@@ -1,0 +1,14 @@
+C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\WHLayout.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\WHLayout.AssemblyInfoInputs.cache
+C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\WHLayout.AssemblyInfo.cs
+C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\WHLayout.csproj.CoreCompileInputs.cache
+C:\Users\chrome4057\CSharpDev\WHLayout\bin\Debug\net9.0\WHLayout.exe
+C:\Users\chrome4057\CSharpDev\WHLayout\bin\Debug\net9.0\WHLayout.deps.json
+C:\Users\chrome4057\CSharpDev\WHLayout\bin\Debug\net9.0\WHLayout.runtimeconfig.json
+C:\Users\chrome4057\CSharpDev\WHLayout\bin\Debug\net9.0\WHLayout.dll
+C:\Users\chrome4057\CSharpDev\WHLayout\bin\Debug\net9.0\WHLayout.pdb
+C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\WHLayout.dll
+C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\refint\WHLayout.dll
+C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\WHLayout.pdb
+C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\WHLayout.genruntimeconfig.cache
+C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\ref\WHLayout.dll
