@@ -21,6 +21,6 @@ class Program {
 
     static void Main(string[] args)
     {
-        Graph g = new Graph(4, 10);   
+        Graph g = new Graph(3, 4, 1 ,1); //Graph(int aisles, int shelvesPerAisle, double shelfLength, double shelfWidth)   
     }
 }

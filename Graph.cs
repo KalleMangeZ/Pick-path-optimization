@@ -24,14 +24,24 @@ public class Graph
     public double shelfWidth;
     public double aisleLength;
     public double aisleWidth;
-    public Graph(int aisles, int shelvesPerAisle)
+    public Graph(int aisles, int shelvesPerAisle, double shelfLength, double shelfWidth)
     {
         this.aisles = aisles;
         this.shelvesPerAisle = shelvesPerAisle;
+        this.shelfLength = shelfLength;
+        this.shelfWidth = shelfWidth;
 
-        shelfLength = 1.2;
-        shelfWidth = 2;
-        LayoutManager = new Layout(shelvesPerAisle, aisles);
+        //create lanes:
+        int nbrCols = aisles * 2;
+        int nbrLanes = nbrCols / 2 - 1;
+        lanes = new HashSet<Lane>();
+
+        for (int i = 1; i <= (aisles - 1) * 2; i = i + 2)
+        {
+            lanes.Add(new Lane(i, i + 1));
+        }
+
+        LayoutManager = new Layout(shelvesPerAisle, aisles, lanes);
         LayoutManager.CreateStaticPickLocations();
         //LayoutManager.CreatePickLocations();
         //LayoutManager.CreateRandomPickingLocations();
@@ -61,7 +71,8 @@ public class Graph
                 diagonalPath.Add(ps);
             }
         }
-
+        
+        Console.WriteLine();
         Console.WriteLine("-----------------------------------");
         Console.WriteLine("Current horizontal path distances: ");
         pathListOfL.Sort((a, b) => a.prev.nodeNbr.CompareTo(b.neighbor.nodeNbr));
@@ -91,16 +102,6 @@ public class Graph
         aisleWidth = shelfWidth * 2;      //2
         double xCoord = 0;
         double yCoord = aisleLength;
-
-        //create lanes:
-        int nbrCols = aisles * 2;
-        int nbrLanes = nbrCols / 2 - 1;
-        lanes = new HashSet<Lane>();
-
-        for (int i = 1; i <= (aisles - 1) * 2; i = i + 2)
-        {
-            lanes.Add(new Lane(i, i + 1));
-        }
 
         nodes["R1"] = new GraphNode("R1", xCoord, 0, 'R', 1);  //start node    (2 neighbors)
         //create nodes for each layer

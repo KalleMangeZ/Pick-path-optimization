@@ -12,3 +12,4 @@ C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\refint\WHLayout.dll
 C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\WHLayout.pdb
 C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\WHLayout.genruntimeconfig.cache
 C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\ref\WHLayout.dll
+C:\Users\chrome4057\CSharpDev\WHLayout\obj\Debug\net9.0\WHLayout.sourcelink.json
