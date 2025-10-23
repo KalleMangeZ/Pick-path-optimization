@@ -1,0 +1,6 @@
+
+root = true
+
+[*.cs]
+# Use K&R style (brace on same line) for methods
+csharp_new_line_before_open_brace = methods:false

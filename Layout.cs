@@ -121,15 +121,14 @@ public class Layout
             }
             Console.WriteLine();
         }
-        
+
         Console.Write("   R1");
-        for (int i = 0; i < lanes.Count+1; i++)
+        for (int i = 0; i < lanes.Count + 1; i++)
         {
             String nodeStringName = "R" + Convert.ToString(i + 2);
-            Console.Write(" " +"   ____________   " + nodeStringName);
+            Console.Write(" " + "   ____________   " + nodeStringName);
         }
         Console.Write("   end");
         Console.WriteLine();
-
     }
 }
