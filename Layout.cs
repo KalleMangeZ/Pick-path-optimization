@@ -19,7 +19,6 @@ public class Layout
     public void CreateLayout(int[,] pickLocations)
     {
         Console.WriteLine("-----------------------------------");
-        Console.WriteLine("Picking Locations: ");
         for (int i = shelvesPerAisle - 1; i >= 0; i--)
         {
             for (int j = 0; j < layout.GetLength(1); j++)
@@ -130,7 +129,6 @@ public class Layout
             Console.Write(" " +"   ____________   " + nodeStringName);
         }
         Console.Write("   end");
-        
         Console.WriteLine();
 
     }
