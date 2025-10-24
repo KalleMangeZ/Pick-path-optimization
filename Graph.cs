@@ -9,8 +9,6 @@ Picker can:
 - pass through the aisle from Lnode to R-node, picking as required
 - pick as required in the aisel, then return to the origin node.
 
-//TEST PUSH FROM MAC!
-
 Future development: add half-aisle to left of start and to right of end.
 */
 
