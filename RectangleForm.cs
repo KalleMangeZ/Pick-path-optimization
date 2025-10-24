@@ -1,0 +1,122 @@
+namespace ConsoleApp1;
+
+using System;
+using System.Drawing;
+using System.Security.Cryptography;
+using System.Windows.Forms;
+
+public class RectangleForm : Form { //döpa om till GUI
+    Graph g;
+    Graphics graphics;
+    private List<GraphNode> shortestNodePath;
+    private int centerXStart, centerYStart, centerXEnd, centerYEnd;
+    private int shelfLength, shelfWidth;
+    private int aisleLength;
+    private int aisleToAisleDist;
+    private Pen pen, pen2;
+
+    public RectangleForm(Graph g, List<GraphNode> pathNodes) {
+        this.g = g;
+        this.Text = "Warehouse Pick Locations";
+        this.Size = new Size(1000, 600);
+        this.Location = new Point(50, 50);
+        shelfLength = 50;
+        shelfWidth = 50;
+        aisleToAisleDist = 250;
+        aisleLength = shelfLength*2 + centerXStart;
+        this.Paint += new PaintEventHandler(DrawRectangle);
+        shortestNodePath = pathNodes;
+        this.CenterToScreen();
+
+    }
+
+    private void DrawRectangle(object sender, PaintEventArgs e) {
+        Graphics graphics = e.Graphics;
+        pen = new Pen(Color.Blue, 2);
+        pen2 = new Pen(Color.Red, 2);
+
+        // Define start and end points (example coordinates)
+        Point startPoint = new Point(shelfLength - shelfLength / 2, 75);
+        Point endPoint = new Point(shelfLength - shelfLength / 2, shelfLength * g.shelvesPerAisle + 2 * shelfLength);
+        // Draw line
+        graphics.DrawLine(pen2, startPoint, endPoint);
+
+        int firstAisleCol = 0;
+        for (int i = 0; i < g.lanes.Count + 1; i++) {
+            for (int x = 0; x < 2; x++) {
+                for (int y = 0; y < g.shelvesPerAisle; y++) {
+                    Rectangle rack = new Rectangle(x * shelfLength + shelfLength + i * aisleToAisleDist, y * shelfWidth + shelfWidth, shelfLength, shelfWidth); //(x, y, width, height)
+                    TextBox tb = new TextBox();
+                    tb.ReadOnly = true;
+                    tb.Width = 30;
+                    tb.Height = 30;
+                    tb.Location = new Point(x * shelfLength + shelfLength + i * aisleToAisleDist + tb.Height / 2, y * shelfWidth + shelfWidth + tb.Width / 2);
+                    tb.Text = (g.LayoutManager.LayoutMatrix[y, x + firstAisleCol]).ToString();
+                    tb.TextAlign = HorizontalAlignment.Center;
+                    graphics.DrawRectangle(pen, rack);
+                    this.Controls.Add(tb);
+                }
+            }
+            firstAisleCol = firstAisleCol + 2;
+        }
+        DrawStartAndEndCircle(pen2, graphics, shelfLength, g.shelvesPerAisle);
+        DrawPath(graphics);
+    }
+
+    public void DrawStartAndEndCircle(Pen pen2, Graphics graphics, int shelfLength, int shelvesPerAisle) {
+        int radius = 10;
+        centerXStart = shelfLength - shelfLength / 2;
+        centerYStart = shelfLength * g.shelvesPerAisle + 2 * shelfLength;
+        string label1 = "Start";
+        Font font = new Font("Arial", 7);
+        Brush brush = Brushes.Black;
+        SizeF textSize = graphics.MeasureString(label1, font);
+        graphics.DrawString(label1, font, brush, centerXStart - textSize.Width / 2, centerYStart - textSize.Height / 2 + 2 * radius);
+        graphics.DrawEllipse(pen2, centerXStart - radius, centerYStart - radius, radius * 2, radius * 2);
+
+        centerXEnd = centerXStart + g.aisles * aisleToAisleDist - 2 * shelfLength;
+        centerYEnd = shelfLength * g.shelvesPerAisle + 2 * shelfLength;
+        string label2 = "End";
+        Font font2 = new Font("Arial", 7);
+        Brush brush2 = Brushes.Black;
+        SizeF textSize2 = graphics.MeasureString(label2, font2);
+        graphics.DrawString(label2, font2, brush2, centerXEnd - textSize2.Width / 2, centerYEnd - textSize2.Height / 2 + 2 * radius);
+        graphics.DrawEllipse(pen2, centerXEnd - radius, centerYEnd - radius, radius * 2, radius * 2);
+
+    }
+
+    public void DrawPath(Graphics graphics) {
+
+        for (int i = 0; i < shortestNodePath.Count - 1; i++) {
+            GraphNode curr = shortestNodePath[i];
+            GraphNode next = shortestNodePath[i + 1];
+
+            if (curr.nodeType == 'R' && next.nodeType == 'L') {
+                int currX = (int)curr.x;
+                int currY = (int)curr.y;
+                int nextX = (int)next.x;
+                int nextY = (int)next.y;
+
+                int Y_R = shelfLength * g.shelvesPerAisle + 2 * shelfLength;
+
+                graphics.DrawLine(pen2, centerXStart, Y_R, centerXStart + 2 * aisleLength, Y_R);
+                graphics.DrawLine(pen2, centerXStart + 2 * aisleLength, Y_R, centerXStart + 2 * aisleLength, Y_R - shelfWidth * 4);
+            }
+
+            //uppdatera X för varje if
+            //uppdatera Y för varje if
+        }
+
+            /*
+            if (curr.nodeType == 'L' && next.nodeType == 'R') {
+                - traverse all lane + horizontal line to Rx
+
+            if (curr.nodeType == 'R' && next.nodeType == 'R') {
+                - traverse up to layout[][]
+                
+            if (curr.nodeType == 'L' && next.nodeType == 'L') {
+                - traverse up to layout[][]
+            */
+    }
+}
+

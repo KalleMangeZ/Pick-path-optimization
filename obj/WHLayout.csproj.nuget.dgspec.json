@@ -1,30 +1,36 @@
 {
   "format": 1,
   "restore": {
-    "/Users/karlmagnusrosell/Desktop/VSC projects/Pick-path-optimization/WHLayout.csproj": {}
+    "C:\\Users\\chrome4057\\CSharpDev\\WHLayout\\WHLayout.csproj": {}
   },
   "projects": {
-    "/Users/karlmagnusrosell/Desktop/VSC projects/Pick-path-optimization/WHLayout.csproj": {
+    "C:\\Users\\chrome4057\\CSharpDev\\WHLayout\\WHLayout.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/karlmagnusrosell/Desktop/VSC projects/Pick-path-optimization/WHLayout.csproj",
+        "projectUniqueName": "C:\\Users\\chrome4057\\CSharpDev\\WHLayout\\WHLayout.csproj",
         "projectName": "WHLayout",
-        "projectPath": "/Users/karlmagnusrosell/Desktop/VSC projects/Pick-path-optimization/WHLayout.csproj",
-        "packagesPath": "/Users/karlmagnusrosell/.nuget/packages/",
-        "outputPath": "/Users/karlmagnusrosell/Desktop/VSC projects/Pick-path-optimization/obj/",
+        "projectPath": "C:\\Users\\chrome4057\\CSharpDev\\WHLayout\\WHLayout.csproj",
+        "packagesPath": "C:\\Users\\chrome4057\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\chrome4057\\CSharpDev\\WHLayout\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/karlmagnusrosell/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\chrome4057\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net9.0"
+          "net9.0-windows"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net9.0": {
-            "targetAlias": "net9.0",
+          "net9.0-windows7.0": {
+            "targetAlias": "net9.0-windows",
             "projectReferences": {}
           }
         },
@@ -41,8 +47,8 @@
         "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
+        "net9.0-windows7.0": {
+          "targetAlias": "net9.0-windows",
           "imports": [
             "net461",
             "net462",
@@ -57,9 +63,12 @@
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WindowsForms": {
+              "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

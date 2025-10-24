@@ -16,14 +16,15 @@ public class Graph
 {
     public Dictionary<string, GraphNode> nodes = new Dictionary<string, GraphNode>();
     public Layout LayoutManager { get; set; }
-    public HashSet<Lane> lanes;
+    public HashSet<Lane> lanes  { get; set; }
     public HashSet<PathStep> path = new HashSet<PathStep>();
-    public int aisles;
-    public int shelvesPerAisle;
-    public double shelfLength;
-    public double shelfWidth;
-    public double aisleLength;
-    public double aisleWidth;
+    public List<GraphNode> pathNodes { get; set; } = new List<GraphNode>();  
+    public int aisles           { get; set; }
+    public int shelvesPerAisle  { get; set; }
+    public double shelfLength   { get; set; }
+    public double shelfWidth    { get; set; }
+    public double aisleLength   { get; set; }
+    public double aisleWidth    { get; set; }
     public Graph(int aisles, int shelvesPerAisle, double shelfLength, double shelfWidth)
     {
         this.aisles = aisles;
@@ -157,6 +158,7 @@ public class Graph
         Console.Write("Shortest path route: ");
         for (int i = 0; i < shortestPath.Count; i++)
         {
+            pathNodes.Add(shortestPath[i]);
             Console.Write(shortestPath[i].Name);
             if (i < shortestPath.Count - 1)
                 Console.Write(" -> ");

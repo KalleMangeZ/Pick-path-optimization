@@ -19,9 +19,9 @@ public class Layout
     public void CreateLayout(int[,] pickLocations)
     {
         Console.WriteLine("-----------------------------------");
-        for (int i = shelvesPerAisle - 1; i >= 0; i--)
+        for (int i = shelvesPerAisle - 1; i >= 0; i--)  //rows
         {
-            for (int j = 0; j < layout.GetLength(1); j++)
+            for (int j = 0; j < layout.GetLength(1); j++) //cols
             {
                 if (pickLocations[i, j] != 0)
                 {
@@ -91,11 +91,11 @@ public class Layout
     {
         int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
             pickLocations[0, 0] = 1;
-            pickLocations[2, 1] = 1;
-            pickLocations[2, 2] = 1;
-            pickLocations[3, 3] = 1;
-            /*pickLocations[5, 5] = 1;
-            pickLocations[2, 6] = 1;*/
+            pickLocations[0, 1] = 1;
+            pickLocations[0, 2] = 1;
+            pickLocations[0, 3] = 1;
+            pickLocations[0, 4] = 1;
+            pickLocations[0, 5] = 1;
             
         CreateLayout(pickLocations);
     }
