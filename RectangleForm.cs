@@ -14,6 +14,7 @@ public class RectangleForm : Form { //döpa om till GUI
     private int aisleLength;
     private int aisleWidth;
     private int aisleToAisleDist;
+    private int yDistStartToRNode;
     private Pen pen, pen2;
 
     public RectangleForm(Graph g, List<GraphNode> pathNodes) {
@@ -24,6 +25,7 @@ public class RectangleForm : Form { //döpa om till GUI
         shelfLength = 50;
         shelfWidth = 50;
         aisleToAisleDist = 250;
+        yDistStartToRNode = 50;
         aisleLength = shelfLength * 2 + centerXStart;
         aisleWidth = g.shelvesPerAisle * shelfWidth;
         this.Paint += new PaintEventHandler(DrawRectangle);
@@ -38,10 +40,10 @@ public class RectangleForm : Form { //döpa om till GUI
         pen2 = new Pen(Color.Red, 2);
 
         // Define start and end points (example coordinates)
-        Point startPoint = new Point(shelfLength - shelfLength / 2, 75);
-        Point endPoint = new Point(shelfLength - shelfLength / 2, shelfLength * g.shelvesPerAisle + 2 * shelfLength);
+        //Point startPoint = new Point(shelfLength - shelfLength / 2, 75);
+        //Point endPoint = new Point(shelfLength - shelfLength / 2, shelfLength * g.shelvesPerAisle + 2 * shelfLength);
         // Draw line
-        graphics.DrawLine(pen2, startPoint, endPoint);
+        //graphics.DrawLine(pen2, startPoint, endPoint);
 
         int firstAisleCol = 0;
         for (int i = 0; i < g.lanes.Count + 1; i++) {
@@ -77,7 +79,7 @@ public class RectangleForm : Form { //döpa om till GUI
         graphics.DrawString(label1, font, brush, centerXStart - textSize.Width / 2, centerYStart - textSize.Height / 2 + 2 * radius);
         graphics.DrawEllipse(pen2, centerXStart - radius, centerYStart - radius, radius * 2, radius * 2);
 
-        centerXEnd = centerXStart + g.aisles * aisleToAisleDist - 2 * shelfLength;
+        centerXEnd = centerXStart + g.aisles * aisleToAisleDist - 2 * shelfLength + xMove;
         centerYEnd = shelfLength * g.shelvesPerAisle + 2 * shelfLength;
         string label2 = "End";
         Font font2 = new Font("Arial", 7);
@@ -94,65 +96,71 @@ public class RectangleForm : Form { //döpa om till GUI
 
         Y_R = centerYStart;
         Y_L = centerYStart - (5 * shelfWidth + shelfWidth / 2);
-        xMove = 2 * aisleLength;
-        
+        xMove = (int)((aisleToAisleDist / 1.5) + 2 * centerXStart);
+
         for (int i = 0; i < shortestNodePath.Count - 1; i++) {
-                GraphNode curr = shortestNodePath[i];
-                if(shortestNodePath[i + 1].Neighbors.Count == 0) {
-                        //Console.WriteLine("node to end at: " + i);
-                }
-                GraphNode next = shortestNodePath[i + 1];
+            GraphNode curr = shortestNodePath[i];
 
-                if (curr.nodeType == 'R' && next.nodeType == 'L') {
-                     //Console.WriteLine("R to L at: " + i);
-                    graphics.DrawLine(pen2, currX, Y_R, currX, Y_L);
-                    graphics.DrawLine(pen2, currX, Y_L, currX + xMove, Y_L);
-                    currX = currX + xMove;
-                    currY = Y_L;
-                }
+            //till END
+            if (shortestNodePath[i + 1].Neighbors.Count == 0 && curr.nodeType == 'L') {
+                //Console.WriteLine("L to end: " + i);
+                graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
+                graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);  
+            }
+            //till END
+            if (shortestNodePath[i + 1].Neighbors.Count == 0 && curr.nodeType == 'R') {
+                //Console.WriteLine("R to end: " + i);
+                int distY = (int)(g.getColPickDist_R(curr) / 2 -1) * shelfLength + shelfLength/2;
+                graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - distY - yDistStartToRNode);
+                graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
+            }
 
-                if (curr.nodeType == 'L' && next.nodeType == 'R') {
-                        //Console.WriteLine("L to R at: " + i);
-                    graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
-                    graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
-                    currX = currX + xMove;
-                    currY = Y_R;
-                }
+            GraphNode next = shortestNodePath[i + 1];
+
+            if (curr.nodeType == 'R' && next.nodeType == 'L') {
+                //Console.WriteLine("R to L at: " + i);
+                graphics.DrawLine(pen2, currX, Y_R, currX, Y_L);
+                graphics.DrawLine(pen2, currX, Y_L, currX + xMove, Y_L);
+                currX = currX + xMove;
+                currY = Y_L;
+            }
+
+            if (curr.nodeType == 'L' && next.nodeType == 'R') {
+                //Console.WriteLine("L to R at: " + i);
+                graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
+                graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
+                currX = currX + xMove;
+                currY = Y_R;
+            }
 
             if (curr.nodeType == 'L' && next.nodeType == 'L') {
                 //Console.WriteLine("L to L at: " + i);
-                int distY = (int)(g.getColPickDist_L(curr) / 2 - 1) * shelfLength;
+                int distY = (int)(g.getColPickDist_L(curr) / 2 -1) * shelfLength;
                 //Console.WriteLine("getColPickDist__: " + distY);
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_L + distY);
                 graphics.DrawLine(pen2, currX, Y_L, currX + xMove, Y_L);
                 currX = currX + xMove;
                 currY = Y_L;
             }
-                
-            if(curr.nodeType == 'R' && next.nodeType == 'R') {
-                //Console.WriteLine("R to R at: " + i);
-                int distY = (int)(g.getColPickDist_R(curr) / 2 - 1) * shelfLength;
-                //Console.WriteLine("getColPickDist__: " + distY);
+
+            if (curr.nodeType == 'R' && next.nodeType == 'R') { //FIXA
+                int distY = (int)((g.getColPickDist_R(curr) / 2 - 1) * shelfLength+shelfLength/2);
+
+                Console.WriteLine(curr.Name + " -> " + next.Name + "   Y_R: " + Y_R + " getColPickDist_R distY: " + distY);
+                Console.WriteLine("index: " + (g.getColPickDist_R(curr) / 2 - 1));
+
+                 
                 graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - distY);
+                
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
                 currX = currX + xMove;
                 currY = Y_R;
             }
 
-
         }
-                    /*
-                    if (curr.nodeType == 'L' && next.nodeType == 'R') {
-                        - traverse all lane + horizontal line to Rx
 
-                    if (curr.nodeType == 'R' && next.nodeType == 'R') {
-                        - traverse up to layout[][]
-
-                    if (curr.nodeType == 'L' && next.nodeType == 'L') {
-                        - traverse up to layout[][]
-                    */
     }
-    
+
 
     public void DrawNodes(Graphics graphics) {
         int currX = centerXStart + xMove;
@@ -164,14 +172,13 @@ public class RectangleForm : Form { //döpa om till GUI
 
             //draw R-nodes
             String nodeStringNameR = "R" + Convert.ToString(i + 2);
-            Point stringPointR = new Point(currX, Y_R + 50);
-             if (i == 0) {
-                graphics.DrawString("R1", new Font("Arial", 10), Brushes.Black, new Point(currX - xMove, Y_R + 50));
+            Point stringPointR = new Point(currX, Y_R + yDistStartToRNode);
+            if (i == 0) {
+                graphics.DrawString("R1", new Font("Arial", 10), Brushes.Black, new Point(currX - xMove, Y_R + yDistStartToRNode));
             }
             graphics.DrawString(nodeStringNameR, new Font("Arial", 10), Brushes.Black, stringPointR);
 
             currX = currX + xMove;
-        }        
+        }
     }
 }
-

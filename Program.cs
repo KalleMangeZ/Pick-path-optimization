@@ -7,9 +7,10 @@ class Program {
 
     static void Main(string[] args)
     {
-        Graph g = new Graph(3, 4, 1, 1); //Graph(int aisles, int shelvesPerAisle, double shelfLength, double shelfWidth) 
+        Graph g = new Graph(3,4, 1, 1); //Graph(int aisles, int shelvesPerAisle, double shelfLength, double shelfWidth) 
         CreateWindow(g);
     }
+
 
     public static void CreateWindow(Graph g) {
         Application.EnableVisualStyles();
