@@ -7,11 +7,12 @@ using System.Windows.Forms;
 
 public class RectangleForm : Form { //döpa om till GUI
     Graph g;
-    Graphics graphics;
     private List<GraphNode> shortestNodePath;
     private int centerXStart, centerYStart, centerXEnd, centerYEnd;
+    private int xMove, Y_R, Y_L;
     private int shelfLength, shelfWidth;
     private int aisleLength;
+    private int aisleWidth;
     private int aisleToAisleDist;
     private Pen pen, pen2;
 
@@ -23,7 +24,8 @@ public class RectangleForm : Form { //döpa om till GUI
         shelfLength = 50;
         shelfWidth = 50;
         aisleToAisleDist = 250;
-        aisleLength = shelfLength*2 + centerXStart;
+        aisleLength = shelfLength * 2 + centerXStart;
+        aisleWidth = g.shelvesPerAisle * shelfWidth;
         this.Paint += new PaintEventHandler(DrawRectangle);
         shortestNodePath = pathNodes;
         this.CenterToScreen();
@@ -61,12 +63,13 @@ public class RectangleForm : Form { //döpa om till GUI
         }
         DrawStartAndEndCircle(pen2, graphics, shelfLength, g.shelvesPerAisle);
         DrawPath(graphics);
+        DrawNodes(graphics);
     }
 
     public void DrawStartAndEndCircle(Pen pen2, Graphics graphics, int shelfLength, int shelvesPerAisle) {
         int radius = 10;
         centerXStart = shelfLength - shelfLength / 2;
-        centerYStart = shelfLength * g.shelvesPerAisle + 2 * shelfLength;
+        centerYStart = shelfLength * (g.shelvesPerAisle + 2);
         string label1 = "Start";
         Font font = new Font("Arial", 7);
         Brush brush = Brushes.Black;
@@ -86,37 +89,89 @@ public class RectangleForm : Form { //döpa om till GUI
     }
 
     public void DrawPath(Graphics graphics) {
+        int currX = centerXStart;
+        int currY = centerYStart;
 
+        Y_R = centerYStart;
+        Y_L = centerYStart - (5 * shelfWidth + shelfWidth / 2);
+        xMove = 2 * aisleLength;
+        
         for (int i = 0; i < shortestNodePath.Count - 1; i++) {
-            GraphNode curr = shortestNodePath[i];
-            GraphNode next = shortestNodePath[i + 1];
+                GraphNode curr = shortestNodePath[i];
+                if(shortestNodePath[i + 1].Neighbors.Count == 0) {
+                        //Console.WriteLine("node to end at: " + i);
+                }
+                GraphNode next = shortestNodePath[i + 1];
 
-            if (curr.nodeType == 'R' && next.nodeType == 'L') {
-                int currX = (int)curr.x;
-                int currY = (int)curr.y;
-                int nextX = (int)next.x;
-                int nextY = (int)next.y;
+                if (curr.nodeType == 'R' && next.nodeType == 'L') {
+                     //Console.WriteLine("R to L at: " + i);
+                    graphics.DrawLine(pen2, currX, Y_R, currX, Y_L);
+                    graphics.DrawLine(pen2, currX, Y_L, currX + xMove, Y_L);
+                    currX = currX + xMove;
+                    currY = Y_L;
+                }
 
-                int Y_R = shelfLength * g.shelvesPerAisle + 2 * shelfLength;
+                if (curr.nodeType == 'L' && next.nodeType == 'R') {
+                        //Console.WriteLine("L to R at: " + i);
+                    graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
+                    graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
+                    currX = currX + xMove;
+                    currY = Y_R;
+                }
 
-                graphics.DrawLine(pen2, centerXStart, Y_R, centerXStart + 2 * aisleLength, Y_R);
-                graphics.DrawLine(pen2, centerXStart + 2 * aisleLength, Y_R, centerXStart + 2 * aisleLength, Y_R - shelfWidth * 4);
+            if (curr.nodeType == 'L' && next.nodeType == 'L') {
+                //Console.WriteLine("L to L at: " + i);
+                int distY = (int)(g.getColPickDist_L(curr) / 2 - 1) * shelfLength;
+                //Console.WriteLine("getColPickDist__: " + distY);
+                graphics.DrawLine(pen2, currX, Y_L, currX, Y_L + distY);
+                graphics.DrawLine(pen2, currX, Y_L, currX + xMove, Y_L);
+                currX = currX + xMove;
+                currY = Y_L;
+            }
+                
+            if(curr.nodeType == 'R' && next.nodeType == 'R') {
+                //Console.WriteLine("R to R at: " + i);
+                int distY = (int)(g.getColPickDist_R(curr) / 2 - 1) * shelfLength;
+                //Console.WriteLine("getColPickDist__: " + distY);
+                graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - distY);
+                graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
+                currX = currX + xMove;
+                currY = Y_R;
             }
 
-            //uppdatera X för varje if
-            //uppdatera Y för varje if
+
         }
+                    /*
+                    if (curr.nodeType == 'L' && next.nodeType == 'R') {
+                        - traverse all lane + horizontal line to Rx
 
-            /*
-            if (curr.nodeType == 'L' && next.nodeType == 'R') {
-                - traverse all lane + horizontal line to Rx
+                    if (curr.nodeType == 'R' && next.nodeType == 'R') {
+                        - traverse up to layout[][]
 
-            if (curr.nodeType == 'R' && next.nodeType == 'R') {
-                - traverse up to layout[][]
-                
-            if (curr.nodeType == 'L' && next.nodeType == 'L') {
-                - traverse up to layout[][]
-            */
+                    if (curr.nodeType == 'L' && next.nodeType == 'L') {
+                        - traverse up to layout[][]
+                    */
+    }
+    
+
+    public void DrawNodes(Graphics graphics) {
+        int currX = centerXStart + xMove;
+        for (int i = 0; i < g.LayoutManager.lanes.Count + 1; i++) {
+            //draw L-nodes
+            String nodeStringNameL = "L" + Convert.ToString(i + 2);
+            Point stringPointL = new Point(currX, Y_L);
+            graphics.DrawString(nodeStringNameL, new Font("Arial", 10), Brushes.Black, stringPointL);
+
+            //draw R-nodes
+            String nodeStringNameR = "R" + Convert.ToString(i + 2);
+            Point stringPointR = new Point(currX, Y_R + 50);
+             if (i == 0) {
+                graphics.DrawString("R1", new Font("Arial", 10), Brushes.Black, new Point(currX - xMove, Y_R + 50));
+            }
+            graphics.DrawString(nodeStringNameR, new Font("Arial", 10), Brushes.Black, stringPointR);
+
+            currX = currX + xMove;
+        }        
     }
 }
 

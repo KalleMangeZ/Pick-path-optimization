@@ -4,7 +4,7 @@ public class Layout
 {
     private int shelvesPerAisle;
     private int aisles;
-    private HashSet<Lane> lanes;
+    public HashSet<Lane> lanes  { get; set; }
     private int[,] layout;
     public int[,] LayoutMatrix => layout;
 
@@ -92,10 +92,10 @@ public class Layout
         int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
             pickLocations[0, 0] = 1;
             pickLocations[0, 1] = 1;
-            pickLocations[0, 2] = 1;
-            pickLocations[0, 3] = 1;
-            pickLocations[0, 4] = 1;
-            pickLocations[0, 5] = 1;
+            pickLocations[1, 2] = 1;
+            pickLocations[2, 3] = 1;
+            pickLocations[1, 4] = 1;
+            pickLocations[2, 5] = 1;
             
         CreateLayout(pickLocations);
     }

@@ -7,9 +7,12 @@ namespace ConsoleApp1;
 /* Assumption: Picking is only done from Left-Right. No back-tracking allowed. Picker start in the first aisle, and ends picking in the last aisle.
 Picker can:
 - pass through the aisle from Lnode to R-node, picking as required
-- pick as required in the aisel, then return to the origin node.
+- pick as required in the aisle, then return to the origin node.
 
 Future development: add half-aisle to left of start and to right of end.
+                    add graphical representation
+                    add pick locations by pressing racks (graphics)
+
 */
 
 public class Graph
@@ -156,13 +159,13 @@ public class Graph
         printPathSteps();
         Console.WriteLine("Shortest distance cost from R1 to end: " + shortestDistance);
         Console.Write("Shortest path route: ");
-        for (int i = 0; i < shortestPath.Count; i++)
-        {
+        for (int i = 0; i < shortestPath.Count; i++) {
             pathNodes.Add(shortestPath[i]);
             Console.Write(shortestPath[i].Name);
             if (i < shortestPath.Count - 1)
                 Console.Write(" -> ");
         }
+        Console.WriteLine();
     }
 
     public double FindShortestPath(GraphNode current, GraphNode target, HashSet<GraphNode> visited, double currentDist,
@@ -330,12 +333,11 @@ public class Graph
         return false;
     }
 
-    public Boolean isEnd(int colLeft, int colRight)
-    {
-        if (colLeft == aisles + 1 && colRight == aisles + 2)
-        {
+    public Boolean isEnd(int colLeft, int colRight) {
+        if (colLeft == aisles + 1 && colRight == aisles + 2) {
             return true;
         }
         return false;
     }
+    
 }
