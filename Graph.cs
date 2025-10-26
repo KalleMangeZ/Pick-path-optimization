@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Numerics;
 using System.Reflection.PortableExecutable;
 using System.Security.Cryptography.X509Certificates;
+using System.Transactions;
 
 namespace ConsoleApp1;
 /* Assumption: Picking is only done from Left-Right. No back-tracking allowed. Picker start in the first aisle, and ends picking in the last aisle.
@@ -10,9 +11,7 @@ Picker can:
 - pick as required in the aisle, then return to the origin node.
 
 Future development: add half-aisle to left of start and to right of end.
-                    add graphical representation
                     add pick locations by pressing racks (graphics)
-
 */
 
 public class Graph
@@ -265,13 +264,22 @@ public class Graph
     {
         var layout = LayoutManager.LayoutMatrix;
 
-        if (isEnd(n.nodeNbr, n.nodeNbr + 1)) //om end bara kolla raderna för leftCol
+        if (isEnd(n.nodeNbr, n.nodeNbr + 1)) //om end bara kolla raderna för leftCol (alltså sista kolumnen)
         {
+            /* old version
             for (int row = 0; row < shelvesPerAisle; row++)
             {
+                Console.WriteLine(n.Name + " to End: " + " row: " + row + " nodeNbr:" + n.nodeNbr + " " + layout[row, n.nodeNbr]);
                 if (layout[row, n.nodeNbr + 1] == 1)
                 {
                     return 2 * shelfLength*(shelvesPerAisle - row);
+                }
+        }*/
+            int lastLeftCol = aisles * 2 - 1;
+            for (int row = 0; row < shelvesPerAisle; row++) {
+                //Console.WriteLine(n.Name + " to End: " + " row: " + row + " nodeNbr:" + n.nodeNbr + " " + layout[row, lastLeftCol]);
+                if (layout[row, lastLeftCol] == 1) {
+                    return 2 * shelfLength * (shelvesPerAisle - row);
                 }
             }
         }

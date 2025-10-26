@@ -2,7 +2,7 @@ namespace ConsoleApp1
 {
     public class GraphNode
     {
-        public string Name;
+        public string Name  { get; set; }
         public List<GraphNode> Neighbors;
         public double x { get; set; }
         public double y { get; set; }

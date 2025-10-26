@@ -21,16 +21,16 @@ public class RectangleForm : Form { //döpa om till GUI
         this.g = g;
         this.Text = "Warehouse Pick Locations";
         this.Size = new Size(1000, 600);
-        this.Location = new Point(50, 50);
+        this.Location = new Point(0, 0);
         shelfLength = 50;
         shelfWidth = 50;
-        aisleToAisleDist = 250;
+        aisleToAisleDist = 200;
         yDistStartToRNode = 50;
         aisleLength = shelfLength * 2 + centerXStart;
         aisleWidth = g.shelvesPerAisle * shelfWidth;
         this.Paint += new PaintEventHandler(DrawRectangle);
         shortestNodePath = pathNodes;
-        this.CenterToScreen();
+        //this.CenterToScreen();
 
     }
 
@@ -39,10 +39,10 @@ public class RectangleForm : Form { //döpa om till GUI
         pen = new Pen(Color.Blue, 2);
         pen2 = new Pen(Color.Red, 2);
 
-        // Define start and end points (example coordinates)
+        //Define start and end points (example coordinates)
         //Point startPoint = new Point(shelfLength - shelfLength / 2, 75);
         //Point endPoint = new Point(shelfLength - shelfLength / 2, shelfLength * g.shelvesPerAisle + 2 * shelfLength);
-        // Draw line
+        //Draw line
         //graphics.DrawLine(pen2, startPoint, endPoint);
 
         int firstAisleCol = 0;
@@ -50,15 +50,37 @@ public class RectangleForm : Form { //döpa om till GUI
             for (int x = 0; x < 2; x++) {
                 for (int y = 0; y < g.shelvesPerAisle; y++) {
                     Rectangle rack = new Rectangle(x * shelfLength + shelfLength + i * aisleToAisleDist, y * shelfWidth + shelfWidth, shelfLength, shelfWidth); //(x, y, width, height)
-                    TextBox tb = new TextBox();
-                    tb.ReadOnly = true;
-                    tb.Width = 30;
-                    tb.Height = 30;
-                    tb.Location = new Point(x * shelfLength + shelfLength + i * aisleToAisleDist + tb.Height / 2, y * shelfWidth + shelfWidth + tb.Width / 2);
-                    tb.Text = (g.LayoutManager.LayoutMatrix[y, x + firstAisleCol]).ToString();
-                    tb.TextAlign = HorizontalAlignment.Center;
+
                     graphics.DrawRectangle(pen, rack);
-                    this.Controls.Add(tb);
+                    string text = g.LayoutManager.LayoutMatrix[y, x + firstAisleCol].ToString();
+                    using (Font font = new Font("Arial", 8))
+                    {
+                        SizeF textSize = graphics.MeasureString(text, font);
+                        float textX = rack.X + (rack.Width - textSize.Width) / 2;
+                        float textY = rack.Y + (rack.Height - textSize.Height) / 2;
+                        graphics.DrawString(text, font, Brushes.Black, textX, textY);
+
+                        if (i == 0 && x == 0 && y == g.shelvesPerAisle - 1) {
+                            TextBox scaleShelfWidth = new TextBox();
+                            scaleShelfWidth.Location = new Point((int)textX - (int)(0.85 * shelfLength), (int)textY);
+                            scaleShelfWidth.ReadOnly = true;
+                            scaleShelfWidth.Width = 20;
+                            scaleShelfWidth.Height = 20;
+                            scaleShelfWidth.Text = Convert.ToString(shelfLength);
+                            this.Controls.Add(scaleShelfWidth);
+
+                            TextBox scaleShelfLength = new TextBox();
+                            scaleShelfLength.Location = new Point((int)textX, (int)textY + (int)(shelfLength / 2));
+                            scaleShelfLength.ReadOnly = true;
+                            scaleShelfLength.Width = 20;
+                            scaleShelfLength.Height = 20;
+                            scaleShelfLength.Text = Convert.ToString(shelfWidth);
+                            this.Controls.Add(scaleShelfLength);
+
+
+                        }
+
+                    } 
                 }
             }
             firstAisleCol = firstAisleCol + 2;
@@ -70,7 +92,7 @@ public class RectangleForm : Form { //döpa om till GUI
 
     public void DrawStartAndEndCircle(Pen pen2, Graphics graphics, int shelfLength, int shelvesPerAisle) {
         int radius = 10;
-        centerXStart = shelfLength - shelfLength / 2;
+        centerXStart = shelfLength/ 2;
         centerYStart = shelfLength * (g.shelvesPerAisle + 2);
         string label1 = "Start";
         Font font = new Font("Arial", 7);
@@ -95,30 +117,38 @@ public class RectangleForm : Form { //döpa om till GUI
         int currY = centerYStart;
 
         Y_R = centerYStart;
-        Y_L = centerYStart - (5 * shelfWidth + shelfWidth / 2);
-        xMove = (int)((aisleToAisleDist / 1.5) + 2 * centerXStart);
+        Y_L = centerYStart - ((g.shelvesPerAisle+1) * shelfWidth + shelfWidth / 2);
+        //xMove = aisleToAisleDist;
 
         for (int i = 0; i < shortestNodePath.Count - 1; i++) {
+            xMove = aisleToAisleDist;
             GraphNode curr = shortestNodePath[i];
 
             //till END
+            
             if (shortestNodePath[i + 1].Neighbors.Count == 0 && curr.nodeType == 'L') {
                 //Console.WriteLine("L to end: " + i);
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);  
             }
+            
             //till END
             if (shortestNodePath[i + 1].Neighbors.Count == 0 && curr.nodeType == 'R') {
-                //Console.WriteLine("R to end: " + i);
-                int distY = (int)(g.getColPickDist_R(curr) / 2 -1) * shelfLength + shelfLength/2;
-                graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - distY - yDistStartToRNode);
+                int yDist = (int)(g.getColPickDist_R(curr) /2)*shelfLength;
+                graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - yDist - yDistStartToRNode/2);
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
             }
+            
 
             GraphNode next = shortestNodePath[i + 1];
 
+            
             if (curr.nodeType == 'R' && next.nodeType == 'L') {
                 //Console.WriteLine("R to L at: " + i);
+                if (curr.nodeNbr == 1) { //if the node is the first in the aisle, only move xMove - centerXStart
+                    xMove = xMove - centerXStart;
+                }
+
                 graphics.DrawLine(pen2, currX, Y_R, currX, Y_L);
                 graphics.DrawLine(pen2, currX, Y_L, currX + xMove, Y_L);
                 currX = currX + xMove;
@@ -135,23 +165,22 @@ public class RectangleForm : Form { //döpa om till GUI
 
             if (curr.nodeType == 'L' && next.nodeType == 'L') {
                 //Console.WriteLine("L to L at: " + i);
-                int distY = (int)(g.getColPickDist_L(curr) / 2 -1) * shelfLength;
+                int distY = (int)(g.getColPickDist_L(curr) / 2 - 1) * shelfLength;
                 //Console.WriteLine("getColPickDist__: " + distY);
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_L + distY);
                 graphics.DrawLine(pen2, currX, Y_L, currX + xMove, Y_L);
                 currX = currX + xMove;
                 currY = Y_L;
             }
-
+            
             if (curr.nodeType == 'R' && next.nodeType == 'R') { //FIXA
                 int distY = (int)((g.getColPickDist_R(curr) / 2 - 1) * shelfLength+shelfLength/2);
 
-                Console.WriteLine(curr.Name + " -> " + next.Name + "   Y_R: " + Y_R + " getColPickDist_R distY: " + distY);
-                Console.WriteLine("index: " + (g.getColPickDist_R(curr) / 2 - 1));
+                if(curr.nodeNbr == 1) { //if the node is the first in the aisle, only move xMove - centerXStart
+                    xMove = xMove - centerXStart;
+                }
 
-                 
                 graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - distY);
-                
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
                 currX = currX + xMove;
                 currY = Y_R;
