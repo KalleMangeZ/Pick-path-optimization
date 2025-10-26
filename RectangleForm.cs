@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 public class RectangleForm : Form { //döpa om till GUI
     Graph g;
-    private List<GraphNode> shortestNodePath;
+    private List<GraphNode> shortestNodePath { get; set; }
     private int centerXStart, centerYStart, centerXEnd, centerYEnd;
     private int xMove, Y_R, Y_L;
     private int shelfLength, shelfWidth;
@@ -88,6 +88,7 @@ public class RectangleForm : Form { //döpa om till GUI
         DrawStartAndEndCircle(pen2, graphics, shelfLength, g.shelvesPerAisle);
         DrawPath(graphics);
         DrawNodes(graphics);
+        DisplayShortestPathString(graphics);
     }
 
     public void DrawStartAndEndCircle(Pen pen2, Graphics graphics, int shelfLength, int shelvesPerAisle) {
@@ -190,7 +191,6 @@ public class RectangleForm : Form { //döpa om till GUI
 
     }
 
-
     public void DrawNodes(Graphics graphics) {
         int currX = centerXStart + xMove;
         for (int i = 0; i < g.LayoutManager.lanes.Count + 1; i++) {
@@ -210,4 +210,18 @@ public class RectangleForm : Form { //döpa om till GUI
             currX = currX + xMove;
         }
     }
+
+    public void DisplayShortestPathString(Graphics graphics) {
+        string shortestPathString = "Shortest path route: ";
+
+        for (int i = 0; i < shortestNodePath.Count; i++) {
+            shortestPathString += shortestNodePath[i].Name;
+
+            if (i < shortestNodePath.Count - 1) {
+                shortestPathString += " -> ";
+            }
+        }
+        graphics.DrawString(shortestPathString, new Font("Arial", 10), Brushes.Black, new Point(50, Y_R+shelfLength*2));
+    }
+
 }
