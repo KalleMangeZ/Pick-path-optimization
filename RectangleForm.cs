@@ -39,12 +39,6 @@ public class RectangleForm : Form { //döpa om till GUI
         pen = new Pen(Color.Blue, 2);
         pen2 = new Pen(Color.Red, 2);
 
-        //Define start and end points (example coordinates)
-        //Point startPoint = new Point(shelfLength - shelfLength / 2, 75);
-        //Point endPoint = new Point(shelfLength - shelfLength / 2, shelfLength * g.shelvesPerAisle + 2 * shelfLength);
-        //Draw line
-        //graphics.DrawLine(pen2, startPoint, endPoint);
-
         int firstAisleCol = 0;
         for (int i = 0; i < g.lanes.Count + 1; i++) {
             for (int x = 0; x < 2; x++) {
@@ -124,28 +118,21 @@ public class RectangleForm : Form { //döpa om till GUI
         for (int i = 0; i < shortestNodePath.Count - 1; i++) {
             xMove = aisleToAisleDist;
             GraphNode curr = shortestNodePath[i];
-
-            //till END
             
             if (shortestNodePath[i + 1].Neighbors.Count == 0 && curr.nodeType == 'L') {
-                //Console.WriteLine("L to end: " + i);
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);  
             }
             
-            //till END
             if (shortestNodePath[i + 1].Neighbors.Count == 0 && curr.nodeType == 'R') {
                 int yDist = (int)(g.getColPickDist_R(curr) /2)*shelfLength;
                 graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - yDist - yDistStartToRNode/2);
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
             }
             
-
             GraphNode next = shortestNodePath[i + 1];
-
             
             if (curr.nodeType == 'R' && next.nodeType == 'L') {
-                //Console.WriteLine("R to L at: " + i);
                 if (curr.nodeNbr == 1) { //if the node is the first in the aisle, only move xMove - centerXStart
                     xMove = xMove - centerXStart;
                 }
@@ -218,7 +205,7 @@ public class RectangleForm : Form { //döpa om till GUI
             shortestPathString += shortestNodePath[i].Name;
 
             if (i < shortestNodePath.Count - 1) {
-                shortestPathString += " -> ";
+                shortestPathString += " → ";
             }
         }
         graphics.DrawString(shortestPathString, new Font("Arial", 10), Brushes.Black, new Point(50, Y_R+shelfLength*2));
