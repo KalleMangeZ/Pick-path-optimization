@@ -91,11 +91,11 @@ public class Layout
     {
         int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
             pickLocations[3, 0] = 1;
-            pickLocations[2, 1] = 1;
-            pickLocations[0, 2] = 1;
-            pickLocations[2, 3] = 1;
-            pickLocations[1, 4] = 1;
-            pickLocations[0, 5] = 1;
+            pickLocations[5, 1] = 1;
+            pickLocations[2, 2] = 1;
+            pickLocations[0, 3] = 1;
+            pickLocations[5, 4] = 1;
+            pickLocations[4, 5] = 1;
             pickLocations[0, 7] = 1;
            
         CreateLayout(pickLocations);

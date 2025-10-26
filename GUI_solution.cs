@@ -2,7 +2,6 @@ namespace ConsoleApp1;
 
 using System;
 using System.Drawing;
-using System.Security.Cryptography;
 using System.Windows.Forms;
 
 public class GUI_solution : Form { //döpa om till GUI
@@ -20,7 +19,7 @@ public class GUI_solution : Form { //döpa om till GUI
     public GUI_solution(Graph g, List<GraphNode> pathNodes) {
         this.g = g;
         this.Text = "Warehouse Pick Locations";
-        this.Size = new Size(1000, 600);
+        this.Size = new Size(1000, 700);
         this.Location = new Point(0, 0);
         shelfLength = 50;
         shelfWidth = 50;
@@ -30,7 +29,7 @@ public class GUI_solution : Form { //döpa om till GUI
         aisleWidth = g.shelvesPerAisle * shelfWidth;
         this.Paint += new PaintEventHandler(DrawRectangle);
         shortestNodePath = pathNodes;
-        //this.CenterToScreen();
+        this.CenterToScreen();
 
     }
 
@@ -205,7 +204,6 @@ public class GUI_solution : Form { //döpa om till GUI
                 shortestPathString += " → ";
             }
         }
-        graphics.DrawString(shortestPathString, new Font("Arial", 10), Brushes.Black, new Point(50, Y_R+shelfLength*2));
+        graphics.DrawString(shortestPathString, new Font("Arial", 10), Brushes.Black, new Point(50, Y_R+shelfLength/3));
     }
-
 }
