@@ -14,7 +14,6 @@ class Program {
     public static void CreateWindow(Graph g) {
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
-        Application.Run(new RectangleForm(g, g.pathNodes)); // This launches the form
-        //RectangleForm rf = new RectangleForm(g, g.pathNodes); onödig?
+        Application.Run(new GUI_solution(g, g.pathNodes)); // This launches the form
     }
 }

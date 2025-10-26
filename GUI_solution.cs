@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 
-public class RectangleForm : Form { //döpa om till GUI
+public class GUI_solution : Form { //döpa om till GUI
     Graph g;
     private List<GraphNode> shortestNodePath { get; set; }
     private int centerXStart, centerYStart, centerXEnd, centerYEnd;
@@ -17,7 +17,7 @@ public class RectangleForm : Form { //döpa om till GUI
     private int yDistStartToRNode;
     private Pen pen, pen2;
 
-    public RectangleForm(Graph g, List<GraphNode> pathNodes) {
+    public GUI_solution(Graph g, List<GraphNode> pathNodes) {
         this.g = g;
         this.Text = "Warehouse Pick Locations";
         this.Size = new Size(1000, 600);
@@ -144,7 +144,6 @@ public class RectangleForm : Form { //döpa om till GUI
             }
 
             if (curr.nodeType == 'L' && next.nodeType == 'R') {
-                //Console.WriteLine("L to R at: " + i);
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
                 currX = currX + xMove;
@@ -152,9 +151,7 @@ public class RectangleForm : Form { //döpa om till GUI
             }
 
             if (curr.nodeType == 'L' && next.nodeType == 'L') {
-                //Console.WriteLine("L to L at: " + i);
                 int distY = (int)(g.getColPickDist_L(curr) / 2 - 1) * shelfLength;
-                //Console.WriteLine("getColPickDist__: " + distY);
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_L + distY);
                 graphics.DrawLine(pen2, currX, Y_L, currX + xMove, Y_L);
                 currX = currX + xMove;
