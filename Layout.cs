@@ -90,42 +90,37 @@ public class Layout
     public void CreateStaticPickLocations()
     {
         int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
-            pickLocations[3, 0] = 1;
-            pickLocations[5, 1] = 1;
+            pickLocations[2, 0] = 1;
+            pickLocations[3, 1] = 1;
+            pickLocations[2, 1] = 1;
             pickLocations[2, 2] = 1;
-            pickLocations[0, 3] = 1;
-            pickLocations[5, 4] = 1;
-            pickLocations[4, 5] = 1;
-            pickLocations[0, 7] = 1;
+            pickLocations[3, 3] = 1;
+            pickLocations[2, 3] = 1;
            
         CreateLayout(pickLocations);
     }
 
-    public void printLayout()
-    {
+    //lägg till metodparametrar
+    public void printLayout() {
         Console.WriteLine("Layout and pick locations:");
 
         Console.Write("     ");
-        for (int i = 0; i < lanes.Count + 1; i++)
-        {
+        for (int i = 0; i < lanes.Count + 1; i++) {
             String nodeStringName = "L" + Convert.ToString(i + 2);
             Console.Write(" " + "   ____________   " + nodeStringName);
         }
         Console.WriteLine();
 
-        for (int i = 0; i < layout.GetLength(0); i++)
-        {
+        for (int i = 0; i < layout.GetLength(0); i++) {
             Console.Write("     ");
-            for (int j = 0; j < layout.GetLength(1); j++)
-            {
+            for (int j = 0; j < layout.GetLength(1); j++) {
                 Console.Write(" (" + i + ", " + j + "): " + layout[i, j]);
             }
             Console.WriteLine();
         }
 
         Console.Write("   R1");
-        for (int i = 0; i < lanes.Count + 1; i++)
-        {
+        for (int i = 0; i < lanes.Count + 1; i++) {
             String nodeStringName = "R" + Convert.ToString(i + 2);
             Console.Write(" " + "   ____________   " + nodeStringName);
         }
