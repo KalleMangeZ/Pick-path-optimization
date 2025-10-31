@@ -82,7 +82,15 @@ public class Layout
         for (int col = 0; col < aisles * 2; col++)
         {
             int randomRow = rand.Next(0, shelvesPerAisle);
-            pickLocations[randomRow, col] = 1;
+
+            double probIsPickLocation = 1 - (1/(double)shelvesPerAisle);
+            double prob = rand.NextDouble();
+            if(prob < probIsPickLocation) {
+                pickLocations[randomRow, col] = 1;
+            } else {
+                Console.WriteLine("col with 0: " + col);
+                pickLocations[randomRow, col] = 0;
+            }
         }
         CreateLayout(pickLocations);
     }
@@ -90,17 +98,12 @@ public class Layout
     public void CreateStaticPickLocations()
     {
         int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
-            pickLocations[5, 0] = 1;
-            pickLocations[2, 1] = 1;
-            pickLocations[4, 2] = 1;
-            pickLocations[5, 3] = 1;
-            pickLocations[6, 4] = 1;
-            pickLocations[5, 5] = 1;
-            pickLocations[7, 6] = 1;
-            pickLocations[4, 7] = 1;
-
-
-           
+            pickLocations[1, 0] = 1;
+            pickLocations[7, 3] = 1;
+            pickLocations[0, 4] = 1;
+            pickLocations[6, 5] = 1;
+            pickLocations[6, 6] = 1;
+            
         CreateLayout(pickLocations);
     }
 

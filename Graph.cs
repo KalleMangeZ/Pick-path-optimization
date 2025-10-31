@@ -48,9 +48,9 @@ public class Graph
         }
 
         LayoutManager = new Layout(shelvesPerAisle, aisles, lanes);
-        LayoutManager.CreateStaticPickLocations();
+        //LayoutManager.CreateStaticPickLocations();
         //LayoutManager.CreatePickLocations();
-        //LayoutManager.CreateRandomPickingLocations();
+        LayoutManager.CreateRandomPickingLocations();
 
         createGraph();
     }

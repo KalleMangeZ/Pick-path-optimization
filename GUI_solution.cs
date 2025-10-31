@@ -124,8 +124,15 @@ public class GUI_solution : Form { //döpa om till GUI
             }
             
             if (curr.nodeType == 'R' && shortestNodePath[i + 1].Neighbors.Count == 0) {
-                int yDist = (int)(g.getColPickDist_R(curr) /2)*shelfLength;
-                graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - yDist - yDistStartToRNode/2);
+                int yDist = (int)(g.getColPickDist_R(curr)/2) * shelfLength;
+
+                if (g.getColPickDist_R(curr) / 2 == 0) {
+                    yDist = 0;
+                    graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - yDist);
+                } else {
+                    graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - yDist - yDistStartToRNode / 2);
+                }
+
                 graphics.DrawLine(pen2, currX, Y_R, centerXEnd, Y_R);
             }
             
