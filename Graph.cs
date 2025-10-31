@@ -42,13 +42,13 @@ public class Graph
         int nbrLanes = nbrCols / 2 - 1;
         lanes = new HashSet<Lane>();
 
-        for (int i = 1; i <= (aisles - 1) * 2; i = i + 2)
+        for (int i = 1; i <= nbrLanes * 2; i = i + 2)
         {
             lanes.Add(new Lane(i, i + 1));
         }
 
         LayoutManager = new Layout(shelvesPerAisle, aisles, lanes);
-        //LayoutManager.CreateStaticPickLocations();
+       // LayoutManager.CreateStaticPickLocations();
         //LayoutManager.CreatePickLocations();
         LayoutManager.CreateRandomPickingLocations();
 
@@ -255,7 +255,7 @@ public class Graph
                 }
             }
         }
-        return 0;
+        return 0;   //aisleWidth
     }
 
     /*söker genom efter item som ligger längst bort från rad 0 mellan colLeft och colRight. (För R noder)
@@ -276,27 +276,24 @@ public class Graph
                 }
             }
         }
-
         //if-statements för att överensstämma "Lane"-vektorn med nodeNbr.
         if (n.nodeNbr - 1 > lanes.Count)  //t.ex om nodeNbr = 4 och lanes.Count = 2
         {
-            return 0;
+            return 0; //aisleLength;
         }
         else if (n.nodeNbr == 1)  //IsStart
         {
-            for (int row = 0; row < shelvesPerAisle; row++)
-            {
-                if (layout[row, 0] == 1)
-                {
-                    return 2 * shelfLength*(shelvesPerAisle - row) + aisleWidth;
+            for (int row = 0; row < shelvesPerAisle; row++) {
+                if (layout[row, 0] == 1) {
+                    return 2 * shelfLength * (shelvesPerAisle - row) + aisleWidth;
                 }
             }
+            return 0; //aisleWidth
         }
-        else if (n.nodeNbr - 2 < 0)
-        {
-            return 0;
+        else if (n.nodeNbr - 2 < 0) {
+            return 0; //aisleWidth
         }
-
+        
         int colLeft = lanes.ElementAt(n.nodeNbr - 2).left;
         int colRight = lanes.ElementAt(n.nodeNbr - 2).right;
 
@@ -313,7 +310,7 @@ public class Graph
                 }
             }
         }
-        return 0;
+        return 0; //aisleWidth
     }
 
     public double getDiagonalDist()
