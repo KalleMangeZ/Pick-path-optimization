@@ -8,6 +8,7 @@ public class GUI_createPickLocations : Form {
     int shelfLength = 50;
     int shelfWidth = 50;
     Button confirmButton;
+    private List<Button> rackButtons;
 
     public GUI_createPickLocations(int aisles, int shelvesPerAisle, Graph g, object sender, EventArgs e) {
         this.aisles = aisles;
@@ -16,6 +17,7 @@ public class GUI_createPickLocations : Form {
         this.Size = new Size(1000, 700);
         this.Text = "Choose Pick Locations for " + aisles + " Aisles and " + shelvesPerAisle + " Shelves per Aisle.";
         this.Paint += GUI_createPickLocations_Load;
+        rackButtons = new List<Button>();
 
         confirmButton = new Button();
         confirmButton.Text = "Confirm Pick Locations";
@@ -52,13 +54,15 @@ public class GUI_createPickLocations : Form {
 
         confirmButton.Click += (sender, e) =>
             {
+                if (true) {}
+            
             // 1. Recreate layout from current GUI selections
             //g.LayoutManager.CreatePickLocationsFromGUI();
             // 2. Rebuild the graph and recompute shortest path
             g.path.Clear();
             g.pathNodes.Clear();
             g.nodes.Clear();
-            g.createGraph();
+            //g.CreateGraph(); LÄGG TILL FÖR ATT DET SKA FUNGERA!
             // 3. Optionally open the result visualization
             //CreateSolutionWindow();
             };
@@ -74,12 +78,13 @@ public class GUI_createPickLocations : Form {
             GUI_solution window = new GUI_solution(g, g.pathNodes);
             window.ShowDialog();
     }
-   
+
     /* Decide where in the layout[][] there will be a zero or one depending on click. */
     private void CreateRackButton(int xLoc, int yLoc, int xIndexLayout, int yIndexLayout, int firstAisleCol, int i) {
         Button rackButton = new Button();
+        rackButtons.Add(rackButton);
 
-        rackButton.Location = new Point(xLoc, yLoc);          
+        rackButton.Location = new Point(xLoc, yLoc);
         rackButton.Width = 50;
         rackButton.Height = 50;
         rackButton.Text = "0";
@@ -99,11 +104,20 @@ public class GUI_createPickLocations : Form {
                 Console.WriteLine("CLICKED - row: " + yIndexLayout + " col: " + (xIndexLayout + firstAisleCol));
                 g.LayoutManager.LayoutMatrix[yIndexLayout, xIndexLayout + firstAisleCol] = int.Parse(rackButton.Text);
             }
-           
+
             g.LayoutManager.LayoutMatrix[yIndexLayout, xIndexLayout + firstAisleCol] = int.Parse(rackButton.Text);
             g.LayoutManager.printLayout();
         };
         this.Controls.Add(rackButton);
+    }
+    
+    public bool IsAnyButtonClicked() {
+        for (int i = 0; i < rackButtons.Count; i++) {
+            if ((bool)rackButtons[i].Tag == true) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

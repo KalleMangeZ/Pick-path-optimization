@@ -101,7 +101,7 @@ public class Graph
         Console.WriteLine("-----------------------------------");
     }
 
-    public void createGraph()
+    public void CreateGraph()
     {
         int layers = aisles + 1;
         aisleLength = shelfLength * shelvesPerAisle;    //4
