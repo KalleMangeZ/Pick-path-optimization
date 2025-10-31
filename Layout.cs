@@ -34,7 +34,75 @@ public class Layout
         printLayout();
     }
 
-    public void CreatePickLocations()
+    public void CreatePickLocationsFromGUI() {
+        int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
+        for (int i = 0; i < layout.GetLength(0); i++) {
+            for (int j = 0; j < layout.GetLength(1); j++) {
+                pickLocations[i, j] = LayoutMatrix[i, j];
+            }
+        }
+        CreateLayout(pickLocations);
+    }
+
+    public void CreateRandomPickingLocations() {
+        Random rand = new Random();
+        int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
+        for (int col = 0; col < aisles * 2; col++) {
+            int randomRow = rand.Next(0, shelvesPerAisle);
+            double probIsPickLocation = 1 - (1 / (double)shelvesPerAisle);
+            double prob = rand.NextDouble();
+            if (prob < probIsPickLocation) {
+                pickLocations[randomRow, col] = 1;
+            }
+            else {
+                Console.WriteLine("col with 0: " + col);
+                pickLocations[randomRow, col] = 0;
+            }
+        }
+        CreateLayout(pickLocations);
+    }
+    
+    public void CreateStaticPickLocations()
+    {
+        int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
+            pickLocations[0, 0] = 1;
+            pickLocations[4, 2] = 1;
+            pickLocations[0, 4] = 1;
+            pickLocations[4, 6] = 1;
+            pickLocations[0, 7] = 1;
+            
+        CreateLayout(pickLocations);
+    }
+
+    //lägg till metodparametrar
+    public void printLayout() {
+        Console.WriteLine("Layout and pick locations:");
+
+        Console.Write("     ");
+        for (int i = 0; i < lanes.Count + 1; i++) {
+            String nodeStringName = "L" + Convert.ToString(i + 2);
+            Console.Write(" " + "   ____________   " + nodeStringName);
+        }
+        Console.WriteLine();
+
+        for (int i = 0; i < layout.GetLength(0); i++) {
+            Console.Write("     ");
+            for (int j = 0; j < layout.GetLength(1); j++) {
+                Console.Write(" (" + i + ", " + j + "): " + layout[i, j]);
+            }
+            Console.WriteLine();
+        }
+
+        Console.Write("   R1");
+        for (int i = 0; i < lanes.Count + 1; i++) {
+            String nodeStringName = "R" + Convert.ToString(i + 2);
+            Console.Write(" " + "   ____________   " + nodeStringName);
+        }
+        Console.Write("   end");
+        Console.WriteLine();
+    }
+
+     public void CreatePickLocations()
     {
         Console.Write("Enter number of pick locations: ");
         int nbrPickLocations;
@@ -73,65 +141,5 @@ public class Layout
         }
 
         CreateLayout(pickLocations);
-    }
-
-    public void CreateRandomPickingLocations()
-    {
-        Random rand = new Random();
-        int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
-        for (int col = 0; col < aisles * 2; col++)
-        {
-            int randomRow = rand.Next(0, shelvesPerAisle);
-
-            double probIsPickLocation = 1 - (1/(double)shelvesPerAisle);
-            double prob = rand.NextDouble();
-            if(prob < probIsPickLocation) {
-                pickLocations[randomRow, col] = 1;
-            } else {
-                Console.WriteLine("col with 0: " + col);
-                pickLocations[randomRow, col] = 0;
-            }
-        }
-        CreateLayout(pickLocations);
-    }
-    
-    public void CreateStaticPickLocations()
-    {
-        int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
-            pickLocations[0, 1] = 1;
-            pickLocations[7, 3] = 1;
-            pickLocations[0, 4] = 1;
-            pickLocations[6, 5] = 1;
-            pickLocations[6, 6] = 1;
-            
-        CreateLayout(pickLocations);
-    }
-
-    //lägg till metodparametrar
-    public void printLayout() {
-        Console.WriteLine("Layout and pick locations:");
-
-        Console.Write("     ");
-        for (int i = 0; i < lanes.Count + 1; i++) {
-            String nodeStringName = "L" + Convert.ToString(i + 2);
-            Console.Write(" " + "   ____________   " + nodeStringName);
-        }
-        Console.WriteLine();
-
-        for (int i = 0; i < layout.GetLength(0); i++) {
-            Console.Write("     ");
-            for (int j = 0; j < layout.GetLength(1); j++) {
-                Console.Write(" (" + i + ", " + j + "): " + layout[i, j]);
-            }
-            Console.WriteLine();
-        }
-
-        Console.Write("   R1");
-        for (int i = 0; i < lanes.Count + 1; i++) {
-            String nodeStringName = "R" + Convert.ToString(i + 2);
-            Console.Write(" " + "   ____________   " + nodeStringName);
-        }
-        Console.Write("   end");
-        Console.WriteLine();
     }
 }

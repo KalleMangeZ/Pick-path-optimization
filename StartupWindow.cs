@@ -5,14 +5,15 @@ public class StartupWindow : Form {
     ComboBox aislesChoice;
     Label nbrShelvesLabel;
     ComboBox nbrShelvesChoice;
-    Button createPickLocations;
+    Button CreatePickLocations;
     public int selectedAisles;
     public int selectedNbrShelves;
     Graph g;
     public int aisleToAisleDist = 200;
 
-    public StartupWindow(Graph g) {
-                this.g = g;
+    //Org: StartupWindow(Graph g) {
+    public StartupWindow() {
+                //this.g = g;
                 this.Text = "Create Pick Locations";
                 this.Width = 400;
                 this.Height = 250;
@@ -54,16 +55,16 @@ public class StartupWindow : Form {
                 aislesChoice.SelectedIndexChanged += AislesChoice_SelectedIndexChanged;
                 nbrShelvesChoice.SelectedIndexChanged += NbrShelvesChoice_SelectedIndexChanged;
 
-                createPickLocations = new Button();
-                createPickLocations.Location = new Point(150, 150);
-                createPickLocations.Text = "Choose pick locations";
-                createPickLocations.Click += new EventHandler(createPickLocations_Click);
+                CreatePickLocations = new Button();
+                CreatePickLocations.Location = new Point(150, 150);
+                CreatePickLocations.Text = "Choose pick locations";
+                CreatePickLocations.Click += new EventHandler(CreatePickLocations_Click);
 
                 this.Controls.Add(aislesLabel);
                 this.Controls.Add(aislesChoice);
                 this.Controls.Add(nbrShelvesLabel);
                 this.Controls.Add(nbrShelvesChoice);
-                this.Controls.Add(createPickLocations);
+                this.Controls.Add(CreatePickLocations);
     }
 
     
@@ -83,7 +84,7 @@ public class StartupWindow : Form {
         }
     }
 
-    private void createPickLocations_Click(object sender, EventArgs e) {
+    private void CreatePickLocations_Click(object sender, EventArgs e) {
         g = new Graph(selectedAisles, selectedNbrShelves, 1, 1);
         CreatePickLocationsWindow(g);
         Console.WriteLine("Pick locations created with: " + selectedAisles + " aisles and " + selectedNbrShelves + " shelves per aisle.");

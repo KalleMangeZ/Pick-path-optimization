@@ -30,7 +30,6 @@ public class GUI_solution : Form { //döpa om till GUI
         this.Paint += new PaintEventHandler(DrawRectangle);
         shortestNodePath = pathNodes;
         this.CenterToScreen();
-
     }
 
     private void DrawRectangle(object sender, PaintEventArgs e) {
