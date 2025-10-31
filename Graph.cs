@@ -330,11 +330,24 @@ public class Graph
         return false;
     }
 
-    public Boolean isEnd(int colLeft, int colRight) {
+    public bool isEnd(int colLeft, int colRight) {
         if (colLeft == aisles + 1 && colRight == aisles + 2) {
             return true;
         }
         return false;
+    }
+
+    //TESTMETHOD
+    public bool IsEmptyLayout() {
+        for (int row = 0; row < shelvesPerAisle; row++) {
+                for (int col = 0; col < aisles*2 ; col++)
+                {
+                    if (LayoutManager.LayoutMatrix[row, col] == 1) {
+                    return false;
+                    }
+                }
+         }
+        return true;
     }
     
 }

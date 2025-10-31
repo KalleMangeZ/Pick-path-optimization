@@ -62,7 +62,7 @@ public class GUI_createPickLocations : Form {
             g.path.Clear();
             g.pathNodes.Clear();
             g.nodes.Clear();
-            //g.CreateGraph(); LÄGG TILL FÖR ATT DET SKA FUNGERA!
+            g.CreateGraph(); 
             // 3. Optionally open the result visualization
             //CreateSolutionWindow();
             };
@@ -75,8 +75,10 @@ public class GUI_createPickLocations : Form {
     }
 
     private void CreateSolutionWindow() {
+        if (IsAnyRackButtonClicked() && g.IsEmptyLayout() == false) {
             GUI_solution window = new GUI_solution(g, g.pathNodes);
             window.ShowDialog();
+        }
     }
 
     /* Decide where in the layout[][] there will be a zero or one depending on click. */
@@ -111,9 +113,9 @@ public class GUI_createPickLocations : Form {
         this.Controls.Add(rackButton);
     }
     
-    public bool IsAnyButtonClicked() {
-        for (int i = 0; i < rackButtons.Count; i++) {
-            if ((bool)rackButtons[i].Tag == true) {
+    public bool IsAnyRackButtonClicked() {
+        foreach (Button rackButton in rackButtons) {
+            if (rackButton.Tag is bool clicked && clicked) {
                 return true;
             }
         }
