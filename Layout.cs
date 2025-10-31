@@ -90,12 +90,16 @@ public class Layout
     public void CreateStaticPickLocations()
     {
         int[,] pickLocations = new int[shelvesPerAisle, aisles * 2];
-            pickLocations[2, 0] = 1;
-            pickLocations[3, 1] = 1;
+            pickLocations[5, 0] = 1;
             pickLocations[2, 1] = 1;
-            pickLocations[2, 2] = 1;
-            pickLocations[3, 3] = 1;
-            pickLocations[2, 3] = 1;
+            pickLocations[4, 2] = 1;
+            pickLocations[5, 3] = 1;
+            pickLocations[6, 4] = 1;
+            pickLocations[5, 5] = 1;
+            pickLocations[7, 6] = 1;
+            pickLocations[4, 7] = 1;
+
+
            
         CreateLayout(pickLocations);
     }

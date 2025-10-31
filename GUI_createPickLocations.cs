@@ -37,14 +37,7 @@ public class GUI_createPickLocations : Form {
                     int yLoc = y * shelfWidth + shelfWidth;
                     Rectangle rack = new Rectangle(xLoc, yLoc, shelfLength, shelfWidth); //(x, y, width, height)
                     graphics.DrawRectangle(pen, rack);
-                    CreateRackButton(xLoc, yLoc, firstAisleCol, i);
-                    /*using (Font font = new Font("Arial", 8))
-                    {
-                        SizeF textSize = graphics.MeasureString(text, font);
-                        float textX = rack.X + (rack.Width - textSize.Width) / 2;
-                        float textY = rack.Y + (rack.Height - textSize.Height) / 2;
-                        graphics.DrawString(text, font, Brushes.Black, textX, textY);
-                    } */
+                    CreateRackButton(xLoc, yLoc, x, y, firstAisleCol, i);
                 }
             }
             firstAisleCol = firstAisleCol + 2;
@@ -53,7 +46,7 @@ public class GUI_createPickLocations : Form {
     }
     
     /* Decide where in the layout[][] there will be a zero or one depending on click. */
-    private void CreateRackButton(int xLoc, int yLoc, int firstAisleCol, int i) {
+    private void CreateRackButton(int xLoc, int yLoc, int xLayoutIndex, int yLayoutIndex, int firstAisleCol, int i) {
         Button rackButton = new Button();
 
         rackButton.Location = new Point(xLoc, yLoc);          
@@ -64,26 +57,23 @@ public class GUI_createPickLocations : Form {
 
         rackButton.Click += (sender, e) => {
             bool isClicked = (bool)rackButton.Tag;
-            xLoc = xLoc / (xLoc * shelfLength + shelfLength + i * aisleToAisleDist);
-            yLoc = yLoc / (yLoc * shelfWidth + shelfWidth);
 
             if (isClicked) {
                 rackButton.Text = "0";
-                g.LayoutManager.LayoutMatrix[yLoc, xLoc + firstAisleCol] = int.Parse(rackButton.Text);
                 rackButton.Tag = false;
+                g.LayoutManager.LayoutMatrix[xLayoutIndex, yLayoutIndex + firstAisleCol] = int.Parse(rackButton.Text);
             }
             else {
-                Console.WriteLine("CLICKED - xLoc: " + xLoc + " yLoc: " + yLoc);
+                Console.WriteLine("CLICKED - x: " + xLayoutIndex + " y: " + yLayoutIndex);
                 rackButton.Text = "1";
                 rackButton.Tag = true;
+                g.LayoutManager.LayoutMatrix[xLayoutIndex, yLayoutIndex + firstAisleCol] = int.Parse(rackButton.Text);
             }
-            
-            //xLoc = xLoc / (xLoc * shelfLength + shelfLength + i * aisleToAisleDist);
-            //yLoc = yLoc / (yLoc * shelfWidth + shelfWidth);
-            //Console.WriteLine("yLoc: " + yLoc + " xLoc: " + xLoc + " firstAisleCol: " + firstAisleCol);
-            g.LayoutManager.LayoutMatrix[yLoc, xLoc + firstAisleCol] = int.Parse(rackButton.Text);
+
+            g.LayoutManager.LayoutMatrix[xLayoutIndex, yLayoutIndex + firstAisleCol] = int.Parse(rackButton.Text);
             g.LayoutManager.printLayout();
         };
+        
         this.Controls.Add(rackButton);
     }
 

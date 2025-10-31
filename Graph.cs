@@ -269,18 +269,8 @@ public class Graph
 
         if (isEnd(n.nodeNbr, n.nodeNbr + 1)) //om end bara kolla raderna för leftCol (alltså sista kolumnen)
         {
-            /* old version
-            for (int row = 0; row < shelvesPerAisle; row++)
-            {
-                Console.WriteLine(n.Name + " to End: " + " row: " + row + " nodeNbr:" + n.nodeNbr + " " + layout[row, n.nodeNbr]);
-                if (layout[row, n.nodeNbr + 1] == 1)
-                {
-                    return 2 * shelfLength*(shelvesPerAisle - row);
-                }
-        }*/
             int lastLeftCol = aisles * 2 - 1;
             for (int row = 0; row < shelvesPerAisle; row++) {
-                //Console.WriteLine(n.Name + " to End: " + " row: " + row + " nodeNbr:" + n.nodeNbr + " " + layout[row, lastLeftCol]);
                 if (layout[row, lastLeftCol] == 1) {
                     return 2 * shelfLength * (shelvesPerAisle - row);
                 }
@@ -325,7 +315,6 @@ public class Graph
         }
         return 0;
     }
-
 
     public double getDiagonalDist()
     {

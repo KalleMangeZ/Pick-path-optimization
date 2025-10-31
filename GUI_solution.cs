@@ -118,15 +118,15 @@ public class GUI_solution : Form { //döpa om till GUI
             xMove = aisleToAisleDist;
             GraphNode curr = shortestNodePath[i];
             
-            if (shortestNodePath[i + 1].Neighbors.Count == 0 && curr.nodeType == 'L') {
+            if (curr.nodeType == 'L' && shortestNodePath[i + 1].Neighbors.Count == 0) {
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
-                graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);  
+                graphics.DrawLine(pen2, currX, Y_R, centerXEnd, Y_R);  
             }
             
-            if (shortestNodePath[i + 1].Neighbors.Count == 0 && curr.nodeType == 'R') {
+            if (curr.nodeType == 'R' && shortestNodePath[i + 1].Neighbors.Count == 0) {
                 int yDist = (int)(g.getColPickDist_R(curr) /2)*shelfLength;
                 graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - yDist - yDistStartToRNode/2);
-                graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
+                graphics.DrawLine(pen2, currX, Y_R, centerXEnd, Y_R);
             }
             
             GraphNode next = shortestNodePath[i + 1];
@@ -142,29 +142,38 @@ public class GUI_solution : Form { //döpa om till GUI
                 currY = Y_L;
             }
 
-            if (curr.nodeType == 'L' && next.nodeType == 'R') {
+            if (curr.nodeType == 'L' && next.nodeType == 'R' && curr.nodeNbr != g.aisles+1) {
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
                 currX = currX + xMove;
                 currY = Y_R;
             }
 
-            if (curr.nodeType == 'L' && next.nodeType == 'L') {
-                int distY = (int)(g.getColPickDist_L(curr) / 2 - 1) * shelfLength;
-                graphics.DrawLine(pen2, currX, Y_L, currX, Y_L + distY);
+            if (curr.nodeType == 'L' && next.nodeType == 'L' && curr.nodeNbr != g.aisles+1) {
+                int yDist = (int)(g.getColPickDist_L(curr) / 2 - 1) * shelfLength;
+                
+                if(g.getColPickDist_R(curr)/2 == 0) {
+                    yDist = 0;
+                }
+                
+                graphics.DrawLine(pen2, currX, Y_L, currX, Y_L + yDist);
                 graphics.DrawLine(pen2, currX, Y_L, currX + xMove, Y_L);
                 currX = currX + xMove;
                 currY = Y_L;
             }
             
-            if (curr.nodeType == 'R' && next.nodeType == 'R') { //FIXA
-                int distY = (int)((g.getColPickDist_R(curr) / 2 - 1) * shelfLength+shelfLength/2);
-
-                if(curr.nodeNbr == 1) { //if the node is the first in the aisle, only move xMove - centerXStart
-                    xMove = xMove - centerXStart;
+            if (curr.nodeType == 'R' && next.nodeType == 'R' && curr.nodeNbr != g.aisles+1) { //FIXA
+                int yDist = (int)((g.getColPickDist_R(curr) / 2 - 1) * shelfLength + yDistStartToRNode / 2);
+                
+                if(g.getColPickDist_R(curr)/2 == 0) {
+                    yDist = 0;
                 }
 
-                graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - distY);
+                if (curr.nodeNbr == 1) { //if the node is the first in the aisle, only move xMove - centerXStart
+                    xMove = xMove - centerXStart;
+                } 
+                
+                graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - yDist);
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
                 currX = currX + xMove;
                 currY = Y_R;

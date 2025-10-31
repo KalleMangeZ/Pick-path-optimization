@@ -8,8 +8,8 @@ class Program {
 
     static void Main(string[] args)
     {
-        Graph g = new Graph(4,10, 1, 1); //Graph(int aisles, int shelvesPerAisle, double shelfLength = 1, double shelfWidth = 1) 
-        CreateStartWindow(g);
+        Graph g = new Graph(4,8, 1, 1); //Graph(int aisles, int shelvesPerAisle, double shelfLength = 1, double shelfWidth = 1) 
+        //CreateStartWindow(g);
         CreateWindow(g);
     }
 
