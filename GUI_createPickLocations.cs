@@ -109,12 +109,11 @@ public class GUI_createPickLocations : Form {
             else {
                 rackButton.Text = "1";
                 rackButton.Tag = true;
-                //Console.WriteLine("CLICKED - row: " + yIndexLayout + " col: " + (xIndexLayout + firstAisleCol));
                 g.LayoutManager.LayoutMatrix[yIndexLayout, xIndexLayout + firstAisleCol] = int.Parse(rackButton.Text);
             }
 
             g.LayoutManager.LayoutMatrix[yIndexLayout, xIndexLayout + firstAisleCol] = int.Parse(rackButton.Text);
-            g.LayoutManager.printLayout();
+            //g.LayoutManager.printLayout();
         };
         this.Controls.Add(rackButton);
     }

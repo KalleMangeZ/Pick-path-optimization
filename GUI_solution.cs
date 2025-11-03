@@ -68,8 +68,6 @@ public class GUI_solution : Form { //döpa om till GUI
                             scaleShelfLength.Height = 20;
                             scaleShelfLength.Text = Convert.ToString(shelfWidth);
                             this.Controls.Add(scaleShelfLength);
-
-
                         }
 
                     } 
@@ -177,7 +175,7 @@ public class GUI_solution : Form { //döpa om till GUI
                 }
 
                 //Fix R to R pick if getColPickDist_R == 2.
-                if (g.getColPickDist_R(curr) == g.aisleWidth && AllRacksAreEmpty(curr)) {
+                if (g.getColPickDist_R(curr) == g.aisleWidth) {
                     yDist = 0;
                 }
                 //Fix R to R pick if getColPickDist_R == 2
@@ -193,42 +191,7 @@ public class GUI_solution : Form { //döpa om till GUI
             }
 
         }
-
     }
-
-    public bool AllRacksAreEmpty(GraphNode node) { //bara kolla ifall det är 0 överallt.
-        int endIndex = (g.aisles * 2) - 1;
-
-        if (node.nodeNbr == 1) { //if Start
-            for (int firstCol = 0; firstCol <= 1; firstCol++) {        //kollar ifall första kolonnen innehåller 1
-                for (int row = 0; row < g.shelvesPerAisle; row++) {
-                    if (g.LayoutManager.LayoutMatrix[row, firstCol] == 1) {
-                        return false;
-                    }
-                }
-            }
-        } else if (node.nodeNbr == endIndex) { //if End
-            for (int col = endIndex; col <= endIndex + 1; col++) {
-                for (int row = 0; row < g.shelvesPerAisle; row++) {
-                    if (g.LayoutManager.LayoutMatrix[row, col] == 1) {
-                        return false;
-                    }
-                }
-            }
-        } else if (g.isLane(node.nodeNbr, node.nodeNbr + 1)) { //is lane
-            int colLeft = node.nodeNbr;
-            int colRight = node.nodeNbr + 1;
-
-            for (int row = g.shelvesPerAisle - 1; row >= 0; row--) {
-                for (int col = colLeft; col <= colRight; col++) {
-                    if (g.LayoutManager.LayoutMatrix[row, col] == 1) {
-                        return false;
-                    }
-                }
-            }
-        } 
-        return true;
-    } 
 
     public void DrawNodes(Graphics graphics) {
         int currX = centerXStart + xMove;

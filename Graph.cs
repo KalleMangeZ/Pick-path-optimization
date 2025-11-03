@@ -158,7 +158,7 @@ public class Graph
         List<GraphNode> shortestPath;
         double shortestDistance = FindShortestPath(nodes["R1"], nodes["end"], new HashSet<GraphNode>(), 0,
         new List<GraphNode>(), out shortestPath);
-        printPathSteps();
+      //  printPathSteps();
         Console.WriteLine("Shortest distance cost from R1 to end: " + shortestDistance);
         Console.Write("Shortest path route: ");
         for (int i = 0; i < shortestPath.Count; i++) {
