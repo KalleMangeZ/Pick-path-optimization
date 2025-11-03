@@ -75,6 +75,12 @@ public class GUI_createPickLocations : Form {
     }
 
     private void CreateSolutionWindow() {
+        if (g.pathNodes == null || g.pathNodes.Count == 0) {
+            MessageBox.Show("No valid pick locations or path found. Please configure the layout first.",
+                            "Empty Path", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return;
+        }
+       
         if (IsAnyRackButtonClicked() && g.IsEmptyLayout() == false) {
             GUI_solution window = new GUI_solution(g, g.pathNodes);
             window.ShowDialog();
@@ -103,7 +109,7 @@ public class GUI_createPickLocations : Form {
             else {
                 rackButton.Text = "1";
                 rackButton.Tag = true;
-                Console.WriteLine("CLICKED - row: " + yIndexLayout + " col: " + (xIndexLayout + firstAisleCol));
+                //Console.WriteLine("CLICKED - row: " + yIndexLayout + " col: " + (xIndexLayout + firstAisleCol));
                 g.LayoutManager.LayoutMatrix[yIndexLayout, xIndexLayout + firstAisleCol] = int.Parse(rackButton.Text);
             }
 

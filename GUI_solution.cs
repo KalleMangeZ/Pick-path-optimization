@@ -110,33 +110,34 @@ public class GUI_solution : Form { //döpa om till GUI
         int currY = centerYStart;
 
         Y_R = centerYStart;
-        Y_L = centerYStart - ((g.shelvesPerAisle+1) * shelfWidth + shelfWidth / 2);
+        Y_L = centerYStart - ((g.shelvesPerAisle + 1) * shelfWidth + shelfWidth / 2);
         //xMove = aisleToAisleDist;
 
         for (int i = 0; i < shortestNodePath.Count - 1; i++) {
             xMove = aisleToAisleDist;
             GraphNode curr = shortestNodePath[i];
-            
+
             if (curr.nodeType == 'L' && shortestNodePath[i + 1].Neighbors.Count == 0) {
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
-                graphics.DrawLine(pen2, currX, Y_R, centerXEnd, Y_R);  
+                graphics.DrawLine(pen2, currX, Y_R, centerXEnd, Y_R);
             }
-            
+
             if (curr.nodeType == 'R' && shortestNodePath[i + 1].Neighbors.Count == 0) {
-                int yDist = (int)(g.getColPickDist_R(curr)/2) * shelfLength;
+                int yDist = (int)(g.getColPickDist_R(curr) / 2) * shelfLength;
 
                 if (g.getColPickDist_R(curr) / 2 == 0) {
                     yDist = 0;
                     graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - yDist);
-                } else {
+                }
+                else {
                     graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - yDist - yDistStartToRNode / 2);
                 }
 
                 graphics.DrawLine(pen2, currX, Y_R, centerXEnd, Y_R);
             }
-            
+
             GraphNode next = shortestNodePath[i + 1];
-            
+
             if (curr.nodeType == 'R' && next.nodeType == 'L') {
                 if (curr.nodeNbr == 1) { //if the node is the first in the aisle, only move xMove - centerXStart
                     xMove = xMove - centerXStart;
@@ -148,37 +149,43 @@ public class GUI_solution : Form { //döpa om till GUI
                 currY = Y_L;
             }
 
-            if (curr.nodeType == 'L' && next.nodeType == 'R' && curr.nodeNbr != g.aisles+1) {
+            if (curr.nodeType == 'L' && next.nodeType == 'R' && curr.nodeNbr != g.aisles + 1) {
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_R);
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
                 currX = currX + xMove;
                 currY = Y_R;
             }
 
-            if (curr.nodeType == 'L' && next.nodeType == 'L' && curr.nodeNbr != g.aisles+1) {
+            if (curr.nodeType == 'L' && next.nodeType == 'L' && curr.nodeNbr != g.aisles + 1) {
                 int yDist = (int)(g.getColPickDist_L(curr) / 2 - 1) * shelfLength;
-                
-                if(g.getColPickDist_R(curr)/2 == 0) {
+
+                if (g.getColPickDist_R(curr) / 2 == 0) {
                     yDist = 0;
                 }
-                
+
                 graphics.DrawLine(pen2, currX, Y_L, currX, Y_L + yDist);
                 graphics.DrawLine(pen2, currX, Y_L, currX + xMove, Y_L);
                 currX = currX + xMove;
                 currY = Y_L;
             }
-            
-            if (curr.nodeType == 'R' && next.nodeType == 'R' && curr.nodeNbr != g.aisles+1) { //FIXA
+
+            if (curr.nodeType == 'R' && next.nodeType == 'R' && curr.nodeNbr != g.aisles + 1) { //FIXA
                 int yDist = (int)((g.getColPickDist_R(curr) / 2 - 1) * shelfLength + yDistStartToRNode / 2);
-                
-                if(g.getColPickDist_R(curr)/2 == 0) {
+
+                if (g.getColPickDist_R(curr) / 2 == 0) {
                     yDist = 0;
                 }
 
+                //Fix R to R pick if getColPickDist_R == 2.
+                if (g.getColPickDist_R(curr) == g.aisleWidth && AllRacksAreEmpty(curr)) {
+                    yDist = 0;
+                }
+                //Fix R to R pick if getColPickDist_R == 2
+
                 if (curr.nodeNbr == 1) { //if the node is the first in the aisle, only move xMove - centerXStart
                     xMove = xMove - centerXStart;
-                } 
-                
+                }
+
                 graphics.DrawLine(pen2, currX, Y_R, currX, Y_R - yDist);
                 graphics.DrawLine(pen2, currX, Y_R, currX + xMove, Y_R);
                 currX = currX + xMove;
@@ -188,6 +195,40 @@ public class GUI_solution : Form { //döpa om till GUI
         }
 
     }
+
+    public bool AllRacksAreEmpty(GraphNode node) { //bara kolla ifall det är 0 överallt.
+        int endIndex = (g.aisles * 2) - 1;
+
+        if (node.nodeNbr == 1) { //if Start
+            for (int firstCol = 0; firstCol <= 1; firstCol++) {        //kollar ifall första kolonnen innehåller 1
+                for (int row = 0; row < g.shelvesPerAisle; row++) {
+                    if (g.LayoutManager.LayoutMatrix[row, firstCol] == 1) {
+                        return false;
+                    }
+                }
+            }
+        } else if (node.nodeNbr == endIndex) { //if End
+            for (int col = endIndex; col <= endIndex + 1; col++) {
+                for (int row = 0; row < g.shelvesPerAisle; row++) {
+                    if (g.LayoutManager.LayoutMatrix[row, col] == 1) {
+                        return false;
+                    }
+                }
+            }
+        } else if (g.isLane(node.nodeNbr, node.nodeNbr + 1)) { //is lane
+            int colLeft = node.nodeNbr;
+            int colRight = node.nodeNbr + 1;
+
+            for (int row = g.shelvesPerAisle - 1; row >= 0; row--) {
+                for (int col = colLeft; col <= colRight; col++) {
+                    if (g.LayoutManager.LayoutMatrix[row, col] == 1) {
+                        return false;
+                    }
+                }
+            }
+        } 
+        return true;
+    } 
 
     public void DrawNodes(Graphics graphics) {
         int currX = centerXStart + xMove;
@@ -219,6 +260,7 @@ public class GUI_solution : Form { //döpa om till GUI
                 shortestPathString += " → ";
             }
         }
-        graphics.DrawString(shortestPathString, new Font("Arial", 10), Brushes.Black, new Point(50, Y_R+shelfLength/3));
+        graphics.DrawString(shortestPathString, new Font("Arial", 10), Brushes.Black, new Point(50, Y_R + shelfLength / 3));
     }
+
 }

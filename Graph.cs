@@ -242,20 +242,17 @@ public class Graph
 
         var layout = LayoutManager.LayoutMatrix;
 
-        if (isLane(colLeft, colRight) == true)
-        {
-            for (int row = shelvesPerAisle - 1; row >= 0; row--)
-            {
-                for (int col = colLeft; col <= colRight; col++)
-                {
-                    if (layout[row, col] == 1)
-                    {
-                        return 2 * shelfLength*(row + 1) + aisleWidth;
+        if (isLane(colLeft, colRight) == true) {
+            for (int row = shelvesPerAisle - 1; row >= 0; row--) {
+                for (int col = colLeft; col <= colRight; col++) {
+                    if (layout[row, col] == 1) {
+                        return 2 * shelfLength * (row + 1) + aisleWidth;
                     }
                 }
             }
         }
-        return 0;   //aisleWidth
+        return aisleWidth;
+        //return 0;   
     }
 
     /*söker genom efter item som ligger längst bort från rad 0 mellan colLeft och colRight. (För R noder)
@@ -275,11 +272,13 @@ public class Graph
                     return 2 * shelfLength * (shelvesPerAisle - row);
                 }
             }
+            return 0;
         }
         //if-statements för att överensstämma "Lane"-vektorn med nodeNbr.
         if (n.nodeNbr - 1 > lanes.Count)  //t.ex om nodeNbr = 4 och lanes.Count = 2
         {
-            return 0; //aisleLength;
+           return aisleWidth;
+           //return 0; 
         }
         else if (n.nodeNbr == 1)  //IsStart
         {
@@ -288,10 +287,12 @@ public class Graph
                     return 2 * shelfLength * (shelvesPerAisle - row) + aisleWidth;
                 }
             }
-            return 0; //aisleWidth
+            return aisleWidth;
+            //return 0; 
         }
         else if (n.nodeNbr - 2 < 0) {
-            return 0; //aisleWidth
+            return aisleWidth;
+            //return 0; 
         }
         
         int colLeft = lanes.ElementAt(n.nodeNbr - 2).left;
@@ -310,7 +311,8 @@ public class Graph
                 }
             }
         }
-        return 0; //aisleWidth
+        return aisleWidth;
+        //return 0; 
     }
 
     public double getDiagonalDist()
@@ -349,5 +351,4 @@ public class Graph
          }
         return true;
     }
-    
 }

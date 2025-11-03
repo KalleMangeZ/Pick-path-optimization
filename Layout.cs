@@ -31,7 +31,7 @@ public class Layout
                 layout[i, j] = 0;
             }
         }
-        printLayout();
+        //printLayout();
     }
 
     public void CreatePickLocationsFromGUI() {
@@ -74,7 +74,6 @@ public class Layout
         CreateLayout(pickLocations);
     }
 
-    //lägg till metodparametrar
     public void printLayout() {
         Console.WriteLine("Layout and pick locations:");
 
