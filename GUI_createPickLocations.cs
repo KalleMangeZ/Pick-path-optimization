@@ -9,6 +9,7 @@ public class GUI_createPickLocations : Form {
     int shelfWidth = 50;
     Button confirmButton;
     private List<Button> rackButtons;
+    private Pen bluePen = new Pen(Color.Blue, 2);
 
     public GUI_createPickLocations(int aisles, int shelvesPerAisle, Graph g, object sender, EventArgs e) {
         this.aisles = aisles;
@@ -26,33 +27,7 @@ public class GUI_createPickLocations : Form {
         confirmButton.Location = new Point(50, shelvesPerAisle * shelfWidth + 100);
         confirmButton.Click += new EventHandler(CreateSolution_Click);
 
-    }
-
-    private void GUI_createPickLocations_Load(object sender, PaintEventArgs e) {
-        displayNonConfiguredLayout(e.Graphics);
-    }
-
-    private void displayNonConfiguredLayout(Graphics graphics) {
-
-        Pen pen = new Pen(Color.Blue, 2);
-        Pen pen2 = new Pen(Color.Red, 2);
-
-        int firstAisleCol = 0;
-        for (int i = 0; i < aisles; i++) {
-            for (int x = 0; x < 2; x++) {
-                for (int y = 0; y < shelvesPerAisle; y++) {
-                    int xLoc = x * shelfLength + shelfLength + i * aisleToAisleDist;
-                    int yLoc = y * shelfWidth + shelfWidth;
-                    Rectangle rack = new Rectangle(xLoc, yLoc, shelfLength, shelfWidth); //(x, y, width, height)
-                    graphics.DrawRectangle(pen, rack);
-                    CreateRackButton(xLoc, yLoc, x, y, firstAisleCol, i);
-                }
-            }
-            firstAisleCol = firstAisleCol + 2;
-        }
-        //DrawStartAndEndCircle(pen2, graphics, shelfLength, g.shelvesPerAisle);
-
-        confirmButton.Click += (sender, e) =>
+          confirmButton.Click += (sender, e) =>
             {
                 if (true) {}
             
@@ -66,8 +41,28 @@ public class GUI_createPickLocations : Form {
             // 3. Optionally open the result visualization
             //CreateSolutionWindow();
             };
-
         this.Controls.Add(confirmButton);
+    }
+
+    private void GUI_createPickLocations_Load(object sender, PaintEventArgs e) {
+        displayNonConfiguredLayout(e.Graphics);
+    }
+
+    private void displayNonConfiguredLayout(Graphics graphics) {
+        int firstAisleCol = 0;
+        for (int i = 0; i < aisles; i++) {
+            for (int x = 0; x < 2; x++) {
+                for (int y = 0; y < shelvesPerAisle; y++) {
+                    int xLoc = x * shelfLength + shelfLength + i * aisleToAisleDist;
+                    int yLoc = y * shelfWidth + shelfWidth;
+                    Rectangle rack = new Rectangle(xLoc, yLoc, shelfLength, shelfWidth); //(x, y, width, height)
+                    graphics.DrawRectangle(bluePen, rack);
+                    CreateRackButton(xLoc, yLoc, x, y, firstAisleCol, i);
+                }
+            }
+            firstAisleCol = firstAisleCol + 2;
+        }
+        //DrawStartAndEndCircle(pen2, graphics, shelfLength, g.shelvesPerAisle);
     }
 
     private void CreateSolution_Click(object sender, EventArgs e) {

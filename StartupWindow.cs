@@ -85,6 +85,11 @@ public class StartupWindow : Form {
     }
 
     private void CreatePickLocations_Click(object sender, EventArgs e) {
+       if (aislesChoice.SelectedIndex == -1 || nbrShelvesChoice.SelectedIndex == -1) {
+            MessageBox.Show("Both number of aisles and number of shelves per aisle must be chosen");
+            return;
+        }
+       
         g = new Graph(selectedAisles, selectedNbrShelves, 1, 1);
         CreatePickLocationsWindow(g);
         Console.WriteLine("Pick locations created with: " + selectedAisles + " aisles and " + selectedNbrShelves + " shelves per aisle.");
