@@ -17,7 +17,7 @@ public class GUI_createPickLocations : Form {
         this.g = g;
         this.Size = new Size(1000, 700);
         this.Text = "Choose Pick Locations for " + aisles + " Aisles and " + shelvesPerAisle + " Shelves per Aisle.";
-        this.Paint += GUI_createPickLocations_Load;
+        this.Load += GUI_createPickLocations_Load;
         rackButtons = new List<Button>();
 
         confirmButton = new Button();
@@ -40,38 +40,50 @@ public class GUI_createPickLocations : Form {
         this.Controls.Add(confirmButton);
     }
 
-    private void GUI_createPickLocations_Load(object sender, PaintEventArgs e) {
-        displayNonConfiguredLayout(e.Graphics);
+    private void GUI_createPickLocations_Load(object sender, EventArgs e) {
+    CreateRackButtons();
     }
 
-    private void displayNonConfiguredLayout(Graphics graphics) {
+    private void CreateRackButtons() {
+    int firstAisleCol = 0;
+    for (int i = 0; i < aisles; i++) {
+        for (int x = 0; x < 2; x++) {
+            for (int y = 0; y < shelvesPerAisle; y++) {
+                int xLoc = x * shelfLength + shelfLength + i * aisleToAisleDist;
+                int yLoc = y * shelfWidth + shelfWidth;
+                CreateRackButton(xLoc, yLoc, x, y, firstAisleCol, i);
+            }
+        }
+        firstAisleCol += 2;
+    }
+}
+
+protected override void OnPaint(PaintEventArgs e) {
+    base.OnPaint(e);
+    DrawLayout(e.Graphics);
+}
+
+private void DrawLayout(Graphics g) {
+    using (Pen pen = new Pen(Color.Blue, 2)) {
         int firstAisleCol = 0;
         for (int i = 0; i < aisles; i++) {
             for (int x = 0; x < 2; x++) {
                 for (int y = 0; y < shelvesPerAisle; y++) {
                     int xLoc = x * shelfLength + shelfLength + i * aisleToAisleDist;
                     int yLoc = y * shelfWidth + shelfWidth;
-                    Rectangle rack = new Rectangle(xLoc, yLoc, shelfLength, shelfWidth); //(x, y, width, height)
-                    graphics.DrawRectangle(bluePen, rack);
-                    CreateRackButton(xLoc, yLoc, x, y, firstAisleCol, i);
+                    g.DrawRectangle(pen, xLoc, yLoc, shelfLength, shelfWidth);
                 }
             }
-            firstAisleCol = firstAisleCol + 2;
+            firstAisleCol += 2;
         }
-        //DrawStartAndEndCircle(pen2, graphics, shelfLength, g.shelvesPerAisle);
     }
-
+}
     private void CreateSolution_Click(object sender, EventArgs e) {
         CreateSolutionWindow();
     }
 
     private void CreateSolutionWindow() {
-        /*if (g.pathNodes == null || g.pathNodes.Count == 0) {
-            MessageBox.Show("No valid pick locations or path found. Please configure the layout first.",
-                            "Empty Path", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return;
-        }*/
-       
+
         if (IsAnyRackButtonClicked() && g.IsEmptyLayout() == false) {
             GUI_solution window = new GUI_solution(g, g.pathNodes);
             window.ShowDialog();
@@ -79,6 +91,7 @@ public class GUI_createPickLocations : Form {
     }
 
     /* Decide where in the layout[][] there will be a zero or one depending on click. */
+    //Change to
     private void CreateRackButton(int xLoc, int yLoc, int xIndexLayout, int yIndexLayout, int firstAisleCol, int i) {
         Button rackButton = new Button();
         rackButtons.Add(rackButton);

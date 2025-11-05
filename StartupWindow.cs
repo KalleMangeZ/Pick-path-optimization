@@ -31,6 +31,8 @@ public class StartupWindow : Form {
                 aislesChoice.Items.Add("3");
                 aislesChoice.Items.Add("4");
                 aislesChoice.Items.Add("5");
+                //aislesChoice.Items.Add("8");
+
                 aislesChoice.DropDownStyle = ComboBoxStyle.DropDownList;
 
                 nbrShelvesLabel = new Label();
@@ -49,7 +51,9 @@ public class StartupWindow : Form {
                 nbrShelvesChoice.Items.Add("7");
                 nbrShelvesChoice.Items.Add("8");
                 nbrShelvesChoice.Items.Add("9");
-                nbrShelvesChoice.Items.Add("10");
+                nbrShelvesChoice.Items.Add("10");                               
+                //nbrShelvesChoice.Items.Add("16");
+
                 nbrShelvesChoice.DropDownStyle = ComboBoxStyle.DropDownList;
 
                 aislesChoice.SelectedIndexChanged += AislesChoice_SelectedIndexChanged;
