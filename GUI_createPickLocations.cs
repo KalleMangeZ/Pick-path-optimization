@@ -25,21 +25,17 @@ public class GUI_createPickLocations : Form {
         confirmButton.Width = 200;
         confirmButton.Height = 40;
         confirmButton.Location = new Point(50, shelvesPerAisle * shelfWidth + 100);
-        confirmButton.Click += new EventHandler(CreateSolution_Click);
 
-          confirmButton.Click += (sender, e) =>
+         confirmButton.Click += (sender, e) =>
             {
-                if (true) {}
-            
             // 1. Recreate layout from current GUI selections
             //g.LayoutManager.CreatePickLocationsFromGUI();
             // 2. Rebuild the graph and recompute shortest path
             g.path.Clear();
             g.pathNodes.Clear();
             g.nodes.Clear();
-            g.CreateGraph(); 
-            // 3. Optionally open the result visualization
-            //CreateSolutionWindow();
+            g.CreateGraph();
+            CreateSolution_Click(sender, e);
             };
         this.Controls.Add(confirmButton);
     }
@@ -70,11 +66,11 @@ public class GUI_createPickLocations : Form {
     }
 
     private void CreateSolutionWindow() {
-        if (g.pathNodes == null || g.pathNodes.Count == 0) {
+        /*if (g.pathNodes == null || g.pathNodes.Count == 0) {
             MessageBox.Show("No valid pick locations or path found. Please configure the layout first.",
                             "Empty Path", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return;
-        }
+        }*/
        
         if (IsAnyRackButtonClicked() && g.IsEmptyLayout() == false) {
             GUI_solution window = new GUI_solution(g, g.pathNodes);
