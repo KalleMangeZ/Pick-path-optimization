@@ -11,10 +11,7 @@ Picker can:
 - pick as required in the aisle, then return to the origin node.
 
 Future development: add half-aisle to left of start and to right of end.
-                    add pick locations by pressing racks (graphics) on the aisles.
-                    1. Enter nbr of aisles
-                    2. Enter nbr of shelves per aisle
-                     
+                   
 */
 
 public class Graph
