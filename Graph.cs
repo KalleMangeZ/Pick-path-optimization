@@ -30,6 +30,7 @@ public class Graph
     public double shelfWidth    { get; set; }
     public double aisleLength   { get; set; }
     public double aisleWidth    { get; set; }
+    public double shortestDistance { get; set; }
     public Graph(int aisles, int shelvesPerAisle, double shelfLength, double shelfWidth)
     {
         this.aisles = aisles;
@@ -156,7 +157,7 @@ public class Graph
         //CreateRandomPickingLocations();
 
         List<GraphNode> shortestPath;
-        double shortestDistance = FindShortestPath(nodes["R1"], nodes["end"], new HashSet<GraphNode>(), 0,
+        shortestDistance = FindShortestPath(nodes["R1"], nodes["end"], new HashSet<GraphNode>(), 0,
         new List<GraphNode>(), out shortestPath);
       //  printPathSteps();
         Console.WriteLine("Shortest distance cost from R1 to end: " + shortestDistance);

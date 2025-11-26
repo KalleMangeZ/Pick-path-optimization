@@ -11,9 +11,7 @@ public class StartupWindow : Form {
     Graph g;
     public int aisleToAisleDist = 200;
 
-    //Org: StartupWindow(Graph g) {
     public StartupWindow() {
-                //this.g = g;
                 this.Text = "Create Pick Locations";
                 this.Width = 400;
                 this.Height = 250;
@@ -31,7 +29,7 @@ public class StartupWindow : Form {
                 aislesChoice.Items.Add("3");
                 aislesChoice.Items.Add("4");
                 aislesChoice.Items.Add("5");
-                //aislesChoice.Items.Add("8");
+                //aislesChoice.Items.Add("8"); support for 100s of aisles
 
                 aislesChoice.DropDownStyle = ComboBoxStyle.DropDownList;
 
@@ -52,7 +50,7 @@ public class StartupWindow : Form {
                 nbrShelvesChoice.Items.Add("8");
                 nbrShelvesChoice.Items.Add("9");
                 nbrShelvesChoice.Items.Add("10");                               
-                //nbrShelvesChoice.Items.Add("16");
+                //nbrShelvesChoice.Items.Add("16"); support for 100s of shelves
 
                 nbrShelvesChoice.DropDownStyle = ComboBoxStyle.DropDownList;
 

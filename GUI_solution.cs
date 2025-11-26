@@ -162,7 +162,6 @@ public class GUI_solution : Form { //döpa om till GUI
                 if (g.getColPickDist_R(curr) == g.aisleWidth) {
                     yDist = 0;
                 }
-                //Fix R to R pick if getColPickDist_R == 2
 
                 if (curr.nodeNbr == 1) { //if the node is the first in the aisle, only move xMove - centerXStart
                     xMove = xMove - centerXStart;
@@ -207,6 +206,7 @@ public class GUI_solution : Form { //döpa om till GUI
                 shortestPathString += " → ";
             }
         }
+        shortestPathString += $" | Total distance: {g.shortestDistance} units";
         graphics.DrawString(shortestPathString, normalFont, Brushes.Black, new Point(50, Y_R + shelfLength / 3));
     }
 
