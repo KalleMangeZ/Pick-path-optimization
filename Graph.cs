@@ -23,16 +23,23 @@ public class Graph
     public List<GraphNode> pathNodes { get; set; } = new List<GraphNode>();  
     public int aisles           { get; set; }
     public int shelvesPerAisle  { get; set; }
+    public int orders           { get; set; }
+    public int layers           { get; set; }
     public double shelfLength   { get; set; }
     public double shelfWidth    { get; set; }
     public double aisleLength   { get; set; }
     public double aisleWidth    { get; set; }
-    public Graph(int aisles, int shelvesPerAisle, double shelfLength, double shelfWidth)
+
+    public int orderNbr { get; set; } = 1;      //!
+
+    public Graph(int aisles, int shelvesPerAisle, int orders, int layers, double shelfLength, double shelfWidth)
     {
         this.aisles = aisles;
         this.shelvesPerAisle = shelvesPerAisle;
         this.shelfLength = shelfLength;
         this.shelfWidth = shelfWidth;
+        this.orders = orders;
+        this.layers = layers;
 
         //create lanes:
         int nbrCols = aisles * 2;
@@ -44,7 +51,7 @@ public class Graph
             lanes.Add(new Lane(i, i + 1));
         }
 
-        LayoutManager = new Layout(shelvesPerAisle, aisles, lanes);
+        LayoutManager = new Layout(shelvesPerAisle, aisles, lanes, orders, layers);
         //LayoutManager.CreateStaticPickLocations();
         //LayoutManager.CreatePickLocations();
         //LayoutManager.CreateRandomPickingLocations();
@@ -242,14 +249,13 @@ public class Graph
         if (isLane(colLeft, colRight) == true) {
             for (int row = shelvesPerAisle - 1; row >= 0; row--) {
                 for (int col = colLeft; col <= colRight; col++) {
-                    if (layout[row, col] == 1) {
+                    if (layout[row, col] == orderNbr) {                                                //change 1 to orderNbr
                         return 2 * shelfLength * (row + 1) + aisleWidth;
                     }
                 }
             }
         }
         return aisleWidth;
-        //return 0;   
     }
 
     /*söker genom efter item som ligger längst bort från rad 0 mellan colLeft och colRight. (För R noder)
@@ -265,7 +271,7 @@ public class Graph
         {
             int lastLeftCol = aisles * 2 - 1;
             for (int row = 0; row < shelvesPerAisle; row++) {
-                if (layout[row, lastLeftCol] == 1) {
+                if (layout[row, lastLeftCol] == orderNbr) {                                               //change 1 to orderNbr
                     return 2 * shelfLength * (shelvesPerAisle - row);
                 }
             }
@@ -275,21 +281,18 @@ public class Graph
         if (n.nodeNbr - 1 > lanes.Count)  //t.ex om nodeNbr = 4 och lanes.Count = 2
         {
            return aisleWidth;
-           //return 0; 
         }
         else if (n.nodeNbr == 1)  //IsStart
         {
             for (int row = 0; row < shelvesPerAisle; row++) {
-                if (layout[row, 0] == 1) {
+                if (layout[row, 0] == orderNbr) {                                                          //change 1 to orderNbr      
                     return 2 * shelfLength * (shelvesPerAisle - row) + aisleWidth;
                 }
             }
             return aisleWidth;
-            //return 0; 
         }
         else if (n.nodeNbr - 2 < 0) {
             return aisleWidth;
-            //return 0; 
         }
         
         int colLeft = lanes.ElementAt(n.nodeNbr - 2).left;
@@ -301,7 +304,7 @@ public class Graph
             {
                 for (int col = colLeft; col <= colRight; col++)
                 {
-                    if (layout[row, col] == 1)
+                    if (layout[row, col] == orderNbr)                                                      //change 1 to orderNbr
                     {
                         return 2 * shelfLength*(shelvesPerAisle - row) + aisleWidth;
                     }
@@ -309,7 +312,6 @@ public class Graph
             }
         }
         return aisleWidth;
-        //return 0; 
     }
 
     public double getDiagonalDist()
@@ -341,7 +343,7 @@ public class Graph
         for (int row = 0; row < shelvesPerAisle; row++) {
                 for (int col = 0; col < aisles*2 ; col++)
                 {
-                    if (LayoutManager.LayoutMatrix[row, col] == 1) {
+                    if (LayoutManager.LayoutMatrix[row, col] == orderNbr) {                                //change 1 to orderNbr
                     return false;
                     }
                 }

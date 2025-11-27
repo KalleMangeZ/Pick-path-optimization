@@ -7,12 +7,16 @@ public class Layout
     public HashSet<Lane> lanes  { get; set; }
     private int[,] layout;
     public int[,] LayoutMatrix => layout;
+    public int orders;
+    public int layers;
 
-    public Layout(int shelvesPerAisle, int aisles, HashSet<Lane> lanes)
+    public Layout(int shelvesPerAisle, int aisles, HashSet<Lane> lanes, int orders, int layers)
     {
         this.shelvesPerAisle = shelvesPerAisle;
         this.aisles = aisles;
         this.lanes = lanes;
+        this.orders = orders;
+        this.layers = layers;
         layout = new int[shelvesPerAisle, aisles * 2];
     }
 

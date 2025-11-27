@@ -83,7 +83,6 @@ private void DrawLayout(Graphics g) {
     }
 
     private void CreateSolutionWindow() {
-
         if (IsAnyRackButtonClicked() && g.IsEmptyLayout() == false) {
             GUI_solution window = new GUI_solution(g, g.pathNodes);
             window.ShowDialog();

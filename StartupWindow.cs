@@ -1,13 +1,18 @@
 namespace ConsoleApp1;
-
 public class StartupWindow : Form {
     Label aislesLabel;
     ComboBox aislesChoice;
     Label nbrShelvesLabel;
     ComboBox nbrShelvesChoice;
     Button CreatePickLocations;
+    Label nbrOrdersLabel;
+    ComboBox nbrOrdersChoice;
+    Label nbrLayersLabel;
+    ComboBox nbrLayersChoice;
     public int selectedAisles;
     public int selectedNbrShelves;
+    public int selectedNbrOrders;
+    public int selectedNbrLayers;
     Graph g;
     public int aisleToAisleDist = 200;
 
@@ -16,7 +21,7 @@ public class StartupWindow : Form {
                 //this.g = g;
                 this.Text = "Create Pick Locations";
                 this.Width = 400;
-                this.Height = 250;
+                this.Height = 450;
                 this.CenterToScreen();
                 
                 aislesLabel = new Label();
@@ -32,7 +37,6 @@ public class StartupWindow : Form {
                 aislesChoice.Items.Add("4");
                 aislesChoice.Items.Add("5");
                 //aislesChoice.Items.Add("8");
-
                 aislesChoice.DropDownStyle = ComboBoxStyle.DropDownList;
 
                 nbrShelvesLabel = new Label();
@@ -42,7 +46,7 @@ public class StartupWindow : Form {
                 nbrShelvesLabel.AutoSize = true;
 
                 nbrShelvesChoice = new ComboBox();
-                nbrShelvesChoice.Location = new Point(250, 100);
+                nbrShelvesChoice.Location = new Point(250, 94);
                 nbrShelvesChoice.Width = 50;
                 nbrShelvesChoice.Items.Add("3");
                 nbrShelvesChoice.Items.Add("4");
@@ -53,25 +57,64 @@ public class StartupWindow : Form {
                 nbrShelvesChoice.Items.Add("9");
                 nbrShelvesChoice.Items.Add("10");                               
                 //nbrShelvesChoice.Items.Add("16");
-
                 nbrShelvesChoice.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                nbrOrdersLabel = new Label();
+                nbrOrdersLabel.Location = new Point(115, 144);
+                nbrOrdersLabel.Text = "Enter number of orders:"; 
+                nbrOrdersLabel.Width = 100;
+                nbrOrdersLabel.AutoSize = true;
+
+                nbrOrdersChoice = new ComboBox();
+                nbrOrdersChoice.Location = new Point(250, 138);
+                nbrOrdersChoice.Width = 50;
+                nbrOrdersChoice.Items.Add("1");
+                nbrOrdersChoice.Items.Add("2");
+                nbrOrdersChoice.Items.Add("3");
+                nbrOrdersChoice.Items.Add("4");
+                nbrOrdersChoice.Items.Add("5");
+                nbrOrdersChoice.Items.Add("6");
+                nbrOrdersChoice.Items.Add("7");
+                nbrOrdersChoice.Items.Add("8");                               
+                //nbrShelvesChoice.Items.Add("16");
+                nbrOrdersChoice.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                nbrLayersLabel = new Label();
+                nbrLayersLabel.Location = new Point(85, 188);
+                nbrLayersLabel.Text = "Enter number of pallet layers:"; 
+                nbrLayersLabel.Width = 100;
+                nbrLayersLabel.AutoSize = true;
+
+                nbrLayersChoice = new ComboBox();
+                nbrLayersChoice.Location = new Point(250, 182);
+                nbrLayersChoice.Width = 50;
+                nbrLayersChoice.Items.Add("1");
+                nbrLayersChoice.Items.Add("2");
+                nbrLayersChoice.Items.Add("3");
+                nbrLayersChoice.Items.Add("4");                              
+                nbrLayersChoice.DropDownStyle = ComboBoxStyle.DropDownList;
 
                 aislesChoice.SelectedIndexChanged += AislesChoice_SelectedIndexChanged;
                 nbrShelvesChoice.SelectedIndexChanged += NbrShelvesChoice_SelectedIndexChanged;
+                nbrOrdersChoice.SelectedIndexChanged += NbrOrdersChoice_SelectedIndexChanged;
+                nbrLayersChoice.SelectedIndexChanged += NbrLayersChoice_SelectedIndexChanged;
 
                 CreatePickLocations = new Button();
-                CreatePickLocations.Location = new Point(150, 150);
-                CreatePickLocations.Text = "Choose pick locations";
+                CreatePickLocations.Location = new Point(150, 250);
+                CreatePickLocations.Text = "Choose";
                 CreatePickLocations.Click += new EventHandler(CreatePickLocations_Click);
 
                 this.Controls.Add(aislesLabel);
                 this.Controls.Add(aislesChoice);
                 this.Controls.Add(nbrShelvesLabel);
                 this.Controls.Add(nbrShelvesChoice);
+                this.Controls.Add(nbrOrdersLabel);
+                this.Controls.Add(nbrOrdersChoice);
+                this.Controls.Add(nbrLayersLabel);
+                this.Controls.Add(nbrLayersChoice);
                 this.Controls.Add(CreatePickLocations);
     }
 
-    
     private void AislesChoice_SelectedIndexChanged(object sender, EventArgs e)
     {
         if (int.TryParse(aislesChoice.SelectedItem?.ToString(), out int parsedAisles))
@@ -88,20 +131,50 @@ public class StartupWindow : Form {
         }
     }
 
+    private void NbrOrdersChoice_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (int.TryParse(nbrOrdersChoice.SelectedItem?.ToString(), out int parsedOrders))
+        {
+            selectedNbrOrders = parsedOrders;
+        }
+    }
+
+    private void NbrLayersChoice_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        if (int.TryParse(nbrLayersChoice.SelectedItem?.ToString(), out int parsedLayers))
+        {
+            selectedNbrLayers = parsedLayers;
+        }
+    }
+
     private void CreatePickLocations_Click(object sender, EventArgs e) {
        if (aislesChoice.SelectedIndex == -1 || nbrShelvesChoice.SelectedIndex == -1) {
             MessageBox.Show("Both number of aisles and number of shelves per aisle must be chosen");
             return;
         }
        
-        g = new Graph(selectedAisles, selectedNbrShelves, 1, 1);
+        g = new Graph(selectedAisles, selectedNbrShelves, selectedNbrOrders, selectedNbrLayers, 1, 1);
+       
+        if (selectedNbrOrders == 1) { 
         CreatePickLocationsWindow(g);
-        Console.WriteLine("Pick locations created with: " + selectedAisles + " aisles and " + selectedNbrShelves + " shelves per aisle.");
+        } else {
+        CreatePickLocationsForManyOrdersWindow(g);
+        }
+
+        Console.WriteLine("Pick locations created with: " + selectedAisles + " aisles, " + selectedNbrShelves + " shelves per aisle, " + selectedNbrOrders + " orders and " + selectedNbrLayers + " pallet layers.");
         //Application.Exit();
     }
-
+    
+    //lets user define pick locations only for one order.
     private void CreatePickLocationsWindow(Graph g) {
         GUI_createPickLocations window = new GUI_createPickLocations(selectedAisles, selectedNbrShelves, g, null, null);
         window.ShowDialog(); 
     }
+            
+    private void CreatePickLocationsForManyOrdersWindow(Graph g)
+    {
+        GUI_createPickLocationsManyOrders window = new GUI_createPickLocationsManyOrders(g, null, null);
+        window.ShowDialog();
+    }
+
 }
