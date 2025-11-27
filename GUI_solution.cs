@@ -21,7 +21,7 @@ public class GUI_solution : Form { //döpa om till GUI
 
     public GUI_solution(Graph g, List<GraphNode> pathNodes) {
         this.g = g;
-        this.Text = "Warehouse Pick Locations";
+        this.Text = $"Warehouse Pick Locations for order {g.orderNbr}";
         this.Size = new Size(1000, 700);
         this.Location = new Point(0, 0);
         shelfLength = 50;
@@ -207,6 +207,7 @@ public class GUI_solution : Form { //döpa om till GUI
                 shortestPathString += " → ";
             }
         }
+        shortestPathString += $" | Total distance: {g.shortestDistance}";
         graphics.DrawString(shortestPathString, normalFont, Brushes.Black, new Point(50, Y_R + shelfLength / 3));
     }
 

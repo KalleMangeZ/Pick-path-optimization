@@ -12,8 +12,6 @@ public class GUI_createPickLocationsManyOrders : Form {
     Button confirmButton;
     List<ComboBox> comboBoxes;
     ComboBox selectOrderComboBox;
-
-
     private Pen bluePen = new Pen(Color.Blue, 2);
 
     public GUI_createPickLocationsManyOrders(Graph graph, object sender, EventArgs e) {
