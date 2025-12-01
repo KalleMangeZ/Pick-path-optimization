@@ -10,13 +10,14 @@ public class GUI_createPickLocationsManyOrders : Form {
     int shelfLength = 50;
     int shelfWidth = 50;
     Button confirmButton;
+    Button orderSelections;
     List<ComboBox> comboBoxes;
-    ComboBox selectOrderComboBox;
+    CheckedListBox orderCheckListBox;
     private Pen bluePen = new Pen(Color.Blue, 2);
 
     public GUI_createPickLocationsManyOrders(Graph graph, object sender, EventArgs e) {
         this.g = graph;
-        this.Size = new Size(1000, 700);
+        this.Size = new Size(1000, 750);
         this.Text = $"Choose Pick Locations for {g.orders} Orders.";
         this.Load += GUI_createPickLocationsManyOrders_Load;
         comboBoxes = new List<ComboBox>();
@@ -26,46 +27,56 @@ public class GUI_createPickLocationsManyOrders : Form {
         confirmButton.Width = 200;
         confirmButton.Height = 40;
         confirmButton.Location = new Point(50, g.shelvesPerAisle * shelfWidth + 100);
-
-        Label selectOrderLabel = new Label();
-        selectOrderLabel.Text = "Select Order Number:";
-        selectOrderLabel.Location = new Point(350, g.shelvesPerAisle * shelfWidth + 112);
-        selectOrderLabel.AutoSize = true;
-
-        selectOrderComboBox = new ComboBox();
-        selectOrderComboBox.Location = new Point(475, g.shelvesPerAisle * shelfWidth + 109);
-        selectOrderComboBox.Width = 50;
-        selectOrderComboBox.Height = 20;
-        selectOrderComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-        for (int i = 1; i < g.orders + 1; i++) {
-            selectOrderComboBox.Items.Add(i.ToString());
-        }
-        selectOrderComboBox.AutoSize = true;
-
-        selectOrderComboBox.SelectedIndexChanged += (sender, e) =>
-        {
-            if (int.TryParse(selectOrderComboBox.SelectedItem?.ToString(), out int selectedOrder))
+        confirmButton.Click += (sender, e) =>
             {
-                g.orderNbr = selectedOrder;
-            }
-        };
+            ApplyCheckedOrdersToGraph();
 
-
-         confirmButton.Click += (sender, e) =>
-            {
-            // 1. Recreate layout from current GUI selections
-            //g.LayoutManager.CreatePickLocationsFromGUI();
-            // 2. Rebuild the graph and recompute shortest path
             g.path.Clear();
             g.pathNodes.Clear();
             g.nodes.Clear();
             g.CreateGraph();
+
             CreateSolution_Click(sender, e);
+
+            //ge svar till optimal layout:
+            //int[] BottomLayer = g.LayoutManager.CalculateOptimalBoxStacking();      //t.ex 1,2
+
             };
+
+        Label selectOrderLabel = new Label();
+        selectOrderLabel.Text = "Select Orders:";
+        selectOrderLabel.Location = new Point(350, g.shelvesPerAisle * shelfWidth + 112);
+        selectOrderLabel.AutoSize = true;
+
+        orderCheckListBox = new CheckedListBox();
+        orderCheckListBox.Location = new Point(440, g.shelvesPerAisle * shelfWidth + 106);
+        for (int i = 1; i < g.orders + 1; i++) {
+            orderCheckListBox.Items.Add($"Order {i}");
+        }
+        orderCheckListBox.Width = 120;
+        orderCheckListBox.Height = 80;        
+        orderCheckListBox.CheckOnClick = true;
+
         this.Controls.Add(confirmButton);
         this.Controls.Add(selectOrderLabel);
-        this.Controls.Add(selectOrderComboBox);
+        this.Controls.Add(orderCheckListBox);
+
     }
+
+    private void ApplyCheckedOrdersToGraph() {
+    HashSet<int> selectedOrders = new HashSet<int>();
+        foreach(int indexChecked in orderCheckListBox.CheckedIndices) {
+            selectedOrders.Add(indexChecked + 1);
+        }
+
+        if (selectedOrders.Count == 0)
+            {
+                MessageBox.Show("Please select at least one order.", "No orders selected",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        g.orderSet = selectedOrders;
+    }  
 
     private void GUI_createPickLocationsManyOrders_Load(object sender, EventArgs e)
     {
@@ -154,11 +165,44 @@ private void DrawLayout(Graphics graphics) {
     }
 }
 
- private void ChooseEmptyOrder_Click(object sender, EventArgs e) {
-       if (selectOrderComboBox.SelectedItem == null) {
-            MessageBox.Show("Please select an order number before confirming pick locations.");
-            return;
+    //returns an array of the optimal bottom layer box combination (upper, how to do?)
+    private int[] CalculateOptimalBoxStacking()
+    {
+    //generate all possible pick combinations
+        HashSet<int[]> combinations = new HashSet<int[]>();
+        for(int i = 1; i < g.orders + 1; i--)
+        {
+           for(int j = 1; j < g.layers + 1; j--)
+            {
+                int[] comb = new int[] { i, j };
+                combinations.Add(comb);
+            }   
         }
-}
+    //test all combinations in the path
+
+
+    return null;
+    }
+
+
+     //relevant?       
+    private int StandardBinCoeffCalculation(int n, int k)
+    {
+        int nFact = Factorial(n);
+        int kFact = Factorial(k);
+        return nFact / (kFact * Factorial(n - k));
+    }
+         //relevant?       
+    private int Factorial(int num)
+    {
+        if(num == 0 || num == 1)
+        {
+            return 1;
+        }
+        else
+        {
+            return num * Factorial(num - 1);
+        }
+    }
 
 }

@@ -21,6 +21,7 @@ public class Graph
     public HashSet<Lane> lanes  { get; set; }
     public HashSet<PathStep> path = new HashSet<PathStep>();
     public List<GraphNode> pathNodes { get; set; } = new List<GraphNode>();  
+    public HashSet<int> orderSet { get; set; }
     public int aisles           { get; set; }
     public int shelvesPerAisle  { get; set; }
     public int orders           { get; set; }
@@ -30,7 +31,6 @@ public class Graph
     public double aisleLength   { get; set; }
     public double aisleWidth    { get; set; }
     public double shortestDistance { get; set; }
-
     public int orderNbr { get; set; } = 1;      //!
 
     public Graph(int aisles, int shelvesPerAisle, int orders, int layers, double shelfLength, double shelfWidth)
@@ -41,6 +41,8 @@ public class Graph
         this.shelfWidth = shelfWidth;
         this.orders = orders;
         this.layers = layers;
+
+        orderSet = new HashSet<int>();
 
         //create lanes:
         int nbrCols = aisles * 2;
@@ -104,6 +106,16 @@ public class Graph
             Console.WriteLine(diagonalPath[i].ToString());
         }
         Console.WriteLine("-----------------------------------");
+    }
+
+    public string ListedOrderString()
+    {
+        String orderString = "";
+        foreach (int order in orderSet)
+        {
+            orderString += order.ToString() + ", ";
+        }
+        return orderString.ToString();
     }
 
     public void CreateGraph()
@@ -250,7 +262,8 @@ public class Graph
         if (isLane(colLeft, colRight) == true) {
             for (int row = shelvesPerAisle - 1; row >= 0; row--) {
                 for (int col = colLeft; col <= colRight; col++) {
-                    if (layout[row, col] == orderNbr) {                                                //change 1 to orderNbr
+                    //if (layout[row, col] == orderNbr) {                                            //change 1 to orderNbr                         
+                     if (orderSet.Contains(layout[row, col])) {                                                
                         return 2 * shelfLength * (row + 1) + aisleWidth;
                     }
                 }
@@ -272,7 +285,8 @@ public class Graph
         {
             int lastLeftCol = aisles * 2 - 1;
             for (int row = 0; row < shelvesPerAisle; row++) {
-                if (layout[row, lastLeftCol] == orderNbr) {                                               //change 1 to orderNbr
+              //if (layout[row, lastLeftCol] == orderNbr) {                                               //change 1 to orderNbr
+                if (orderSet.Contains(layout[row, lastLeftCol])) {                                               
                     return 2 * shelfLength * (shelvesPerAisle - row);
                 }
             }
@@ -286,7 +300,8 @@ public class Graph
         else if (n.nodeNbr == 1)  //IsStart
         {
             for (int row = 0; row < shelvesPerAisle; row++) {
-                if (layout[row, 0] == orderNbr) {                                                          //change 1 to orderNbr      
+                //if (layout[row, 0] == orderNbr) {                                                          //change 1 to orderNbr     
+                if (orderSet.Contains(layout[row, 0])) {                                                          
                     return 2 * shelfLength * (shelvesPerAisle - row) + aisleWidth;
                 }
             }
@@ -305,7 +320,8 @@ public class Graph
             {
                 for (int col = colLeft; col <= colRight; col++)
                 {
-                    if (layout[row, col] == orderNbr)                                                      //change 1 to orderNbr
+                    //if (layout[row, col] == orderNbr)                                                      //change 1 to orderNbr
+                    if (orderSet.Contains(layout[row, col]))
                     {
                         return 2 * shelfLength*(shelvesPerAisle - row) + aisleWidth;
                     }
@@ -344,7 +360,8 @@ public class Graph
         for (int row = 0; row < shelvesPerAisle; row++) {
                 for (int col = 0; col < aisles*2 ; col++)
                 {
-                    if (LayoutManager.LayoutMatrix[row, col] == orderNbr) {                                //change 1 to orderNbr
+                    //if (LayoutManager.LayoutMatrix[row, col] == orderNbr) {                                //change 1 to orderNbr
+                    if (orderSet.Contains(LayoutManager.LayoutMatrix[row, col])) {
                     return false;
                     }
                 }

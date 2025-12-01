@@ -21,7 +21,7 @@ public class GUI_solution : Form { //döpa om till GUI
 
     public GUI_solution(Graph g, List<GraphNode> pathNodes) {
         this.g = g;
-        this.Text = $"Warehouse Pick Locations for order {g.orderNbr}";
+        this.Text = $"Warehouse Pick Locations for order(s) " + g.ListedOrderString();
         this.Size = new Size(1000, 700);
         this.Location = new Point(0, 0);
         shelfLength = 50;
