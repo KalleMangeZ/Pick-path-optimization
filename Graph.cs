@@ -16,7 +16,7 @@ Future development: add half-aisle to left of start and to right of end.
 
 public class Graph
 {
-    public Dictionary<string, GraphNode> nodes = new Dictionary<string, GraphNode>();
+    public Dictionary<string, GraphNode> nodes { get; set; }= new Dictionary<string, GraphNode>();
     public Layout LayoutManager { get; set; }
     public HashSet<Lane> lanes  { get; set; }
     public HashSet<PathStep> path = new HashSet<PathStep>();

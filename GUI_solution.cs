@@ -210,5 +210,4 @@ public class GUI_solution : Form { //döpa om till GUI
         shortestPathString += $" | Total distance: {g.shortestDistance}";
         graphics.DrawString(shortestPathString, normalFont, Brushes.Black, new Point(50, Y_R + shelfLength / 3));
     }
-
 }

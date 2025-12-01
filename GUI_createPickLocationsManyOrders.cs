@@ -39,7 +39,7 @@ public class GUI_createPickLocationsManyOrders : Form {
             CreateSolution_Click(sender, e);
 
             //ge svar till optimal layout:
-            //int[] BottomLayer = g.LayoutManager.CalculateOptimalBoxStacking();      //t.ex 1,2
+            CalculateOptimalBoxStacking();      //t.ex 1,2
 
             };
 
@@ -76,7 +76,40 @@ public class GUI_createPickLocationsManyOrders : Form {
             }
 
         g.orderSet = selectedOrders;
-    }  
+    }
+
+     //returns an array of the optimal bottom layer box combination for 2 boxesPerLayer
+    private void CalculateOptimalBoxStacking()
+    {
+    List<BoxLayerCombination> combinations = new List<BoxLayerCombination>();
+    for (int i = 1; i <= g.orders; i++)
+    {
+        for (int j = 1; j <= g.orders; j++)
+        {
+            if (i < j)   // <-- prevents duplicates like (2,1)
+            {
+                g.orderSet = new HashSet<int> { i, j };     //lägger till endast i och j i orderset
+                List<GraphNode> shortestPath;
+                double shortestDistance = g.FindShortestPath(g.nodes["R1"], g.nodes["end"], new HashSet<GraphNode>(), 0,
+                new List<GraphNode>(), out shortestPath);
+                BoxLayerCombination comb = new BoxLayerCombination(i, j, shortestDistance);
+                combinations.Add(comb);
+            }
+        }
+    }
+
+    //get best full layers
+    combinations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost));
+    BoxLayerCombination bestCombination = combinations[0];
+    
+
+    foreach(var comb in combinations) {
+        Console.WriteLine("Combination: " +comb.Box1 + ", " +comb.Box2 + " - Shortest Cost: " + comb.ShortestCost);
+        Console.WriteLine(bestCombination.Box1 + ", " + bestCombination.Box2 + " is the best combination with cost: " + bestCombination.ShortestCost);
+    }
+    // Further logic to evaluate combinations can be added here
+    
+    }   
 
     private void GUI_createPickLocationsManyOrders_Load(object sender, EventArgs e)
     {
@@ -164,26 +197,6 @@ private void DrawLayout(Graphics graphics) {
         }
     }
 }
-
-    //returns an array of the optimal bottom layer box combination (upper, how to do?)
-    private int[] CalculateOptimalBoxStacking()
-    {
-    //generate all possible pick combinations
-        HashSet<int[]> combinations = new HashSet<int[]>();
-        for(int i = 1; i < g.orders + 1; i--)
-        {
-           for(int j = 1; j < g.layers + 1; j--)
-            {
-                int[] comb = new int[] { i, j };
-                combinations.Add(comb);
-            }   
-        }
-    //test all combinations in the path
-
-
-    return null;
-    }
-
 
      //relevant?       
     private int StandardBinCoeffCalculation(int n, int k)
