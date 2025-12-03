@@ -4,7 +4,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-public class GUI_solution : Form { //döpa om till GUI
+public class GUI_solution : Form { 
     Graph g;
     private List<GraphNode> shortestNodePath { get; set; }
     private int centerXStart, centerYStart, centerXEnd, centerYEnd;

@@ -2,7 +2,7 @@ namespace ConsoleApp1
 {
     public class BoxLayerCombination
     {
-        public HashSet<int> Boxes { get; set; }
+        public HashSet<int> Boxes { get; set; }  //BORDE EJ VARA SET PGA MULTIPLE ORDRAR MED SAMMA KUND
         public double ShortestCost { get; set; }
 
         public BoxLayerCombination(HashSet<int> boxes, double shortestCost)
