@@ -2,6 +2,29 @@ namespace ConsoleApp1
 {
     public class BoxLayerCombination
     {
+        public HashSet<int> Boxes { get; set; }
+        public double ShortestCost { get; set; }
+
+        public BoxLayerCombination(HashSet<int> boxes, double shortestCost)
+        {
+            Boxes = boxes;
+            ShortestCost = shortestCost;
+        }
+
+    }
+}
+
+
+
+
+
+
+
+
+/*namespace ConsoleApp1
+{
+    public class BoxLayerCombination
+    {
     public int Box1 { get; set; }
     public int Box2 { get; set; }
     public double ShortestCost { get; set; }
@@ -14,4 +37,4 @@ namespace ConsoleApp1
     }
 
     }
-}
+}*/

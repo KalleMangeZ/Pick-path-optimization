@@ -39,7 +39,8 @@ public class GUI_createPickLocationsManyOrders : Form {
             CreateSolution_Click(sender, e);
 
             //ge svar till optimal layout:
-            CalculateOptimalBoxStacking();      //t.ex 1,2
+            //CalculateOptimalBoxStacking();      //t.ex 1,2
+            Combinations.RunCombinations(g);   //kalla på nya combinations med graph g
 
             };
 
@@ -79,37 +80,55 @@ public class GUI_createPickLocationsManyOrders : Form {
     }
 
      //returns an array of the optimal bottom layer box combination for 2 boxesPerLayer
-    private void CalculateOptimalBoxStacking()
+    /*private void CalculateOptimalBoxStacking()
     {
-    List<BoxLayerCombination> combinations = new List<BoxLayerCombination>();
-    for (int i = 1; i <= g.orders; i++)
-    {
-        for (int j = 1; j <= g.orders; j++)
+        List<BoxLayerCombination> combinations = new List<BoxLayerCombination>();
+        for (int i = 1; i <= g.orders; i++)
         {
-            if (i < j)   // <-- prevents duplicates like (2,1)
+            for (int j = 1; j <= g.orders; j++)
             {
-                g.orderSet = new HashSet<int> { i, j };     //lägger till endast i och j i orderset
-                List<GraphNode> shortestPath;
-                double shortestDistance = g.FindShortestPath(g.nodes["R1"], g.nodes["end"], new HashSet<GraphNode>(), 0,
-                new List<GraphNode>(), out shortestPath);
-                BoxLayerCombination comb = new BoxLayerCombination(i, j, shortestDistance);
-                combinations.Add(comb);
+                if (i < j)   // <-- prevents duplicates like (2,1)
+                {
+                    g.orderSet = new HashSet<int> { i, j };     //lägger till endast i och j i orderset
+                    List<GraphNode> shortestPath;
+                    double shortestDistance = g.FindShortestPath(g.nodes["R1"], g.nodes["end"], new HashSet<GraphNode>(), 0,
+                    new List<GraphNode>(), out shortestPath);
+                    BoxLayerCombination comb = new BoxLayerCombination(i, j, shortestDistance);
+                    combinations.Add(comb);
+                }
             }
         }
-    }
 
-    //get best full layers
-    combinations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost));
-    BoxLayerCombination bestCombination = combinations[0];
-    
+        //get best full layers
+        combinations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost));
+        BoxLayerCombination bestCombination = combinations[0];
 
-    foreach(var comb in combinations) {
-        Console.WriteLine("Combination: " +comb.Box1 + ", " +comb.Box2 + " - Shortest Cost: " + comb.ShortestCost);
+        //add remaining orders to a list
+        HashSet<int> remainingNumbersInComb = new HashSet<int>();
+        for(int k = 1; k < g.orders + 1; k++) {
+            if(k != bestCombination.Box1 && k != bestCombination.Box2) {
+                remainingNumbersInComb.Add(k);
+            }
+        }
+
+        foreach(var comb in combinations) {
+            Console.WriteLine("Combination: " +comb.Box1 + ", " +comb.Box2 + " - Shortest Cost: " + comb.ShortestCost);
+        }
+
         Console.WriteLine(bestCombination.Box1 + ", " + bestCombination.Box2 + " is the best combination with cost: " + bestCombination.ShortestCost);
-    }
-    // Further logic to evaluate combinations can be added here
-    
-    }   
+        
+          foreach(BoxLayerCombination comb in combinations) {
+            if(remainingNumbersInComb.Contains(comb.Box1) && remainingNumbersInComb.Contains(comb.Box2)) {
+                Console.WriteLine("Combination for remaining orders: " + comb.Box1 + ", " + comb.Box2 + " - Shortest Cost: " + comb.ShortestCost);
+            }
+        }
+
+        foreach(BoxLayerCombination comb in combinations) {
+            if(remainingNumbersInComb.Contains(comb.Box1) && !remainingNumbersInComb.Contains(comb.Box2)) {
+                Console.WriteLine("Combination for remaining orders: " + comb.Box1 + ", " + comb.Box2 + " - Shortest Cost: " + comb.ShortestCost);
+            }
+        }
+    }   */
 
     private void GUI_createPickLocationsManyOrders_Load(object sender, EventArgs e)
     {
@@ -197,25 +216,5 @@ private void DrawLayout(Graphics graphics) {
         }
     }
 }
-
-     //relevant?       
-    private int StandardBinCoeffCalculation(int n, int k)
-    {
-        int nFact = Factorial(n);
-        int kFact = Factorial(k);
-        return nFact / (kFact * Factorial(n - k));
-    }
-         //relevant?       
-    private int Factorial(int num)
-    {
-        if(num == 0 || num == 1)
-        {
-            return 1;
-        }
-        else
-        {
-            return num * Factorial(num - 1);
-        }
-    }
 
 }
