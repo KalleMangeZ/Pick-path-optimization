@@ -10,7 +10,6 @@ public class GUI_createPickLocationsManyOrders : Form {
     int shelfLength = 50;
     int shelfWidth = 50;
     Button confirmButton;
-    Button orderSelections;
     List<ComboBox> comboBoxes;
     CheckedListBox orderCheckListBox;
     private Pen bluePen = new Pen(Color.Blue, 2);
@@ -38,8 +37,7 @@ public class GUI_createPickLocationsManyOrders : Form {
 
             CreateSolution_Click(sender, e);
 
-            //ge svar till optimal layout:
-            //CalculateOptimalBoxStacking();      //t.ex 1,2
+            //ger optimal boxkonfiguration på pall:
             Combinations.RunCombinations(g);   //kalla på nya combinations med graph g
 
             };
@@ -61,7 +59,6 @@ public class GUI_createPickLocationsManyOrders : Form {
         this.Controls.Add(confirmButton);
         this.Controls.Add(selectOrderLabel);
         this.Controls.Add(orderCheckListBox);
-
     }
 
     private void ApplyCheckedOrdersToGraph() {
@@ -78,57 +75,6 @@ public class GUI_createPickLocationsManyOrders : Form {
 
         g.orderSet = selectedOrders;
     }
-
-     //returns an array of the optimal bottom layer box combination for 2 boxesPerLayer
-    /*private void CalculateOptimalBoxStacking()
-    {
-        List<BoxLayerCombination> combinations = new List<BoxLayerCombination>();
-        for (int i = 1; i <= g.orders; i++)
-        {
-            for (int j = 1; j <= g.orders; j++)
-            {
-                if (i < j)   // <-- prevents duplicates like (2,1)
-                {
-                    g.orderSet = new HashSet<int> { i, j };     //lägger till endast i och j i orderset
-                    List<GraphNode> shortestPath;
-                    double shortestDistance = g.FindShortestPath(g.nodes["R1"], g.nodes["end"], new HashSet<GraphNode>(), 0,
-                    new List<GraphNode>(), out shortestPath);
-                    BoxLayerCombination comb = new BoxLayerCombination(i, j, shortestDistance);
-                    combinations.Add(comb);
-                }
-            }
-        }
-
-        //get best full layers
-        combinations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost));
-        BoxLayerCombination bestCombination = combinations[0];
-
-        //add remaining orders to a list
-        HashSet<int> remainingNumbersInComb = new HashSet<int>();
-        for(int k = 1; k < g.orders + 1; k++) {
-            if(k != bestCombination.Box1 && k != bestCombination.Box2) {
-                remainingNumbersInComb.Add(k);
-            }
-        }
-
-        foreach(var comb in combinations) {
-            Console.WriteLine("Combination: " +comb.Box1 + ", " +comb.Box2 + " - Shortest Cost: " + comb.ShortestCost);
-        }
-
-        Console.WriteLine(bestCombination.Box1 + ", " + bestCombination.Box2 + " is the best combination with cost: " + bestCombination.ShortestCost);
-        
-          foreach(BoxLayerCombination comb in combinations) {
-            if(remainingNumbersInComb.Contains(comb.Box1) && remainingNumbersInComb.Contains(comb.Box2)) {
-                Console.WriteLine("Combination for remaining orders: " + comb.Box1 + ", " + comb.Box2 + " - Shortest Cost: " + comb.ShortestCost);
-            }
-        }
-
-        foreach(BoxLayerCombination comb in combinations) {
-            if(remainingNumbersInComb.Contains(comb.Box1) && !remainingNumbersInComb.Contains(comb.Box2)) {
-                Console.WriteLine("Combination for remaining orders: " + comb.Box1 + ", " + comb.Box2 + " - Shortest Cost: " + comb.ShortestCost);
-            }
-        }
-    }   */
 
     private void GUI_createPickLocationsManyOrders_Load(object sender, EventArgs e)
     {

@@ -57,9 +57,15 @@ public class Combinations
         if (n % k != 0)
         {
             Console.WriteLine("n must be divisible by k. FIXA DETTA");
-            //skapa alla möjliga kombinationer av längd k med numrena från n. Sätt resten av ordrarna på toppen.
+            /*skapa alla möjliga kombinationer av längd k med numrena från n. Sätt resten av ordrarna på toppen.
             //alltså C(n, k) och ta den/de bästa kombinationerna. Sätt resten av oanvända
-            
+
+            - Fixa för ojämnt antal ordrar
+
+            - Fixa för ojämnt antal ordrar per lager
+
+            */
+
             return;
         }
 

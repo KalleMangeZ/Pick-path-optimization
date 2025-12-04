@@ -84,7 +84,6 @@ public class GUI_solution : Form {
         SizeF textSize2 = graphics.MeasureString(label2, smallFont);
         graphics.DrawString(label2, smallFont, brush2, centerXEnd - textSize2.Width / 2, centerYEnd - textSize2.Height / 2 + 2 * radius);
         graphics.DrawEllipse(redPen, centerXEnd - radius, centerYEnd - radius, radius * 2, radius * 2);
-
     }
 
     public void DrawPath(Graphics graphics) {
@@ -112,7 +111,9 @@ public class GUI_solution : Form {
                     graphics.DrawLine(redPen, currX, Y_R, currX, Y_R - yDist);
                 }
                 else {
-                    graphics.DrawLine(redPen, currX, Y_R, currX, Y_R - yDist - yDistStartToRNode / 2);
+                    graphics.DrawLine(redPen, currX-shelfLength/4, Y_R, currX-shelfLength/4, Y_R - yDist - yDistStartToRNode / 2); //vert test
+                                graphics.DrawLine(redPen, currX-shelfLength/4, Y_R - yDist - yDistStartToRNode / 2, currX+shelfLength/4, Y_R - yDist - yDistStartToRNode / 2); //hort TEST
+                                graphics.DrawLine(redPen, currX+shelfLength/4, Y_R, currX+shelfLength/4, Y_R - yDist - yDistStartToRNode / 2); //vert TEST
                 }
 
                 graphics.DrawLine(redPen, currX, Y_R, centerXEnd, Y_R);
@@ -145,7 +146,9 @@ public class GUI_solution : Form {
                     yDist = 0;
                 }
 
-                graphics.DrawLine(redPen, currX, Y_L, currX, Y_L + yDist);
+                graphics.DrawLine(redPen, currX-shelfLength/4, Y_L, currX-shelfLength/4, Y_L + yDist); //TEST MED -shelfLength/4
+                                graphics.DrawLine(redPen, currX-shelfLength/4, Y_L+yDist, currX+shelfLength/4, Y_L + yDist); //TEST
+                                graphics.DrawLine(redPen, currX+shelfLength/4, Y_L, currX+shelfLength/4, Y_L + yDist); //TEST
                 graphics.DrawLine(redPen, currX, Y_L, currX + xMove, Y_L);
                 currX = currX + xMove;
                 currY = Y_L;
@@ -166,9 +169,11 @@ public class GUI_solution : Form {
 
                 if (curr.nodeNbr == 1) { //if the node is the first in the aisle, only move xMove - centerXStart
                     xMove = xMove - centerXStart;
-                }
+                } 
 
-                graphics.DrawLine(redPen, currX, Y_R, currX, Y_R - yDist);
+                graphics.DrawLine(redPen, currX-shelfLength/4, Y_R, currX-shelfLength/4, Y_R - yDist);                     //vert  TEST MED -shelfLength/4
+                                graphics.DrawLine(redPen, currX-shelfLength/4, Y_R-yDist, currX+shelfLength/4, Y_R-yDist); //hort TEST
+                                graphics.DrawLine(redPen, currX+shelfLength/4, Y_R, currX+shelfLength/4, Y_R - yDist); //vert TEST
                 graphics.DrawLine(redPen, currX, Y_R, currX + xMove, Y_R);
                 currX = currX + xMove;
                 currY = Y_R;
