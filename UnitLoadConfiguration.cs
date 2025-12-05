@@ -2,12 +2,12 @@ namespace ConsoleApp1;
 
 public class UnitLoadConfiguration
 {
-    public List<BoxLayerCombination> Boxes { get; set; }        //pickLoadCarriers
+    public List<BoxLayerCombination> Layers { get; set; }        //multiple layers with pickLoadCarriers
     public double ShortestCost { get; set; }
 
-    public UnitLoadConfiguration(List<BoxLayerCombination> boxes, double shortestCost)
+    public UnitLoadConfiguration(List<BoxLayerCombination> layers, double shortestCost)
     {
-        Boxes = boxes;
+        Layers = layers;
         ShortestCost = shortestCost;
     }
 

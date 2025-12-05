@@ -119,9 +119,33 @@ public class Combinations
 
     configurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost));
     
-    UnitLoadConfiguration best = configurations[0];
-    Console.WriteLine("\nMinimal unit load configuration cost: " + best.ShortestCost);
+    UnitLoadConfiguration optimal = configurations[0];
+    /*Console.WriteLine("\nMinimal unit load configuration cost: " + optimal.ShortestCost);
     Console.WriteLine("Configuration boxes: " + string.Join(" | ",
-        best.Boxes.Select(b => "(" + string.Join(",", b.Boxes) + ")")));    }
+        optimal.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")"))); */  
+
+    ShowOptimalConfigurationRoutes(g, optimal);
+    }
+
+    public static void ShowOptimalConfigurationRoutes(Graph g, UnitLoadConfiguration config)
+    {
+        foreach (BoxLayerCombination boxLayer in config.Layers)
+        {
+            g.orderSet = new HashSet<int>(boxLayer.Boxes);
+            g.path.Clear();      
+            g.pathNodes.Clear();
+            g.nodes.Clear();
+            g.CreateGraph();
+            GUI_solution gui_solution = new GUI_solution(g, g.pathNodes);
+            gui_solution.ShowDialog();
+        }
+
+        //print the minimal configuration routes in console
+        Console.WriteLine("Minimal unit load configuration cost: " + config.ShortestCost);
+        Console.WriteLine("Configuration boxes: " + string.Join(" | ",
+        config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
+    }
+
 
 }
+

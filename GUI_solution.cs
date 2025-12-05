@@ -16,6 +16,7 @@ public class GUI_solution : Form {
     private int yDistStartToRNode;
     private Pen bluePen = new Pen(Color.Blue, 2);
     private Pen redPen = new Pen(Color.Red, 2);
+    private Pen greyPen = new Pen(Color.FromArgb(240, 240, 240), 2);
     private Font smallFont = new Font("Arial", 7);
     private Font normalFont = new Font("Arial", 10);
 
@@ -113,10 +114,13 @@ public class GUI_solution : Form {
                 else {
                     graphics.DrawLine(redPen, currX-shelfLength/4, Y_R, currX-shelfLength/4, Y_R - yDist - yDistStartToRNode / 2); //vert test
                                 graphics.DrawLine(redPen, currX-shelfLength/4, Y_R - yDist - yDistStartToRNode / 2, currX+shelfLength/4, Y_R - yDist - yDistStartToRNode / 2); //hort TEST
-                                graphics.DrawLine(redPen, currX+shelfLength/4, Y_R, currX+shelfLength/4, Y_R - yDist - yDistStartToRNode / 2); //vert TEST
+                                graphics.DrawLine(redPen, currX+shelfLength/4, Y_R, currX+shelfLength/4, Y_R - yDist - yDistStartToRNode / 2); //vert TEST          
                 }
 
                 graphics.DrawLine(redPen, currX, Y_R, centerXEnd, Y_R);
+                if(yDist != 0) {
+                    graphics.DrawLine(greyPen, currX-shelfLength/4, Y_R, currX+shelfLength/4, Y_R); //GREY TEST
+                }
             }
 
             GraphNode next = shortestNodePath[i + 1];
@@ -128,6 +132,7 @@ public class GUI_solution : Form {
 
                 graphics.DrawLine(redPen, currX, Y_R, currX, Y_L);
                 graphics.DrawLine(redPen, currX, Y_L, currX + xMove, Y_L);
+                
                 currX = currX + xMove;
                 currY = Y_L;
             }
@@ -147,9 +152,12 @@ public class GUI_solution : Form {
                 }
 
                 graphics.DrawLine(redPen, currX-shelfLength/4, Y_L, currX-shelfLength/4, Y_L + yDist); //TEST MED -shelfLength/4
-                                graphics.DrawLine(redPen, currX-shelfLength/4, Y_L+yDist, currX+shelfLength/4, Y_L + yDist); //TEST
-                                graphics.DrawLine(redPen, currX+shelfLength/4, Y_L, currX+shelfLength/4, Y_L + yDist); //TEST
+                                graphics.DrawLine(redPen, currX-shelfLength/4, Y_L+yDist, currX+shelfLength/4, Y_L + yDist); //hort TEST
+                                graphics.DrawLine(redPen, currX+shelfLength/4, Y_L, currX+shelfLength/4, Y_L + yDist); //vert TEST
                 graphics.DrawLine(redPen, currX, Y_L, currX + xMove, Y_L);
+                                if(yDist != 0) {
+                                graphics.DrawLine(greyPen, currX-shelfLength/4, Y_L, currX+shelfLength/4, Y_L); //hort TEST
+                                }
                 currX = currX + xMove;
                 currY = Y_L;
             }
@@ -175,6 +183,9 @@ public class GUI_solution : Form {
                                 graphics.DrawLine(redPen, currX-shelfLength/4, Y_R-yDist, currX+shelfLength/4, Y_R-yDist); //hort TEST
                                 graphics.DrawLine(redPen, currX+shelfLength/4, Y_R, currX+shelfLength/4, Y_R - yDist); //vert TEST
                 graphics.DrawLine(redPen, currX, Y_R, currX + xMove, Y_R);
+                                if(yDist != 0) {
+                                graphics.DrawLine(greyPen, currX-shelfLength/4, Y_R, currX+shelfLength/4, Y_R); //hort TEST
+                                }
                 currX = currX + xMove;
                 currY = Y_R;
             }

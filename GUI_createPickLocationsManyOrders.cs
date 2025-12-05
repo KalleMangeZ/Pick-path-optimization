@@ -18,6 +18,9 @@ public class GUI_createPickLocationsManyOrders : Form {
         this.g = graph;
         this.Size = new Size(1000, 750);
         this.Text = $"Choose Pick Locations for {g.orders} Orders.";
+        this.AutoScroll = true;            
+        this.AutoScrollMinSize = new Size(0, 2000); 
+
         this.Load += GUI_createPickLocationsManyOrders_Load;
         comboBoxes = new List<ComboBox>();
 
@@ -30,7 +33,7 @@ public class GUI_createPickLocationsManyOrders : Form {
             {
             ApplyCheckedOrdersToGraph();
 
-            g.path.Clear();
+            g.path.Clear();      //lägga till i Combinations
             g.pathNodes.Clear();
             g.nodes.Clear();
             g.CreateGraph();
@@ -39,7 +42,6 @@ public class GUI_createPickLocationsManyOrders : Form {
 
             //ger optimal boxkonfiguration på pall:
             Combinations.RunCombinations(g);   //kalla på nya combinations med graph g
-
             };
 
         Label selectOrderLabel = new Label();
@@ -144,6 +146,12 @@ public class GUI_createPickLocationsManyOrders : Form {
 
     protected override void OnPaint(PaintEventArgs e) {
     base.OnPaint(e);
+
+    // Move drawing based on scroll position
+    var gTrans = e.Graphics;
+    gTrans.TranslateTransform(this.AutoScrollPosition.X, this.AutoScrollPosition.Y);
+    DrawLayout(gTrans);
+
     DrawLayout(e.Graphics);
 }
 
