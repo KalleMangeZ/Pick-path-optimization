@@ -56,16 +56,12 @@ public class Combinations
 
         if (n % k != 0)
         {
-            Console.WriteLine("n must be divisible by k. FIXA DETTA");
+            RunCombinationsOddNumberOfOrders(n, k, g);
             /*skapa alla möjliga kombinationer av längd k med numrena från n. Sätt resten av ordrarna på toppen.
             //alltså C(n, k) och ta den/de bästa kombinationerna. Sätt resten av oanvända
-
             - Fixa för ojämnt antal ordrar
-
-            - Fixa för ojämnt antal ordrar per lager
-
+            - Man ska inte kunna skicka in antal lager --> antal lager beräknas
             */
-
             return;
         }
 
@@ -76,8 +72,6 @@ public class Combinations
         List<BoxLayerCombination> allCombinations = new List<BoxLayerCombination>();
         foreach (var partition in partitions)       //list<int> in list<list<int>>
         {
-            Console.Write($"{count}. ");
-            Console.WriteLine(string.Join(" | ", partition.Select(g => "(" + string.Join(",", g) + ")")));
 
             foreach (var orders in partition)   //list<int>
             {
@@ -113,17 +107,23 @@ public class Combinations
                     list.Add(comb);
                     listCost += comb.ShortestCost;
                 }
-                Console.WriteLine("Total cost for configuration " + (i+1) + ": " + listCost);
                 configurations.Add(new UnitLoadConfiguration(list, listCost));
            }
 
     configurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost));
-    
     UnitLoadConfiguration optimal = configurations[0];
-    /*Console.WriteLine("\nMinimal unit load configuration cost: " + optimal.ShortestCost);
-    Console.WriteLine("Configuration boxes: " + string.Join(" | ",
-        optimal.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")"))); */  
 
+    int count = 1;
+    foreach(UnitLoadConfiguration ULC in configurations)
+    {
+        Console.WriteLine();
+        Console.Write(count + ". ");
+        Console.Write("Configuration boxes: " + string.Join(" | ",
+        ULC.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
+        Console.Write(" | Cost: " + ULC.ShortestCost);
+        count++;
+    }
+    Console.WriteLine();
     ShowOptimalConfigurationRoutes(g, optimal);
     }
 
@@ -141,9 +141,16 @@ public class Combinations
         }
 
         //print the minimal configuration routes in console
+        Console.WriteLine();
         Console.WriteLine("Minimal unit load configuration cost: " + config.ShortestCost);
         Console.WriteLine("Configuration boxes: " + string.Join(" | ",
         config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
+    }
+
+    public static void RunCombinationsOddNumberOfOrders(int n, int k, Graph g) {
+        
+
+
     }
 
 

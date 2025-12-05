@@ -33,14 +33,14 @@ public class Graph
     public double shortestDistance { get; set; }
     public int orderNbr { get; set; } = 1;      //!
 
-    public Graph(int aisles, int shelvesPerAisle, int orders, int layers, double shelfLength, double shelfWidth)
+    public Graph(int aisles, int shelvesPerAisle, int orders, int nbrOrdersPerLayers, double shelfLength, double shelfWidth)
     {
         this.aisles = aisles;
         this.shelvesPerAisle = shelvesPerAisle;
         this.shelfLength = shelfLength;
         this.shelfWidth = shelfWidth;
         this.orders = orders;
-        this.layers = layers;
+        this.layers = orders/nbrOrdersPerLayers; //! ksk behöver ändras till double
 
         orderSet = new HashSet<int>();
 
