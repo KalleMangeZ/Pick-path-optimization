@@ -25,9 +25,6 @@ public class Combinations
             RunCombinationsUnevenNumberOfOrders(n, k, g);
         }
 
-        Console.WriteLine($"\nTotal partitions: {partitions.Count}");
-        Console.WriteLine($"Number of boxes per layer: {k}");
-        Console.WriteLine($"Number of layers: {g.layers}");
     }
 
     public static void RunCombinationsEvenNumberOfOrders(int n, int k, Graph g) {
@@ -49,6 +46,10 @@ public class Combinations
             count++;
         }
         calculateUnitLoadConfigurationCost_Even(allCombinations, g);
+
+        Console.WriteLine($"\nTotal partitions: {partitions.Count}");
+        Console.WriteLine($"Number of boxes per layer: {k}");
+        Console.WriteLine($"Number of layers: {g.layers}");
     }
 
      // Recursive function to generate all partitions into sets of size k
@@ -233,6 +234,10 @@ public class Combinations
             }
         }
         calculateUnitLoadConfigurationCost_Uneven(unitLoadConfigurations, g); 
+
+        Console.WriteLine($"\nTotal partitions: {firstGroups.Count}");
+        Console.WriteLine($"Number of boxes per layer: {k}");
+        Console.WriteLine($"Number of layers: {g.layers}");
     }
 
     public static List<List<int>> GetPermutations(List<int> list, int length)
