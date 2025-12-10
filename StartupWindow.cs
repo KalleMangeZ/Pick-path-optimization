@@ -76,6 +76,7 @@ public class StartupWindow : Form {
                 nbrOrdersChoice.Items.Add("6");
                 nbrOrdersChoice.Items.Add("7");
                 nbrOrdersChoice.Items.Add("8");  
+                nbrOrdersChoice.Items.Add("9");
                 nbrOrdersChoice.Items.Add("10");        //TEST!                            
                 //nbrShelvesChoice.Items.Add("16");
                 nbrOrdersChoice.DropDownStyle = ComboBoxStyle.DropDownList;

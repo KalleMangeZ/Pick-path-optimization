@@ -26,6 +26,7 @@ public class Graph
     public int shelvesPerAisle  { get; set; }
     public int orders           { get; set; }
     public int layers           { get; set; }
+    public int nbrOrdersPerLayers { get; set; }
     public double shelfLength   { get; set; }
     public double shelfWidth    { get; set; }
     public double aisleLength   { get; set; }
@@ -40,7 +41,8 @@ public class Graph
         this.shelfLength = shelfLength;
         this.shelfWidth = shelfWidth;
         this.orders = orders;
-        this.layers = orders/nbrOrdersPerLayers; //! ksk behöver ändras till double
+        this.nbrOrdersPerLayers = nbrOrdersPerLayers;
+        this.layers = (int)Math.Ceiling(orders / (double)nbrOrdersPerLayers);
 
         orderSet = new HashSet<int>();
 
@@ -84,7 +86,7 @@ public class Graph
                 diagonalPath.Add(ps);
             }
         }
-        
+       
         Console.WriteLine();
         Console.WriteLine("-----------------------------------");
         Console.WriteLine("Current horizontal path distances: ");
@@ -248,7 +250,7 @@ public class Graph
     }
 
     /*söker genom efter item som ligger längst bort från rad 3 mellan colLeft och colRight. (För L noder)
-    (1,2) och (3,4) är OK. 
+    (1,2) och (3,4) är OK.
     kod för kolla om n = startnod eller n = endnod
     0,1 , 2,3 , 4,5 är ej möjligt.
     om n = startnod eller endnod --> bara kolla en col (högercol resp. vänstercol) */
@@ -262,7 +264,7 @@ public class Graph
         if (isLane(colLeft, colRight) == true) {
             for (int row = shelvesPerAisle - 1; row >= 0; row--) {
                 for (int col = colLeft; col <= colRight; col++) {
-                    //if (layout[row, col] == orderNbr) {                                            //change 1 to orderNbr                         
+                    //if (layout[row, col] == orderNbr) {                                            //change 1 to orderNbr                        
                      if (orderSet.Contains(layout[row, col])) {                                                
                         return 2 * shelfLength * (row + 1) + aisleWidth;
                     }
@@ -273,7 +275,7 @@ public class Graph
     }
 
     /*söker genom efter item som ligger längst bort från rad 0 mellan colLeft och colRight. (För R noder)
-    (1,2) och (3,4) är OK. 
+    (1,2) och (3,4) är OK.
     kod för kolla om n = startnod eller n = endnod
     0,1 , 2,3 , 4,5 är ej möjligt.
     om n = startnod eller endnod --> bara kolla en col (högercol resp. vänstercol) */
@@ -286,7 +288,7 @@ public class Graph
             int lastLeftCol = aisles * 2 - 1;
             for (int row = 0; row < shelvesPerAisle; row++) {
               //if (layout[row, lastLeftCol] == orderNbr) {                                               //change 1 to orderNbr
-                if (orderSet.Contains(layout[row, lastLeftCol])) {                                               
+                if (orderSet.Contains(layout[row, lastLeftCol])) {                                              
                     return 2 * shelfLength * (shelvesPerAisle - row);
                 }
             }
@@ -300,7 +302,7 @@ public class Graph
         else if (n.nodeNbr == 1)  //IsStart
         {
             for (int row = 0; row < shelvesPerAisle; row++) {
-                //if (layout[row, 0] == orderNbr) {                                                          //change 1 to orderNbr     
+                //if (layout[row, 0] == orderNbr) {                                                          //change 1 to orderNbr    
                 if (orderSet.Contains(layout[row, 0])) {                                                          
                     return 2 * shelfLength * (shelvesPerAisle - row) + aisleWidth;
                 }
@@ -310,7 +312,7 @@ public class Graph
         else if (n.nodeNbr - 2 < 0) {
             return aisleWidth;
         }
-        
+       
         int colLeft = lanes.ElementAt(n.nodeNbr - 2).left;
         int colRight = lanes.ElementAt(n.nodeNbr - 2).right;
 
