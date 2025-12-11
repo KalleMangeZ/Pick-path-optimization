@@ -32,15 +32,11 @@ public class GUI_createPickLocationsManyOrders : Form {
         confirmButton.Click += (sender, e) =>
             {
             ApplyCheckedOrdersToGraph();
-
             g.path.Clear();      //lägga till i Combinations
             g.pathNodes.Clear();
             g.nodes.Clear();
             g.CreateGraph();
-
             CreateSolution_Click(sender, e);
-
-            //ger optimal boxkonfiguration på pall:
             Combinations.RunCombinations(g);   //kalla på nya combinations med graph g
             };
 

@@ -35,6 +35,8 @@ public class GUI_solution : Form {
         shortestNodePath = pathNodes;
         this.CenterToScreen();
         this.DoubleBuffered = true;
+
+                        OrderSequenceAnalysis analysis = new OrderSequenceAnalysis(g);
     }
 
     private void DrawRectangle(object sender, PaintEventArgs e) {

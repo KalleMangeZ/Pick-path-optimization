@@ -5,8 +5,12 @@ public class Layout
     private int shelvesPerAisle;
     private int aisles;
     public HashSet<Lane> lanes  { get; set; }
-    private int[,] layout;
-    public int[,] LayoutMatrix => layout;
+    public int[,] layout;
+    public int[,] LayoutMatrix
+    {
+        get => layout;
+        set => layout = value;
+    }    
     public int orders;
     public int layers;
 

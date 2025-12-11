@@ -81,7 +81,6 @@ public class StartupWindow : Form {
                 //nbrShelvesChoice.Items.Add("16");
                 nbrOrdersChoice.DropDownStyle = ComboBoxStyle.DropDownList;
 
-                
                 nbrOrdersPerLayerLabel = new Label();
                 nbrOrdersPerLayerLabel.Location = new Point(35, 188);
                 nbrOrdersPerLayerLabel.Text = "Enter number of orders per pallet layer:"; 
