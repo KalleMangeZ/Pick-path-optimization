@@ -1,4 +1,5 @@
 namespace ConsoleApp1;
+
 public class StartupWindow : Form {
     Label aislesLabel;
     ComboBox aislesChoice;
@@ -94,7 +95,14 @@ public class StartupWindow : Form {
                 nbrOrdersPerLayerChoice.Items.Add("2");
                 nbrOrdersPerLayerChoice.Items.Add("3");
                 nbrOrdersPerLayerChoice.Items.Add("4");    
-                nbrOrdersPerLayerChoice.Items.Add("5");    //  TEST!    C(10,5) ...blir ... = 113400. 
+                nbrOrdersPerLayerChoice.Items.Add("5"); 
+                nbrOrdersPerLayerChoice.Items.Add("6");
+                nbrOrdersPerLayerChoice.Items.Add("7");
+                nbrOrdersPerLayerChoice.Items.Add("8");
+                nbrOrdersPerLayerChoice.Items.Add("9");
+                nbrOrdersPerLayerChoice.Items.Add("10");
+        
+                                                    //  TEST!    C(10,5) ...blir ... = 113400. 
                                                    //  113400/C(10,5) = 113400/252 = 450 layers
                                                    //  450/5 = 90 configs
                 nbrOrdersPerLayerChoice.DropDownStyle = ComboBoxStyle.DropDownList;

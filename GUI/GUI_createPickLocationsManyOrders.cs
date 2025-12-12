@@ -1,9 +1,10 @@
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-namespace ConsoleApp1;
 
+namespace ConsoleApp1;
 public class GUI_createPickLocationsManyOrders : Form {
     Graph g;
     int aisleToAisleDist = 200;
@@ -113,58 +114,57 @@ public class GUI_createPickLocationsManyOrders : Form {
         }
     }
 
-    private void CreateComboBox(int xLoc, int yLoc, int xIndexLayout, int yIndexLayout, int firstAisleCol, int aisleIndex) {
-        ComboBox comboBox = new ComboBox();
-        comboBoxes.Add(comboBox);
+        private void CreateComboBox(int xLoc, int yLoc, int xIndexLayout, int yIndexLayout, int firstAisleCol, int aisleIndex) {
+            ComboBox comboBox = new ComboBox();
+            comboBoxes.Add(comboBox);
 
-        comboBox.Location = new Point(xLoc + shelfLength / 10, yLoc + shelfWidth / 4);
-        comboBox.Width = shelfLength-10;
-        comboBox.Height = shelfWidth / 2;
+            comboBox.Location = new Point(xLoc + shelfLength / 10, yLoc + shelfWidth / 4);
+            comboBox.Width = shelfLength-10;
+            comboBox.Height = shelfWidth / 2;
 
-        comboBox.Items.Add("0"); // Option for no pick location
-        for(int i = 1; i < g.orders+1; i++) {
-            comboBox.Items.Add(i.ToString());
-        }
-        comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox.Items.Add("0"); // Option for no pick location
+            for(int i = 1; i < g.orders+1; i++) {
+                comboBox.Items.Add(i.ToString());
+            }
+            comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
-        // Event handler for selection change
-        comboBox.SelectedIndexChanged += (sender, e) =>
-        {
-            if (int.TryParse(comboBox.SelectedItem?.ToString(), out int selectedValue))
+            // Event handler for selection change
+            comboBox.SelectedIndexChanged += (sender, e) =>
             {
-                g.LayoutManager.LayoutMatrix[yIndexLayout, xIndexLayout + firstAisleCol] = selectedValue;
-            }
-        };
-
-        this.Controls.Add(comboBox);
-        comboBoxes.Add(comboBox);
-    }
-
-    protected override void OnPaint(PaintEventArgs e) {
-    base.OnPaint(e);
-
-    // Move drawing based on scroll position
-    var gTrans = e.Graphics;
-    gTrans.TranslateTransform(this.AutoScrollPosition.X, this.AutoScrollPosition.Y);
-    DrawLayout(gTrans);
-
-    DrawLayout(e.Graphics);
-}
-
-private void DrawLayout(Graphics graphics) {
-    using (Pen pen = new Pen(Color.Blue, 2)) {
-        int firstAisleCol = 0;
-        for (int i = 0; i < g.aisles; i++) {
-            for (int x = 0; x < 2; x++) {
-                for (int y = 0; y < g.shelvesPerAisle; y++) {
-                    int xLoc = x * shelfLength + shelfLength + i * aisleToAisleDist;
-                    int yLoc = y * shelfWidth + shelfWidth;
-                    graphics.DrawRectangle(pen, xLoc, yLoc, shelfLength, shelfWidth);
+                if (int.TryParse(comboBox.SelectedItem?.ToString(), out int selectedValue))
+                {
+                    g.LayoutManager.LayoutMatrix[yIndexLayout, xIndexLayout + firstAisleCol] = selectedValue;
                 }
+            };
+
+            this.Controls.Add(comboBox);
+            comboBoxes.Add(comboBox);
+        }
+
+        protected override void OnPaint(PaintEventArgs e) {
+        base.OnPaint(e);
+
+        // Move drawing based on scroll position
+        var gTrans = e.Graphics;
+        gTrans.TranslateTransform(this.AutoScrollPosition.X, this.AutoScrollPosition.Y);
+        DrawLayout(gTrans);
+
+        DrawLayout(e.Graphics);
+        }
+
+    private void DrawLayout(Graphics graphics) {
+        using (Pen pen = new Pen(Color.Blue, 2)) {
+            int firstAisleCol = 0;
+            for (int i = 0; i < g.aisles; i++) {
+                for (int x = 0; x < 2; x++) {
+                    for (int y = 0; y < g.shelvesPerAisle; y++) {
+                        int xLoc = x * shelfLength + shelfLength + i * aisleToAisleDist;
+                        int yLoc = y * shelfWidth + shelfWidth;
+                        graphics.DrawRectangle(pen, xLoc, yLoc, shelfLength, shelfWidth);
+                    }
+                }
+                firstAisleCol += 2;
             }
-            firstAisleCol += 2;
         }
     }
-}
-
 }
