@@ -36,7 +36,7 @@ public class GUI_solution : Form {
         this.CenterToScreen();
         this.DoubleBuffered = true;
 
-                        OrderSequenceAnalysis analysis = new OrderSequenceAnalysis(g);
+        OrderSequenceAnalysis analysis = new OrderSequenceAnalysis(g);
     }
 
     private void DrawRectangle(object sender, PaintEventArgs e) {

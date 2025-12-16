@@ -3,7 +3,6 @@ namespace ConsoleApp1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 public class Combinations
 {
     static int k;
