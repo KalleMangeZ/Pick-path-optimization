@@ -31,6 +31,7 @@ namespace ConsoleApp1
 
         private void ShowOrderStrings(Graphics graphics)
         {
+            graphics.DrawString("Order sequence:",normalFont,Brushes.Black,new Point(50, 25));
             for(int i = 0; i < a.orderSequence.Count; i++) {
                 orderSequenceString += a.orderSequence[i] + "   ";
             }
@@ -41,8 +42,8 @@ namespace ConsoleApp1
             for(int order = 1; order < g.orders+1; order++) {
                 graphics.DrawString(order.ToString(),normalFont,Brushes.Black,new Point(50, 50+rowLength*order));
                 graphics.DrawLine(pen, 
-                        110+a.orderStartInSequence[order-1]*spaceBetweenOrders, 50+rowLength*order,
-                        110+a.orderEndInSequence[order-1]*spaceBetweenOrders, 50+rowLength*order);
+                        109+a.orderStartInSequence[order-1]*spaceBetweenOrders, 50+rowLength*order,
+                        109+a.orderEndInSequence[order-1]*spaceBetweenOrders, 50+rowLength*order);
 
             graphics.DrawString(orderSequenceString,normalFont,Brushes.Black,new Point(100, 50));
             }

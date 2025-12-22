@@ -19,6 +19,7 @@ public class GUI_solution : Form {
     private Pen greyPen = new Pen(Color.FromArgb(240, 240, 240), 2);
     private Font smallFont = new Font("Arial", 7);
     private Font normalFont = new Font("Arial", 10);
+    private static OrderSequenceAnalysis? _instance;
 
     public GUI_solution(Graph g, List<GraphNode> pathNodes) {
         this.g = g;
@@ -35,8 +36,15 @@ public class GUI_solution : Form {
         shortestNodePath = pathNodes;
         this.CenterToScreen();
         this.DoubleBuffered = true;
+        GetOrCreate(g);
+    }
 
-        OrderSequenceAnalysis analysis = new OrderSequenceAnalysis(g);
+    public static OrderSequenceAnalysis GetOrCreate(Graph g)
+    {
+        if (_instance == null)
+            _instance = new OrderSequenceAnalysis(g);
+
+        return _instance;
     }
 
     private void DrawRectangle(object sender, PaintEventArgs e) {
