@@ -149,6 +149,16 @@ public class Combinations
         Console.WriteLine("\nMinimal unit load configuration cost: " + config.ShortestCost);
         Console.WriteLine("Configuration boxes: " + string.Join(" | ", 
         config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")"))); 
+
+        Console.WriteLine("Stacking: \n" + string.Join("\n", 
+        config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
+        
+        Console.Write("|=");
+        for(int i = 0; i < g.nbrOrdersPerLayers; i++) {
+        Console.Write("=");
+        }
+        Console.Write("|");
+
     }
     public static void RunCombinationsUnevenNumberOfOrders(int n, int k, Graph g) {
         var firstGroups = GetCombinations_Uneven(n, k);
