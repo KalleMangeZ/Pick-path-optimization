@@ -10,7 +10,6 @@ public class GUI_createPickLocations : Form {
     Button confirmButton;
     private List<Button> rackButtons;
     private Pen bluePen = new Pen(Color.Blue, 2);
-
     public GUI_createPickLocations(int aisles, int shelvesPerAisle, Graph g, object sender, EventArgs e) {
         this.aisles = aisles;
         this.shelvesPerAisle = shelvesPerAisle;
@@ -83,7 +82,6 @@ private void DrawLayout(Graphics g) {
     }
 
     private void CreateSolutionWindow() {
-
         if (IsAnyRackButtonClicked() && g.IsEmptyLayout() == false) {
             GUI_solution window = new GUI_solution(g, g.pathNodes);
             window.ShowDialog();

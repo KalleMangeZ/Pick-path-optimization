@@ -24,8 +24,4 @@ public class Lane
     {
         return HashCode.Combine(left, right);
     }
-
-        
-
-
 }

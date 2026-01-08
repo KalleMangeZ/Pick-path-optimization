@@ -4,7 +4,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 
-public class GUI_solution : Form { //döpa om till GUI
+public class GUI_solution : Form { 
     Graph g;
     private List<GraphNode> shortestNodePath { get; set; }
     private int centerXStart, centerYStart, centerXEnd, centerYEnd;
@@ -16,12 +16,14 @@ public class GUI_solution : Form { //döpa om till GUI
     private int yDistStartToRNode;
     private Pen bluePen = new Pen(Color.Blue, 2);
     private Pen redPen = new Pen(Color.Red, 2);
+    private Pen greyPen = new Pen(Color.FromArgb(240, 240, 240), 2);
     private Font smallFont = new Font("Arial", 7);
     private Font normalFont = new Font("Arial", 10);
+    private static OrderSequenceAnalysis? _instance;
 
     public GUI_solution(Graph g, List<GraphNode> pathNodes) {
         this.g = g;
-        this.Text = "Warehouse Pick Locations";
+        this.Text = $"Warehouse Pick Locations for order(s) " + g.ListedOrderString();
         this.Size = new Size(1000, 700);
         this.Location = new Point(0, 0);
         shelfLength = 50;
@@ -34,6 +36,15 @@ public class GUI_solution : Form { //döpa om till GUI
         shortestNodePath = pathNodes;
         this.CenterToScreen();
         this.DoubleBuffered = true;
+        GetOrCreate(g);
+    }
+
+    public static OrderSequenceAnalysis GetOrCreate(Graph g)
+    {
+        if (_instance == null)
+            _instance = new OrderSequenceAnalysis(g);
+
+        return _instance;
     }
 
     private void DrawRectangle(object sender, PaintEventArgs e) {
@@ -84,7 +95,6 @@ public class GUI_solution : Form { //döpa om till GUI
         SizeF textSize2 = graphics.MeasureString(label2, smallFont);
         graphics.DrawString(label2, smallFont, brush2, centerXEnd - textSize2.Width / 2, centerYEnd - textSize2.Height / 2 + 2 * radius);
         graphics.DrawEllipse(redPen, centerXEnd - radius, centerYEnd - radius, radius * 2, radius * 2);
-
     }
 
     public void DrawPath(Graphics graphics) {
@@ -112,10 +122,15 @@ public class GUI_solution : Form { //döpa om till GUI
                     graphics.DrawLine(redPen, currX, Y_R, currX, Y_R - yDist);
                 }
                 else {
-                    graphics.DrawLine(redPen, currX, Y_R, currX, Y_R - yDist - yDistStartToRNode / 2);
+                    graphics.DrawLine(redPen, currX-shelfLength/4, Y_R, currX-shelfLength/4, Y_R - yDist - yDistStartToRNode / 2); //vert test
+                                graphics.DrawLine(redPen, currX-shelfLength/4, Y_R - yDist - yDistStartToRNode / 2, currX+shelfLength/4, Y_R - yDist - yDistStartToRNode / 2); //hort TEST
+                                graphics.DrawLine(redPen, currX+shelfLength/4, Y_R, currX+shelfLength/4, Y_R - yDist - yDistStartToRNode / 2); //vert TEST          
                 }
 
                 graphics.DrawLine(redPen, currX, Y_R, centerXEnd, Y_R);
+                if(yDist != 0) {
+                    graphics.DrawLine(greyPen, currX-shelfLength/4, Y_R, currX+shelfLength/4, Y_R); //GREY TEST
+                }
             }
 
             GraphNode next = shortestNodePath[i + 1];
@@ -127,6 +142,7 @@ public class GUI_solution : Form { //döpa om till GUI
 
                 graphics.DrawLine(redPen, currX, Y_R, currX, Y_L);
                 graphics.DrawLine(redPen, currX, Y_L, currX + xMove, Y_L);
+                
                 currX = currX + xMove;
                 currY = Y_L;
             }
@@ -145,8 +161,13 @@ public class GUI_solution : Form { //döpa om till GUI
                     yDist = 0;
                 }
 
-                graphics.DrawLine(redPen, currX, Y_L, currX, Y_L + yDist);
+                graphics.DrawLine(redPen, currX-shelfLength/4, Y_L, currX-shelfLength/4, Y_L + yDist); //TEST MED -shelfLength/4
+                                graphics.DrawLine(redPen, currX-shelfLength/4, Y_L+yDist, currX+shelfLength/4, Y_L + yDist); //hort TEST
+                                graphics.DrawLine(redPen, currX+shelfLength/4, Y_L, currX+shelfLength/4, Y_L + yDist); //vert TEST
                 graphics.DrawLine(redPen, currX, Y_L, currX + xMove, Y_L);
+                                if(yDist != 0) {
+                                graphics.DrawLine(greyPen, currX-shelfLength/4, Y_L, currX+shelfLength/4, Y_L); //hort TEST
+                                }
                 currX = currX + xMove;
                 currY = Y_L;
             }
@@ -165,10 +186,15 @@ public class GUI_solution : Form { //döpa om till GUI
 
                 if (curr.nodeNbr == 1) { //if the node is the first in the aisle, only move xMove - centerXStart
                     xMove = xMove - centerXStart;
-                }
+                } 
 
-                graphics.DrawLine(redPen, currX, Y_R, currX, Y_R - yDist);
+                graphics.DrawLine(redPen, currX-shelfLength/4, Y_R, currX-shelfLength/4, Y_R - yDist);                     //vert  TEST MED -shelfLength/4
+                                graphics.DrawLine(redPen, currX-shelfLength/4, Y_R-yDist, currX+shelfLength/4, Y_R-yDist); //hort TEST
+                                graphics.DrawLine(redPen, currX+shelfLength/4, Y_R, currX+shelfLength/4, Y_R - yDist); //vert TEST
                 graphics.DrawLine(redPen, currX, Y_R, currX + xMove, Y_R);
+                                if(yDist != 0) {
+                                graphics.DrawLine(greyPen, currX-shelfLength/4, Y_R, currX+shelfLength/4, Y_R); //hort TEST
+                                }
                 currX = currX + xMove;
                 currY = Y_R;
             }
@@ -206,8 +232,11 @@ public class GUI_solution : Form { //döpa om till GUI
                 shortestPathString += " → ";
             }
         }
+<<<<<<< HEAD:GUI_solution.cs
         shortestPathString += $" | Total distance: {g.shortestDistance} units";
+=======
+        shortestPathString += $" | Total distance: {g.shortestDistance}";
+>>>>>>> allowManyOrders:GUI/GUI_solution.cs
         graphics.DrawString(shortestPathString, normalFont, Brushes.Black, new Point(50, Y_R + shelfLength / 3));
     }
-
 }
