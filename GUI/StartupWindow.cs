@@ -78,10 +78,10 @@ public class StartupWindow : Form {
                 nbrOrdersChoice.Items.Add("7");
                 nbrOrdersChoice.Items.Add("8");  
                 nbrOrdersChoice.Items.Add("9");
-                nbrOrdersChoice.Items.Add("10");        //TEST!    
-
-                nbrOrdersChoice.Items.Add("12");        //EXPERIMENTAL                           
-
+                nbrOrdersChoice.Items.Add("10");    //TEST!    
+                nbrOrdersChoice.Items.Add("12");    //EXPERIMENTAL        
+                nbrOrdersChoice.Items.Add("48");    //EXPERIMENTAL  
+                   
                 nbrOrdersChoice.DropDownStyle = ComboBoxStyle.DropDownList;
 
                 nbrOrdersPerLayerLabel = new Label();
@@ -103,7 +103,7 @@ public class StartupWindow : Form {
                 nbrOrdersPerLayerChoice.Items.Add("8");
                 nbrOrdersPerLayerChoice.Items.Add("9");
                 nbrOrdersPerLayerChoice.Items.Add("10");
-        
+
                                                     //  TEST!    C(10,5) ...blir ... = 113400. 
                                                    //  113400/C(10,5) = 113400/252 = 450 layers
                                                    //  450/5 = 90 configs

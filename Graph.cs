@@ -92,6 +92,7 @@ public class Graph
         Console.WriteLine("Current horizontal path distances: ");
         pathListOfL.Sort((a, b) => a.prev.nodeNbr.CompareTo(b.neighbor.nodeNbr));
         for (int i = 0; i < pathListOfL.Count; i++)
+
         {
             Console.WriteLine(pathListOfL[i].ToString());
         }
@@ -177,17 +178,20 @@ public class Graph
         List<GraphNode> shortestPath;
         shortestDistance = FindShortestPath(nodes["R1"], nodes["end"], new HashSet<GraphNode>(), 0,
         new List<GraphNode>(), out shortestPath);
-      //  printPathSteps();
-        Console.WriteLine("Shortest distance cost from R1 to end: " + shortestDistance);
-        Console.Write("Shortest path route: ");
+        //printPathSteps();
+        
+        //Console.WriteLine("Shortest distance cost from R1 to end: " + shortestDistance);          //TEMP
+        //Console.Write("Shortest path route: ");                                                   //TEMP  
         for (int i = 0; i < shortestPath.Count; i++) {
             pathNodes.Add(shortestPath[i]);
-            Console.Write(shortestPath[i].Name);
-            if (i < shortestPath.Count - 1)
-                Console.Write(" -> ");
+            //Console.Write(shortestPath[i].Name);                                                  //TEMP
+            if (i < shortestPath.Count - 1) {
+                //Console.Write(" -> ");                                                            //TEMP                 
+            }
+        //Console.WriteLine();                                                                      //TEMP                                
         }
-        Console.WriteLine();
     }
+
 
     public double FindShortestPath(GraphNode current, GraphNode target, HashSet<GraphNode> visited, double currentDist,
     List<GraphNode> pathSoFar, out List<GraphNode> shortestPath)

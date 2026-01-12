@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+
 public class Combinations
 {
     static int k;
@@ -15,15 +16,13 @@ public class Combinations
         n = g.orders;
         k = g.nbrOrdersPerLayers;
 
-        stopwatch = new Stopwatch();
-        stopwatch.Start();
-
         if(k >= n) {
             k = n;
         }
        
         if(n % k == 0) { //works when full layers are possible
             RunCombinationsEvenNumberOfOrders(n, k, g); //works for uneven orders if n%k == 0
+            BranchAndBound bb = new BranchAndBound(g);
         }  
         else {
             RunCombinationsUnevenNumberOfOrders(n, k, g);
@@ -33,6 +32,9 @@ public class Combinations
     public static void RunCombinationsEvenNumberOfOrders(int n, int k, Graph g) {
         var numbers = Enumerable.Range(1, n).ToList();
         var partitions = GetPartitions(numbers, k).ToList();
+
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
 
         int count = 1;
         List<BoxLayerCombination> allCombinations = new List<BoxLayerCombination>();
@@ -132,29 +134,34 @@ public class Combinations
         count++;
     }
     Console.WriteLine();
-    ShowOptimalConfigurationRoutes(g, optimal);
+    
+    stopwatch.Stop();
+    TimeSpan ts = stopwatch.Elapsed;
+    ShowOptimalConfigurationRoutes(g, optimal, "Brute Force", ts);
     }
 
-    public static void ShowOptimalConfigurationRoutes(Graph g, UnitLoadConfiguration config)
+    public static void ShowOptimalConfigurationRoutes(Graph g, UnitLoadConfiguration config, String searchMethod, TimeSpan ts)
     {
-        stopwatch.Stop();
-        TimeSpan ts = stopwatch.Elapsed;
-        
+    
+        if(searchMethod == "Brute Force") {
+        Console.WriteLine("\n --- BRUTE FORCE ---");
+        } else if(searchMethod == "Branch and Bound") {
+        Console.WriteLine("\n --- BRANCH AND BOUND ---");
+        }
         //print the minimal configuration routes in console
-        Console.WriteLine();
-        Console.WriteLine("\nMinimal unit load configuration cost: " + config.ShortestCost);
+        Console.WriteLine("Minimal unit load configuration cost: " + config.ShortestCost);
         Console.WriteLine($"Time taken: {ts.TotalSeconds / 3600:F2} hours, or "+$"{ts.TotalSeconds / 60:F2} minutes, or "+$"{ts.TotalSeconds:F2} seconds");        
         Console.WriteLine("Configuration boxes: " + string.Join(" | ", 
         config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")"))); 
 
-        Console.WriteLine("Stacking: \n" + string.Join("\n", 
+        /*Console.WriteLine("Stacking: \n" + string.Join("\n", 
         config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
         
         Console.Write("|=");
         for(int i = 0; i < g.nbrOrdersPerLayers; i++) {
         Console.Write("=");
         }
-        Console.Write("|");
+        Console.Write("|");*/
         
         foreach (BoxLayerCombination boxLayer in config.Layers)
         {
@@ -251,8 +258,6 @@ public class Combinations
         calculateUnitLoadConfigurationCost_Uneven(unitLoadConfigurations, g); 
 
         Console.WriteLine($"\nTotal partitions: {firstGroups.Count}");
-        Console.WriteLine($"Number of boxes per layer: {k}");
-        Console.WriteLine($"Number of layers: {g.layers}");
     }
 
     public static List<List<int>> GetPermutations(List<int> list, int length)
@@ -279,7 +284,10 @@ public class Combinations
     public static void calculateUnitLoadConfigurationCost_Uneven(List<UnitLoadConfiguration> unitLoadConfigurations, Graph g){
        unitLoadConfigurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost)); //sort by cost
        UnitLoadConfiguration optimal = unitLoadConfigurations[0];
-        ShowOptimalConfigurationRoutes(g, optimal); 
+
+        stopwatch.Stop();
+        TimeSpan ts = stopwatch.Elapsed;
+        ShowOptimalConfigurationRoutes(g, optimal, "Brute Force", ts); 
     }
 
    //Generate combinations C(n,k)
