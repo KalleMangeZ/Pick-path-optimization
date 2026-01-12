@@ -78,8 +78,10 @@ public class StartupWindow : Form {
                 nbrOrdersChoice.Items.Add("7");
                 nbrOrdersChoice.Items.Add("8");  
                 nbrOrdersChoice.Items.Add("9");
-                nbrOrdersChoice.Items.Add("10");        //TEST!                            
-                //nbrShelvesChoice.Items.Add("16");
+                nbrOrdersChoice.Items.Add("10");        //TEST!    
+
+                nbrOrdersChoice.Items.Add("12");        //EXPERIMENTAL                           
+
                 nbrOrdersChoice.DropDownStyle = ComboBoxStyle.DropDownList;
 
                 nbrOrdersPerLayerLabel = new Label();

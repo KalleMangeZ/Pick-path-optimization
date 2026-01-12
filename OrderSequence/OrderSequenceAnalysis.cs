@@ -8,6 +8,7 @@ public List<int> orderSequence {get; set;} = new List<int>();
 public List<int> orderStartInSequence {get; set;} = new List<int>();
 public List<int> orderEndInSequence {get; set;} = new List<int>();
 public List<OrderStack> orderStacks {get; set;}
+public List<ExtendedOrderStack> extendedOrderStacks {get; set;} = new List<ExtendedOrderStack>();
 public List<Order> orders {get; set;}
 CreatePickingPath pp;
 
@@ -80,19 +81,40 @@ CreatePickingPath pp;
             for(int j = 0; j < orderEndInSequence.Count; j++) {
                 if(orderStartInSequence[i] > orderEndInSequence[j]) {
                     //Console.WriteLine("Order " + (i+1) + " can be stacked on top of Order " + (j+1));
-                    orderStacks.Add(new OrderStack(orders[i], orders[j]));
+                    orderStacks.Add(new OrderStack(orders[j], orders[i]));
                 }
             }
         }
         if(orderStacks.Count == 0) {
             Console.WriteLine("\n No stacking possibilities found --> Pick Layer-By-Layer");
         }
+
+        if(g.layers > 2) {
+            CreateExtendedOrderStack();
+        }
+
+    }
+
+    public void CreateExtendedOrderStack() {
+        foreach(OrderStack stack1 in orderStacks) {
+            foreach(OrderStack stack2 in orderStacks) {
+                if(stack1.top.orderNumber == stack2.bottom.orderNumber) { 
+                    extendedOrderStacks.Add(new ExtendedOrderStack(stack1.bottom, stack1.top, stack2.top));  //e.g stack1: 1-4, stack2: 4-5
+                }
+            }
+        }
     }
 
     public void PrintOrderStack() {
-        Console.WriteLine(" ---------------- ");
+        Console.WriteLine("\n------------------");
         for(int i = 0; i < orderStacks.Count; i++) {
-            Console.WriteLine("Order " + orderStacks[i].bottom.orderNumber + " can be stacked on top of Order " + orderStacks[i].top.orderNumber);
+            Console.WriteLine("order-stack: " + orderStacks[i].bottom.orderNumber + "-" + orderStacks[i].top.orderNumber);
+        }
+
+        if(extendedOrderStacks.Count != 0) {
+            for(int i = 0; i < extendedOrderStacks.Count; i++) {
+                Console.WriteLine("extended order-stack: " + extendedOrderStacks[i].bottom.orderNumber + "-" + extendedOrderStacks[i].middle.orderNumber + "-" + extendedOrderStacks[i].top.orderNumber);
+            }
         }
     }
 

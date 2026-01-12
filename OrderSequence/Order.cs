@@ -12,7 +12,7 @@ public class Order
             orderNumber = oN;
             orderStart = oS;
             orderEnd = oE;
-            orderRouteLength = oRL;
+            orderRouteLength = oRL; //not used
         }
 
 

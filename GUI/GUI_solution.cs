@@ -232,11 +232,7 @@ public class GUI_solution : Form {
                 shortestPathString += " → ";
             }
         }
-<<<<<<< HEAD:GUI_solution.cs
         shortestPathString += $" | Total distance: {g.shortestDistance} units";
-=======
-        shortestPathString += $" | Total distance: {g.shortestDistance}";
->>>>>>> allowManyOrders:GUI/GUI_solution.cs
         graphics.DrawString(shortestPathString, normalFont, Brushes.Black, new Point(50, Y_R + shelfLength / 3));
     }
 }

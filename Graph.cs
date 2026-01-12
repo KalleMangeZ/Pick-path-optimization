@@ -26,12 +26,15 @@ public class Graph
     public int shelvesPerAisle  { get; set; }
     public int orders           { get; set; }
     public int layers           { get; set; }
-    public int nbrOrdersPerLayers { get; set; }
+    public int nbrOrdersPerLayers { get; set; } //Determined by box size and pallet size
     public double shelfLength   { get; set; }
     public double shelfWidth    { get; set; }
     public double aisleLength   { get; set; }
     public double aisleWidth    { get; set; }
-    public Graph(int aisles, int shelvesPerAisle, double shelfLength, double shelfWidth)
+    public double shortestDistance { get; set; }
+    public int orderNbr { get; set; } = 1;      //!
+
+    public Graph(int aisles, int shelvesPerAisle, int orders, int nbrOrdersPerLayers, double shelfLength, double shelfWidth)
     {
         this.aisles = aisles;
         this.shelvesPerAisle = shelvesPerAisle;

@@ -3,15 +3,20 @@ namespace ConsoleApp1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 public class Combinations
 {
     static int k;
     static int n;
+    static Stopwatch stopwatch;
 
     public static void RunCombinations(Graph g)
     {
         n = g.orders;
         k = g.nbrOrdersPerLayers;
+
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
 
         if(k >= n) {
             k = n;
@@ -23,7 +28,6 @@ public class Combinations
         else {
             RunCombinationsUnevenNumberOfOrders(n, k, g);
         }
-
     }
 
     public static void RunCombinationsEvenNumberOfOrders(int n, int k, Graph g) {
@@ -94,7 +98,7 @@ public class Combinations
         }
     }
 
-    public static void calculateUnitLoadConfigurationCost_Even(List<BoxLayerCombination> allCombinations, Graph g)  //Could be used as a general calc. method?
+    public static void calculateUnitLoadConfigurationCost_Even(List<BoxLayerCombination> allCombinations, Graph g) 
     {
         List<UnitLoadConfiguration> configurations = new List<UnitLoadConfiguration>(); //TEST
         int nbrConfigurations = allCombinations.Count/g.layers;
@@ -122,7 +126,7 @@ public class Combinations
     {
         Console.WriteLine();
         Console.Write(count + ". ");
-        Console.Write("Configuration boxes: " + string.Join(" | ",
+        Console.Write("Configuration boxes: " + string.Join(" | ",          //Naive approach
         ULC.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
         Console.Write(" | Cost: " + ULC.ShortestCost);
         count++;
@@ -133,20 +137,13 @@ public class Combinations
 
     public static void ShowOptimalConfigurationRoutes(Graph g, UnitLoadConfiguration config)
     {
-        foreach (BoxLayerCombination boxLayer in config.Layers)
-        {
-            g.orderSet = new HashSet<int>(boxLayer.Boxes);
-            g.path.Clear();      
-            g.pathNodes.Clear();
-            g.nodes.Clear();
-            g.CreateGraph();
-            GUI_solution gui_solution = new GUI_solution(g, g.pathNodes);
-            gui_solution.ShowDialog();
-        }
-
+        stopwatch.Stop();
+        TimeSpan ts = stopwatch.Elapsed;
+        
         //print the minimal configuration routes in console
         Console.WriteLine();
         Console.WriteLine("\nMinimal unit load configuration cost: " + config.ShortestCost);
+        Console.WriteLine($"Time taken: {ts.TotalSeconds / 3600:F2} hours, or "+$"{ts.TotalSeconds / 60:F2} minutes, or "+$"{ts.TotalSeconds:F2} seconds");        
         Console.WriteLine("Configuration boxes: " + string.Join(" | ", 
         config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")"))); 
 
@@ -158,7 +155,17 @@ public class Combinations
         Console.Write("=");
         }
         Console.Write("|");
-
+        
+        foreach (BoxLayerCombination boxLayer in config.Layers)
+        {
+            g.orderSet = new HashSet<int>(boxLayer.Boxes);
+            g.path.Clear();      
+            g.pathNodes.Clear();
+            g.nodes.Clear();
+            g.CreateGraph();
+            GUI_solution gui_solution = new GUI_solution(g, g.pathNodes);
+            gui_solution.ShowDialog();
+        }
     }
     public static void RunCombinationsUnevenNumberOfOrders(int n, int k, Graph g) {
         var firstGroups = GetCombinations_Uneven(n, k);
