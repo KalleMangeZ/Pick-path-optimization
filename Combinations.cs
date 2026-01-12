@@ -156,7 +156,6 @@ public class Combinations
 
         /*Console.WriteLine("Stacking: \n" + string.Join("\n", 
         config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
-        
         Console.Write("|=");
         for(int i = 0; i < g.nbrOrdersPerLayers; i++) {
         Console.Write("=");
