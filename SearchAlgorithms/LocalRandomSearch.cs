@@ -2,6 +2,7 @@ namespace ConsoleApp1;
 
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 /*
 Heuristic search algorithm that generates random unit load configurations. Avoids exhaustive search.
@@ -11,14 +12,13 @@ public class LocalRandomSearch
 {
     Graph g;
     List<UnitLoadConfiguration> configurations;
+    Stopwatch stopwatch;
 
     public LocalRandomSearch(Graph g)
     {
         this.g = g;
-        GenerateRandomConfigurations(5);
-        GenerateRandomConfigurations(50);
-        GenerateRandomConfigurations(500);
-        GenerateRandomConfigurations(5000);
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
         GenerateRandomConfigurations(10000);
     }
 
@@ -76,8 +76,11 @@ public class LocalRandomSearch
             UnitLoadConfiguration optimal = configurations[0];
             Console.WriteLine("\n#Random configurations generated: " + nbrRandomConfigurations);
             Console.WriteLine("Only serpentine path traversals cost: " + g.layers*(g.aisles*(g.shelvesPerAisle+g.aisleWidth)));
-            Combinations.ShowOptimalConfigurationRoutes(g, optimal, "Local Random Search", TimeSpan.Zero);
             
+            stopwatch.Stop();
+            TimeSpan ts = stopwatch.Elapsed;
+
+            Combinations.ShowOptimalConfigurationRoutes(g, optimal, "Local Random Search", ts); //ts = TimeSpan.Zero to revert
             // (Implementation of storing best configuration goes here)*/
         }
 
