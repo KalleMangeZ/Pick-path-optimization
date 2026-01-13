@@ -22,11 +22,12 @@ public class Combinations
        
         if(n % k == 0) { //works when full layers are possible
             RunCombinationsEvenNumberOfOrders(n, k, g); //works for uneven orders if n%k == 0
-            BranchAndBound bb = new BranchAndBound(g);
         }  
         else {
             RunCombinationsUnevenNumberOfOrders(n, k, g);
         }
+            
+        BranchAndBound bb = new BranchAndBound(g);
     }
 
     public static void RunCombinationsEvenNumberOfOrders(int n, int k, Graph g) {
@@ -174,6 +175,9 @@ public class Combinations
         }
     }
     public static void RunCombinationsUnevenNumberOfOrders(int n, int k, Graph g) {
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
+        
         var firstGroups = GetCombinations_Uneven(n, k);
         HashSet<string> uniqueArrangements = new HashSet<string>();
         List<BoxLayerCombination> combinations = new List<BoxLayerCombination>();
@@ -241,15 +245,12 @@ public class Combinations
                         configCost += shortestDistance;
                 }
 
-                // Build final printable configuration string
                 string key = string.Join(" | ", normalGroups.Select(g => string.Join(",", g)));
-                string keyWithCost = $"{key}   Cost = {configCost}";
 
-                                // Print only if unique
+                // Print only if unique
                 if (!uniqueArrangements.Contains(key))
                 {
                     uniqueArrangements.Add(key);
-                    Console.WriteLine(keyWithCost);
                     unitLoadConfigurations.Add(new UnitLoadConfiguration(layerList, configCost));
                 }
             }
@@ -283,6 +284,18 @@ public class Combinations
     public static void calculateUnitLoadConfigurationCost_Uneven(List<UnitLoadConfiguration> unitLoadConfigurations, Graph g){
        unitLoadConfigurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost)); //sort by cost
        UnitLoadConfiguration optimal = unitLoadConfigurations[0];
+
+        int count = 1;
+        foreach(UnitLoadConfiguration ULC in unitLoadConfigurations)
+        {
+            Console.WriteLine();
+            Console.Write(count + ". ");
+            Console.Write("Configuration boxes: " + string.Join(" | ",          //Naive approach
+            ULC.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
+            Console.Write(" | Cost: " + ULC.ShortestCost);
+            count++;
+        }
+        Console.WriteLine();
 
         stopwatch.Stop();
         TimeSpan ts = stopwatch.Elapsed;
