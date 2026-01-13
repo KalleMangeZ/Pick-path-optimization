@@ -11,6 +11,7 @@ public class GUI_createPickLocationsManyOrders : Form {
     int shelfLength = 50;
     int shelfWidth = 50;
     Button confirmButton;
+    Button GenerateRandomPickLocationsButton;
     List<ComboBox> comboBoxes;
     CheckedListBox orderCheckListBox;
     private Pen bluePen = new Pen(Color.Blue, 2);
@@ -41,6 +42,21 @@ public class GUI_createPickLocationsManyOrders : Form {
             Combinations.RunCombinations(g);   //kalla på nya combinations med graph g
             };
 
+        GenerateRandomPickLocationsButton = new Button();
+        GenerateRandomPickLocationsButton.Text = "Generate Random Pick Locations";
+        GenerateRandomPickLocationsButton.Width = 200;
+        GenerateRandomPickLocationsButton.Height = 40;
+        GenerateRandomPickLocationsButton.Location = new Point(50, g.shelvesPerAisle * shelfWidth + 150);
+        GenerateRandomPickLocationsButton.Click += (sender, e) =>
+        {
+            Random random = new Random();
+            foreach (ComboBox comboBox in comboBoxes)
+            {
+                int randomIndex = random.Next(0, comboBox.Items.Count);
+                comboBox.SelectedIndex = randomIndex;
+            }
+        };
+
         Label selectOrderLabel = new Label();
         selectOrderLabel.Text = "Select Orders:";
         selectOrderLabel.Location = new Point(350, g.shelvesPerAisle * shelfWidth + 112);
@@ -56,6 +72,7 @@ public class GUI_createPickLocationsManyOrders : Form {
         orderCheckListBox.CheckOnClick = true;
 
         this.Controls.Add(confirmButton);
+        this.Controls.Add(GenerateRandomPickLocationsButton);
         this.Controls.Add(selectOrderLabel);
         this.Controls.Add(orderCheckListBox);
     }

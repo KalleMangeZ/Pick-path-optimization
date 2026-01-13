@@ -11,7 +11,7 @@ public class Combinations
     static int n;
     static Stopwatch stopwatch;
 
-    public static void RunCombinations(Graph g)
+    public static void RunCombinations(Graph g)     
     {
         n = g.orders;
         k = g.nbrOrdersPerLayers;
@@ -21,10 +21,10 @@ public class Combinations
         }
        
         if(n % k == 0) { //works when full layers are possible
-            RunCombinationsEvenNumberOfOrders(n, k, g); //works for uneven orders if n%k == 0
+            RunCombinationsEvenNumberOfOrders(n, k, g); //works for uneven orders if n%k == 0       //Brutal-Force approach
         }  
         else {
-            RunCombinationsUnevenNumberOfOrders(n, k, g);
+            RunCombinationsUnevenNumberOfOrders(n, k, g);                                           //Brutal-Force approach
         }
             
         BranchAndBound bb = new BranchAndBound(g);
@@ -89,7 +89,7 @@ public class Combinations
             yield return new List<int>();
             yield break;
         }
-        for (int i = 0; i <= list.Count - k; i++)
+        for (int i = 0; i <= list.Count - k; i++) 
         {
             var head = list[i];
             foreach (var tail in GetCombinations_Even(list.Skip(i + 1).ToList(), k - 1))
@@ -129,7 +129,7 @@ public class Combinations
     {
         Console.WriteLine();
         Console.Write(count + ". ");
-        Console.Write("Configuration boxes: " + string.Join(" | ",          //Naive approach
+        Console.Write("Configuration boxes: " + string.Join(" | ",          //Brutal-Force approach
         ULC.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
         Console.Write(" | Cost: " + ULC.ShortestCost);
         count++;

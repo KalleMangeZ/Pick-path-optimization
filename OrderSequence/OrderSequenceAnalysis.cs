@@ -35,7 +35,7 @@ CreatePickingPath pp;
             }
         }
 
-        Console.WriteLine("Index Sequence:");
+        /*Console.WriteLine("Index Sequence:");
         for(int i = 0; i < orderSequence.Count; i++) {
             Console.Write(i + " ");
         }
@@ -43,7 +43,7 @@ CreatePickingPath pp;
         Console.WriteLine("\nSerpentine order sequence: ");
         for(int i = 0; i < orderSequence.Count; i++) {
             Console.Write(orderSequence[i] + " ");
-        }
+        }*/
     }
 
     public void AnalyzeOrderSequence() {
