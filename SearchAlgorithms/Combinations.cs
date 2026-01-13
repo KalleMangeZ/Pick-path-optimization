@@ -21,13 +21,14 @@ public class Combinations
         }
        
         if(n % k == 0) { //works when full layers are possible
-            RunCombinationsEvenNumberOfOrders(n, k, g); //works for uneven orders if n%k == 0       //Brutal-Force approach
+            //RunCombinationsEvenNumberOfOrders(n, k, g); //works for uneven orders if n%k == 0       //Brutal-Force approach
         }  
         else {
-            RunCombinationsUnevenNumberOfOrders(n, k, g);                                           //Brutal-Force approach
+            //RunCombinationsUnevenNumberOfOrders(n, k, g);                                           //Brutal-Force approach
         }
             
-        BranchAndBound bb = new BranchAndBound(g);
+        //BranchAndBound bb = new BranchAndBound(g);
+        LocalRandomSearch lrs = new LocalRandomSearch(g);
     }
 
     public static void RunCombinationsEvenNumberOfOrders(int n, int k, Graph g) {
@@ -143,11 +144,12 @@ public class Combinations
 
     public static void ShowOptimalConfigurationRoutes(Graph g, UnitLoadConfiguration config, String searchMethod, TimeSpan ts)
     {
-    
         if(searchMethod == "Brute Force") {
         Console.WriteLine("\n --- BRUTE FORCE ---");
         } else if(searchMethod == "Branch and Bound") {
         Console.WriteLine("\n --- BRANCH AND BOUND ---");
+        } else if(searchMethod == "Local Random Search") {
+        Console.WriteLine("\n --- LOCAL RANDOM SEARCH ---");
         }
         //print the minimal configuration routes in console
         Console.WriteLine("Minimal unit load configuration cost: " + config.ShortestCost);

@@ -36,7 +36,7 @@ public class GUI_solution : Form {
         shortestNodePath = pathNodes;
         this.CenterToScreen();
         this.DoubleBuffered = true;
-        GetOrCreate(g);
+        //GetOrCreate(g);                   //ANALYSIS TEMP DISABLED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     }
 
     public static OrderSequenceAnalysis GetOrCreate(Graph g)

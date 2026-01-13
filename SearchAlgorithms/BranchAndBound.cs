@@ -11,7 +11,6 @@ Graph g;
 Stopwatch stopwatch;
 private double minLayerCost;
 
-
 public BranchAndBound(Graph graph)
 {
     this.g = graph;
