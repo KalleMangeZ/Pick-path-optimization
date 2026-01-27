@@ -11,7 +11,8 @@ namespace ConsoleApp1
         private string orderSequenceString;
         private Font normalFont = new Font("Arial", 12);
         private Pen pen = new Pen(Color.Black, 2);
-    
+        private bool visualizationCreated = false; // Guard flag
+
         public OrderSequenceVisualization(Graph g, OrderSequenceAnalysis a)
         {
             this.g = g;

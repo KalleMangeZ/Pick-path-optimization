@@ -8,6 +8,7 @@ public List<int> orderSequence {get; set;} = new List<int>();
 public List<int> orderStartInSequence {get; set;} = new List<int>();
 public List<int> orderEndInSequence {get; set;} = new List<int>();
 public List<OrderStack> orderStacks {get; set;}
+public List<OrderStack> uniqueOrderStacks {get; set;} = new List<OrderStack>();
 public List<ExtendedOrderStack> extendedOrderStacks {get; set;} = new List<ExtendedOrderStack>();
 public List<Order> orders {get; set;}
 CreatePickingPath pp;
@@ -22,8 +23,6 @@ CreatePickingPath pp;
             CreateOrderStack();
             PrintOrderStack();
             CaseUniqueStackPossibilites();
-            OrderSequenceVisualization osv = new OrderSequenceVisualization(g, this);
-            osv.Show();
     }
 
     public void CreateOrderSequence() {
@@ -34,16 +33,6 @@ CreatePickingPath pp;
                 orderSequence.Add(lm[r, c]);
             }
         }
-
-        /*Console.WriteLine("Index Sequence:");
-        for(int i = 0; i < orderSequence.Count; i++) {
-            Console.Write(i + " ");
-        }
-
-        Console.WriteLine("\nSerpentine order sequence: ");
-        for(int i = 0; i < orderSequence.Count; i++) {
-            Console.Write(orderSequence[i] + " ");
-        }*/
     }
 
     public void AnalyzeOrderSequence() {
@@ -141,11 +130,21 @@ CreatePickingPath pp;
     //prints
         foreach(KeyValuePair<int, int> kvp in stackPossibilities) {
             //Console.WriteLine("Order: " + kvp.Key + "  Value: " + kvp.Value);
-            if(kvp.Value == 1) {
-                //Select!
-                Console.WriteLine("Order " + kvp.Key + " is only present in one order-stack");
-            }
+              if (kvp.Value == 1)
+              {
+                var stack = orderStacks.Find(os =>
+                    os.top.orderNumber == kvp.Key ||
+                    os.bottom.orderNumber == kvp.Key);
+
+                if (stack != null && !uniqueOrderStacks.Any(u =>
+                    u.top.orderNumber == stack.top.orderNumber &&
+                    u.bottom.orderNumber == stack.bottom.orderNumber))
+                {
+                    uniqueOrderStacks.Add(stack);
+                    Console.WriteLine($"Unique order-stack: {stack.bottom.orderNumber}-{stack.top.orderNumber}");
+                }
+              }
         }
-    
     }
 }
+

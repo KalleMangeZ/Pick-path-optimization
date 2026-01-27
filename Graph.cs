@@ -38,8 +38,8 @@ public class Graph
     {
         this.aisles = aisles;
         this.shelvesPerAisle = shelvesPerAisle;
-        this.shelfLength = shelfLength;
-        this.shelfWidth = shelfWidth;
+        this.shelfLength = shelfLength; //=1
+        this.shelfWidth = shelfWidth; //=1
         this.orders = orders;
         this.nbrOrdersPerLayers = nbrOrdersPerLayers;
         this.layers = (int)Math.Ceiling(orders / (double)nbrOrdersPerLayers);

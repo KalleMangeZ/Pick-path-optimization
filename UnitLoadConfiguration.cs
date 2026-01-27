@@ -6,7 +6,7 @@ public class UnitLoadConfiguration
     public double ShortestCost { get; set; }
 
     public UnitLoadConfiguration(List<BoxLayerCombination> layers, double shortestCost)
-    {
+{
         Layers = layers;
         ShortestCost = shortestCost;
     }

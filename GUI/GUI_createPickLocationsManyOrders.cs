@@ -1,12 +1,16 @@
+namespace ConsoleApp1;
 
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace ConsoleApp1;
 public class GUI_createPickLocationsManyOrders : Form {
     Graph g;
+    GUI_solution window { get; set; }
+    private OrderSequenceAnalysis analysis;
+    private OrderSequenceAnalysis graphAnalysis;
+
     int aisleToAisleDist = 200;
     int shelfLength = 50;
     int shelfWidth = 50;
@@ -38,8 +42,12 @@ public class GUI_createPickLocationsManyOrders : Form {
             g.pathNodes.Clear();
             g.nodes.Clear();
             g.CreateGraph();
+            Combinations.RunCombinations(g); 
             CreateSolution_Click(sender, e);
-            Combinations.RunCombinations(g);   //kalla på nya combinations med graph g
+            
+            BoxStackingFromUniqueOrderStacks boxStacking =
+                new BoxStackingFromUniqueOrderStacks(g, Combinations.LocalRandomSearch.configurations, window.OrderSequenceAnalysis.uniqueOrderStacks);
+
             };
 
         GenerateRandomPickLocationsButton = new Button();
@@ -103,8 +111,13 @@ public class GUI_createPickLocationsManyOrders : Form {
 
      private void CreateSolutionWindow() {
         if (IsAnyComboBoxClicked() && g.IsEmptyLayout() == false) {
-            GUI_solution window = new GUI_solution(g, g.pathNodes);
-            window.ShowDialog();
+            if (graphAnalysis == null)
+            {
+            graphAnalysis = new OrderSequenceAnalysis(g); // Only created once
+            }
+
+        window = new GUI_solution(g, g.pathNodes, graphAnalysis);
+        window.ShowDialog();
         }
     }
 
@@ -155,7 +168,6 @@ public class GUI_createPickLocationsManyOrders : Form {
             };
 
             this.Controls.Add(comboBox);
-            comboBoxes.Add(comboBox);
         }
 
         protected override void OnPaint(PaintEventArgs e) {

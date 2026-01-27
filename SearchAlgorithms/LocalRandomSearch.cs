@@ -11,7 +11,7 @@ Heuristic search algorithm that generates random unit load configurations. Avoid
 public class LocalRandomSearch
 {
     Graph g;
-    List<UnitLoadConfiguration> configurations;
+    public List<UnitLoadConfiguration> configurations {get; set;}
     Stopwatch stopwatch;
 
     public LocalRandomSearch(Graph g)
@@ -19,7 +19,7 @@ public class LocalRandomSearch
         this.g = g;
         stopwatch = new Stopwatch();
         stopwatch.Start();
-        GenerateRandomConfigurations(10000);
+        GenerateRandomConfigurations(5000);
     }
 
     public void GenerateRandomConfigurations(int nbrRandomConfigurations)
@@ -71,11 +71,11 @@ public class LocalRandomSearch
             UnitLoadConfiguration config = new UnitLoadConfiguration(listOfLayers, totalCost);
             configurations.Add(config);
         }
-            //estPrintSomeConfigurations(configurations, 50);
+            //PrintSomeConfigurations(configurations, 50);
             configurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost)); //sort by cost
             UnitLoadConfiguration optimal = configurations[0];
             Console.WriteLine("\n#Random configurations generated: " + nbrRandomConfigurations);
-            Console.WriteLine("Only serpentine path traversals cost: " + g.layers*(g.aisles*(g.shelvesPerAisle+g.aisleWidth)));
+            Console.WriteLine("Only serpentine path traversals (if nbrAisles is odd) cost: " + ((g.layers*g.aisles*g.getDiagonalDist())+(g.shelvesPerAisle*g.shelfWidth))); 
             
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;

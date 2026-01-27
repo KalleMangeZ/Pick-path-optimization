@@ -2,6 +2,7 @@ namespace ConsoleApp1;
 
 public class GUI_createPickLocations : Form {
     Graph g;
+    private OrderSequenceAnalysis analysis;
     int aisles;
     int shelvesPerAisle;
     int aisleToAisleDist = 200;
@@ -83,7 +84,7 @@ private void DrawLayout(Graphics g) {
 
     private void CreateSolutionWindow() {
         if (IsAnyRackButtonClicked() && g.IsEmptyLayout() == false) {
-            GUI_solution window = new GUI_solution(g, g.pathNodes);
+            GUI_solution window = new GUI_solution(g, g.pathNodes, analysis);
             window.ShowDialog();
         }
     }

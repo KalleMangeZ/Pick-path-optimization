@@ -8,8 +8,12 @@ using System.Diagnostics;
 public class Combinations
 {
     static int k;
+
     static int n;
     static Stopwatch stopwatch;
+    public static LocalRandomSearch LocalRandomSearch {get; set;}
+    public static BranchAndBound BranchAndBound {get; set;}
+    public static OrderSequenceAnalysis analysis {get; set;}
 
     public static void RunCombinations(Graph g)     
     {
@@ -21,14 +25,19 @@ public class Combinations
         }
        
         if(n % k == 0) { //works when full layers are possible
-            //RunCombinationsEvenNumberOfOrders(n, k, g); //works for uneven orders if n%k == 0       //Brutal-Force approach
+            RunCombinationsEvenNumberOfOrders(n, k, g); //works for uneven orders if n%k == 0       //Brutal-Force approach
         }  
         else {
-            //RunCombinationsUnevenNumberOfOrders(n, k, g);                                           //Brutal-Force approach
+            RunCombinationsUnevenNumberOfOrders(n, k, g);                                           //Brutal-Force approach
         }
-            
-        //BranchAndBound bb = new BranchAndBound(g);
-        LocalRandomSearch lrs = new LocalRandomSearch(g);
+
+        BranchAndBound = new BranchAndBound(g);
+        LocalRandomSearch = new LocalRandomSearch(g);
+
+        analysis = new OrderSequenceAnalysis(g); 
+        OrderSequenceVisualization osv =
+            new OrderSequenceVisualization(g, analysis);
+            osv.Show();
     }
 
     public static void RunCombinationsEvenNumberOfOrders(int n, int k, Graph g) {
@@ -126,6 +135,7 @@ public class Combinations
     UnitLoadConfiguration optimal = configurations[0];
 
     int count = 1;
+    Console.WriteLine("--- All Configurations --- ");
     foreach(UnitLoadConfiguration ULC in configurations)
     {
         Console.WriteLine();
@@ -153,17 +163,13 @@ public class Combinations
         }
         //print the minimal configuration routes in console
         Console.WriteLine("Minimal unit load configuration cost: " + config.ShortestCost);
-        Console.WriteLine($"Time taken: {ts.TotalSeconds / 3600:F2} hours, or "+$"{ts.TotalSeconds / 60:F2} minutes, or "+$"{ts.TotalSeconds:F2} seconds");        
+        Console.WriteLine($"Hours: {ts.Hours:F2} Minutes: {ts.Minutes:F2}, Seconds: {ts.Seconds + ts.Milliseconds / 1000.0:F2}");        
         Console.WriteLine("Configuration boxes: " + string.Join(" | ", 
         config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")"))); 
 
-        /*Console.WriteLine("Stacking: \n" + string.Join("\n", 
-        config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
-        Console.Write("|=");
-        for(int i = 0; i < g.nbrOrdersPerLayers; i++) {
-        Console.Write("=");
-        }
-        Console.Write("|");*/
+        /*OrderSequenceVisualization osv =
+            new OrderSequenceVisualization(g, analysis);
+            osv.Show();*/
         
         foreach (BoxLayerCombination boxLayer in config.Layers)
         {
@@ -172,7 +178,7 @@ public class Combinations
             g.pathNodes.Clear();
             g.nodes.Clear();
             g.CreateGraph();
-            GUI_solution gui_solution = new GUI_solution(g, g.pathNodes);
+            GUI_solution gui_solution = new GUI_solution(g, g.pathNodes, analysis);
             gui_solution.ShowDialog();
         }
     }
@@ -288,6 +294,7 @@ public class Combinations
        UnitLoadConfiguration optimal = unitLoadConfigurations[0];
 
         int count = 1;
+        Console.WriteLine("--- All Configurations --- ");
         foreach(UnitLoadConfiguration ULC in unitLoadConfigurations)
         {
             Console.WriteLine();
