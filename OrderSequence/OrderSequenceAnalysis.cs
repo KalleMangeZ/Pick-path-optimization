@@ -74,9 +74,9 @@ CreatePickingPath pp;
                 }
             }
         }
-        if(orderStacks.Count == 0) {
-            Console.WriteLine("\n No stacking possibilities found --> Pick Layer-By-Layer");
-        }
+            if(orderStacks.Count == 0) {
+                Console.WriteLine("\n No stacking possibilities found --> Pick Layer-By-Layer");
+            }
 
         if(g.layers > 2) {
             CreateExtendedOrderStack();
@@ -95,7 +95,7 @@ CreatePickingPath pp;
     }
 
     public void PrintOrderStack() {
-        Console.WriteLine("\n------------------");
+        Console.WriteLine("------------------");
         for(int i = 0; i < orderStacks.Count; i++) {
             Console.WriteLine("order-stack: " + orderStacks[i].bottom.orderNumber + "-" + orderStacks[i].top.orderNumber);
         }

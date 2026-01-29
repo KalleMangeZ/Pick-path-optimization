@@ -8,9 +8,7 @@ using System.Windows.Forms;
 public class GUI_createPickLocationsManyOrders : Form {
     Graph g;
     GUI_solution window { get; set; }
-    private OrderSequenceAnalysis analysis;
     private OrderSequenceAnalysis graphAnalysis;
-
     int aisleToAisleDist = 200;
     int shelfLength = 50;
     int shelfWidth = 50;
@@ -45,9 +43,10 @@ public class GUI_createPickLocationsManyOrders : Form {
             Combinations.RunCombinations(g); 
             CreateSolution_Click(sender, e);
             
-            BoxStackingFromUniqueOrderStacks boxStacking =
-                new BoxStackingFromUniqueOrderStacks(g, Combinations.LocalRandomSearch.configurations, window.OrderSequenceAnalysis.uniqueOrderStacks);
-
+                if(window.OrderSequenceAnalysis.uniqueOrderStacks.Count > 0) {
+                BoxStackingFromUniqueOrderStacks boxStacking =
+                    new BoxStackingFromUniqueOrderStacks(g, Combinations.LocalRandomSearch.configurations, window.OrderSequenceAnalysis.uniqueOrderStacks);
+                }
             };
 
         GenerateRandomPickLocationsButton = new Button();
@@ -110,11 +109,11 @@ public class GUI_createPickLocationsManyOrders : Form {
     }
 
      private void CreateSolutionWindow() {
-        if (IsAnyComboBoxClicked() && g.IsEmptyLayout() == false) {
-            if (graphAnalysis == null)
-            {
+        if (IsAnyComboBoxClicked() && g.IsEmptyLayout() == false && graphAnalysis == null) {
             graphAnalysis = new OrderSequenceAnalysis(g); // Only created once
-            }
+            OrderSequenceVisualization osv =
+            new OrderSequenceVisualization(g, graphAnalysis);
+            osv.Show();
 
         window = new GUI_solution(g, g.pathNodes, graphAnalysis);
         window.ShowDialog();

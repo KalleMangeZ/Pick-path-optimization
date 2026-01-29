@@ -22,13 +22,14 @@ public class BoxStackingFromUniqueOrderStacks
         2. If match found, check if top layer orders match as well 
         */
     public void SearchMatchingConfigurations()
-    {
-        List<int> searchedLayer = new List<int>();
-        List<UnitLoadConfiguration> someMatchingConfigurations = new List<UnitLoadConfiguration>();
+        {
+        List<int> searchedLayer = uniqueOrderStacks
+            .Select(o => o.bottom.orderNumber)
+            .Distinct()
+            .ToList();
 
-        foreach(var order in uniqueOrderStacks) {
-            searchedLayer.Add(order.bottom.orderNumber); //doesnt matter if top or bottom
-        }
+        Dictionary<string, UnitLoadConfiguration> uniqueConfigs =
+            new Dictionary<string, UnitLoadConfiguration>();
 
         foreach (UnitLoadConfiguration config in configurations)
         {
@@ -36,25 +37,51 @@ public class BoxStackingFromUniqueOrderStacks
             {
                 if (searchedLayer.All(o => layer.Boxes.Contains(o)))
                 {
-                   someMatchingConfigurations.Add(config);
+                    string key = GetCanonicalKey(config);
+
+                    // keep only one instance per canonical configuration
+                    if (!uniqueConfigs.ContainsKey(key))
+                    {
+                        uniqueConfigs[key] = config;
+                    }
+
+                    break; // no need to check other layers
                 }
             }
         }
 
-        someMatchingConfigurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost)); //sort by cost
+        var finalConfigs = uniqueConfigs.Values
+            .OrderBy(c => c.ShortestCost)
+            .Take(10)
+            .ToList();
+
         int count = 1;
-        foreach(var ULC in someMatchingConfigurations) {
-            if(count > 10) {
-                break;
-            }
+        foreach (var ulc in finalConfigs)
+        {
             Console.WriteLine();
-            Console.Write(count + ". ");
-            Console.Write("Configuration boxes: " + string.Join(" | ",          
-            ULC.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
-            Console.Write(" | Cost: " + ULC.ShortestCost);
+            Console.Write($"{count}. Configuration boxes: ");
+            Console.Write(
+                string.Join(" | ",
+                    ulc.Layers
+                    .Select(b => "(" + string.Join(",", b.Boxes.OrderBy(x => x)) + ")")
+                    .OrderBy(s => s)
+                )
+            );
+            Console.Write($" | Cost: {ulc.ShortestCost}");
             count++;
-        }               
+        }
     }
+
+    private static string GetCanonicalKey(UnitLoadConfiguration config)
+    {
+        var normalizedLayers = config.Layers
+            .Select(layer => layer.Boxes.OrderBy(x => x).ToList())
+            .OrderBy(layer => string.Join(",", layer))
+            .Select(layer => $"({string.Join(",", layer)})");
+
+        return string.Join(" | ", normalizedLayers);
+    }
+
 
  }
 

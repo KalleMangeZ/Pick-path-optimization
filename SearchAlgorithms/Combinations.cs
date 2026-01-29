@@ -34,10 +34,10 @@ public class Combinations
         BranchAndBound = new BranchAndBound(g);
         LocalRandomSearch = new LocalRandomSearch(g);
 
-        analysis = new OrderSequenceAnalysis(g); 
+        /*analysis = new OrderSequenceAnalysis(g); 
         OrderSequenceVisualization osv =
             new OrderSequenceVisualization(g, analysis);
-            osv.Show();
+            osv.Show();*/
     }
 
     public static void RunCombinationsEvenNumberOfOrders(int n, int k, Graph g) {
@@ -294,7 +294,7 @@ public class Combinations
        UnitLoadConfiguration optimal = unitLoadConfigurations[0];
 
         int count = 1;
-        Console.WriteLine("--- All Configurations --- ");
+        Console.Write("--- All Configurations --- ");
         foreach(UnitLoadConfiguration ULC in unitLoadConfigurations)
         {
             Console.WriteLine();
