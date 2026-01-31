@@ -12,8 +12,14 @@ public class GUI_createPickLocationsManyOrders : Form {
     int aisleToAisleDist = 200;
     int shelfLength = 50;
     int shelfWidth = 50;
+
+    int comboBoxNbr = 0;
+    int sequenceTextBoxLength;
+
     Button confirmButton;
     Button GenerateRandomPickLocationsButton;
+    Label sequenceLabel;
+    TextBox sequenceTextBox;
     List<ComboBox> comboBoxes;
     CheckedListBox orderCheckListBox;
     private Pen bluePen = new Pen(Color.Blue, 2);
@@ -78,10 +84,61 @@ public class GUI_createPickLocationsManyOrders : Form {
         orderCheckListBox.Height = 80;        
         orderCheckListBox.CheckOnClick = true;
 
+
+        sequenceLabel = new Label();
+        sequenceLabel.Text = "Order sequence:";
+        sequenceLabel.Location = new Point(50, g.shelvesPerAisle * shelfWidth + 200);
+        sequenceLabel.AutoSize = true;
+
+        sequenceTextBox = new TextBox();
+        sequenceTextBox.Location = new Point(50, g.shelvesPerAisle * shelfWidth + 216);
+        sequenceTextBox.Width = 200;
+        // Only allow digits and spaces
+        sequenceTextBox.KeyPress += SequenceTextBox_KeyPress;
+        sequenceTextBox.TextChanged += SequenceTextBox_TextChanged;
+
+        this.Controls.Add(sequenceLabel);
+        this.Controls.Add(sequenceTextBox);
+
+
         this.Controls.Add(confirmButton);
         this.Controls.Add(GenerateRandomPickLocationsButton);
         this.Controls.Add(selectOrderLabel);
         this.Controls.Add(orderCheckListBox);
+    }
+
+    private void SequenceTextBox_KeyPress(object sender, KeyPressEventArgs e)
+    {
+        // Allow control keys (Backspace, Delete, etc.)
+        if (char.IsControl(e.KeyChar))
+            return;
+        // Allow digits
+        if (char.IsDigit(e.KeyChar))
+            return;
+        // OPTIONAL: allow spaces
+        if (e.KeyChar == ' ')
+            return;
+        // Block everything else
+        e.Handled = true;
+    }
+
+    private void SequenceTextBox_TextChanged(object sender, EventArgs e)
+    {
+
+        List<int> sequence = sequenceTextBox.Text
+            .Where(char.IsDigit)
+            .Select(c => c - '0')
+            .ToList();
+
+        foreach (var cb in comboBoxes)
+        {
+            cb.SelectedIndex = 0; // "0" = no pick
+        }
+
+        for(int i = g.nbrOrdersPerLayers-1; i < sequence.Count; i = i + 2*g.nbrOrdersPerLayers)
+        {
+            for()
+        }
     }
 
     private void ApplyCheckedOrdersToGraph() {

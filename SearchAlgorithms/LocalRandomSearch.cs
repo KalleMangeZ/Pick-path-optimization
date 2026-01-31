@@ -20,6 +20,7 @@ public class LocalRandomSearch
         stopwatch = new Stopwatch();
         stopwatch.Start();
         GenerateRandomConfigurations(5000);
+        //TestPrintSomeConfigurations(configurations, 500);
     }
 
     public void GenerateRandomConfigurations(int nbrRandomConfigurations)
@@ -71,12 +72,11 @@ public class LocalRandomSearch
             UnitLoadConfiguration config = new UnitLoadConfiguration(listOfLayers, totalCost);
             configurations.Add(config);
         }
-            //PrintSomeConfigurations(configurations, 50);
+            TestPrintSomeConfigurations(configurations, 50);
             configurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost)); //sort by cost
             UnitLoadConfiguration optimal = configurations[0];
             Console.WriteLine("\n#Random configurations generated: " + nbrRandomConfigurations);
-            Console.WriteLine("Only serpentine path traversals (if nbrAisles is odd) cost: " + ((g.layers*g.aisles*g.getDiagonalDist())+(g.shelvesPerAisle*g.shelfWidth))); 
-            
+            Console.WriteLine("Only serpentine path traversals (if nbrAisles is even) cost: " + g.layers*((g.aisles*g.shelfWidth*2)+((g.aisles+1)*g.shelvesPerAisle))); 
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;
 
