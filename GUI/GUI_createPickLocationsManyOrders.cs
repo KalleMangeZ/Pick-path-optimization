@@ -124,22 +124,55 @@ public class GUI_createPickLocationsManyOrders : Form {
 
     private void SequenceTextBox_TextChanged(object sender, EventArgs e)
     {
-
         List<int> sequence = sequenceTextBox.Text
             .Where(char.IsDigit)
             .Select(c => c - '0')
             .ToList();
 
-        foreach (var cb in comboBoxes)
-        {
-            cb.SelectedIndex = 0; // "0" = no pick
-        }
-
-        for(int i = g.nbrOrdersPerLayers-1; i < sequence.Count; i = i + 2*g.nbrOrdersPerLayers)
-        {
-            for()
+        int selectedIndex = 0;
+        sequence = ReverseInChunks(sequence, g.shelvesPerAisle);
+        for(int i = 0; i < comboBoxes.Count; i = i + 2*g.shelvesPerAisle) {
+           for(int j = 0; j < g.shelvesPerAisle; j++) {
+                if ((i+j >= comboBoxes.Count) || (selectedIndex >= sequence.Count)) {
+                return;
+                }
+                
+                comboBoxes[i + j].SelectedIndex = sequence[selectedIndex];
+                selectedIndex++;
+            }
         }
     }
+
+    public static List<int> ReverseInChunks(List<int> input, int x)
+    {
+        List<int> result = new List<int>();
+        bool reverse = true; // first chunk reversed
+
+        for (int i = 0; i < input.Count; i += x)
+        {
+            int end = Math.Min(i + x, input.Count);
+
+            if (reverse)
+            {
+                for (int j = end - 1; j >= i; j--)
+                {
+                    result.Add(input[j]);
+                }
+            }
+            else
+            {
+                for (int j = i; j < end; j++)
+                {
+                    result.Add(input[j]);
+                }
+            }
+
+            reverse = !reverse; // toggle for next chunk
+        }
+
+        return result;
+    }
+
 
     private void ApplyCheckedOrdersToGraph() {
     HashSet<int> selectedOrders = new HashSet<int>();
