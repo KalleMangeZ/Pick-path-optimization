@@ -114,10 +114,10 @@ public class BoxStackingFromUniqueOrderStacks
             Console.WriteLine("Layer1: " + string.Join(",", orderLayer1));
 
         //TEST
-        bool findOnlyOneMatch = true;
+        bool matchNotFound = true;
         for (int i = 0; i < 200; i++)
         {
-            if(!findOnlyOneMatch){
+            if(!matchNotFound){
                 break;
             }
             /*Console.WriteLine( $"configurations: {string.Join(",", configurations[i].Layers[0].Boxes)} | " + 
@@ -138,20 +138,68 @@ public class BoxStackingFromUniqueOrderStacks
                         $"| Required: {string.Join(",", requiredLayer1)} " +
                         $"| Cost: {configurations[i].ShortestCost}"
                     );
-                    findOnlyOneMatch = false;
+                    matchNotFound = false;
                 }
             }
         }
-        if(findOnlyOneMatch){
+        if(matchNotFound){
             Console.WriteLine("No matching configuration found for the unique order stacks. New stack generation needed");
             GenerateConfigurationsFromUniqueStacks();
         }
     }
 
-    public void GenerateConfigurationsFromUniqueStacks()
-    {
-    
+    public void GenerateConfigurationsFromUniqueStacks() {
+        BoxLayerCombination boxesLayer1 = new BoxLayerCombination(new HashSet<int>(), 0.0);
+        BoxLayerCombination boxesLayer2 = new BoxLayerCombination(new HashSet<int>(), 0.0);
         
+        List<BoxLayerCombination> layers = new List<BoxLayerCombination>();
+        layers.Add(boxesLayer1);
+        layers.Add(boxesLayer2);
+        
+        UnitLoadConfiguration configWithCriteria = new UnitLoadConfiguration(layers, 0);
 
+        foreach (var orderStack in uniqueOrderStacks)
+        {
+            boxesLayer1.Boxes.Add(orderStack.bottom.orderNumber);
+            boxesLayer2.Boxes.Add(orderStack.top.orderNumber);
+        }
+
+        if(g.nbrOrdersPerLayers > boxesLayer1.Boxes.Count) {  //om det finns tomma platser kvar i lagren.
+            int boxesToAdd = g.nbrOrdersPerLayers - boxesLayer1.Boxes.Count; //per lager
+            List<HashSet<int>> usedOrders = new List<HashSet<int>>();
+            List<HashSet<int>> availableOrders = new List<HashSet<int>>();
+            HashSet<int> allOrders = new HashSet<int>();
+            for(int i = 1; i <= g.orders; i++) {
+                if(boxesLayer1.Boxes.Contains(i) && boxesLayer2.Boxes.Contains(i)) {
+                usedOrders.Add(i); //1,2,3,4
+                }
+                if(!boxesLayer1.Boxes.Contains(i) && !boxesLayer2.Boxes.Contains(i))
+                availableOrders.Add(i); //5,6
+            }
+            
+            int iterations = 500;
+            int count = 0; 
+            Random rand = new Random();
+            List<UnitLoadConfiguration> list = new List<UnitLoadConfiguration>();
+            
+            while(count < iterations)
+            {
+                for(int i = 0; i < boxesToAdd; i++)
+                {
+                    boxesLayer1.Boxes.Add()
+                }
+
+            }
+            
+
+            //boxesLayer1.Boxes.Add(X)); 
+            Random rand = new Random();
+
+        }
+
+        Console.WriteLine("Generated new configuration from unique order stacks:");
+        Console.WriteLine("Layer 2: " + string.Join(",", boxesLayer2.Boxes));
+        Console.WriteLine("Layer 1: " + string.Join(",", boxesLayer1.Boxes));
+        
     }
 }
