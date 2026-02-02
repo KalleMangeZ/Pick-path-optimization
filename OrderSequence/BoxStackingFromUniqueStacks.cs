@@ -149,6 +149,7 @@ public class BoxStackingFromUniqueOrderStacks
     }
 
     public void GenerateConfigurationsFromUniqueStacks() {
+        List<UnitLoadConfiguration> listConfigsWithCriteria = new List<UnitLoadConfiguration>();
         BoxLayerCombination boxesLayer1 = new BoxLayerCombination(new HashSet<int>(), 0.0);
         BoxLayerCombination boxesLayer2 = new BoxLayerCombination(new HashSet<int>(), 0.0);
         
@@ -166,40 +167,82 @@ public class BoxStackingFromUniqueOrderStacks
 
         if(g.nbrOrdersPerLayers > boxesLayer1.Boxes.Count) {  //om det finns tomma platser kvar i lagren.
             int boxesToAdd = g.nbrOrdersPerLayers - boxesLayer1.Boxes.Count; //per lager
-            List<HashSet<int>> usedOrders = new List<HashSet<int>>();
-            List<HashSet<int>> availableOrders = new List<HashSet<int>>();
+
+            List<int> usedOrders = new List<int>();
+            List<int> availableOrders = new List<int>();
             HashSet<int> allOrders = new HashSet<int>();
             for(int i = 1; i <= g.orders; i++) {
-                if(boxesLayer1.Boxes.Contains(i) && boxesLayer2.Boxes.Contains(i)) {
-                usedOrders.Add(i); //1,2,3,4
-                }
                 if(!boxesLayer1.Boxes.Contains(i) && !boxesLayer2.Boxes.Contains(i))
                 availableOrders.Add(i); //5,6
             }
             
-            int iterations = 500;
+            int iterations = 50; //Select how many new configurations to generate (Random search approach)
             int count = 0; 
             Random rand = new Random();
-            List<UnitLoadConfiguration> list = new List<UnitLoadConfiguration>();
-            
-            while(count < iterations)
+
+            while(count < iterations && availableOrders.Count >= 2)
             {
-                for(int i = 0; i < boxesToAdd; i++)
+                for(int i = 0; i < boxesToAdd; i++)  //new configuration generation
                 {
-                    boxesLayer1.Boxes.Add()
+                    //selects a random available box from availableOrders and removes it from the list
+                    
+                    var tempAvailable = new List<int>(availableOrders);
+                    if (tempAvailable.Count < 2){
+                    break;
+                    }
+
+                    int idx1 = rand.Next(tempAvailable.Count);
+                    int box1 = tempAvailable[idx1];
+                    tempAvailable.RemoveAt(idx1);
+
+                    int idx2 = rand.Next(tempAvailable.Count);
+                    int box2 = tempAvailable[idx2];
+                    tempAvailable.RemoveAt(idx2);
+
+                    boxesLayer1.Boxes.Add(box1);
+                    boxesLayer2.Boxes.Add(box2);
+                    count++;
+
+                    listConfigsWithCriteria.Add(new UnitLoadConfiguration(
+                            new List<BoxLayerCombination> {
+                            new BoxLayerCombination(new HashSet<int>(boxesLayer1.Boxes), 0.0),
+                            new BoxLayerCombination(new HashSet<int>(boxesLayer2.Boxes), 0.0)
+                        },
+                        0.0
+                    ));
+                    boxesLayer1.Boxes.Remove(box1);
+                    boxesLayer2.Boxes.Remove(box2);
                 }
 
             }
-            
-
-            //boxesLayer1.Boxes.Add(X)); 
-            Random rand = new Random();
-
         }
 
-        Console.WriteLine("Generated new configuration from unique order stacks:");
-        Console.WriteLine("Layer 2: " + string.Join(",", boxesLayer2.Boxes));
-        Console.WriteLine("Layer 1: " + string.Join(",", boxesLayer1.Boxes));
-        
+       foreach(UnitLoadConfiguration ulc in listConfigsWithCriteria)
+       {
+            //calculate the cost of the configuration:
+            ulc.CalculateShortestCost(g);
+       }
+    
+        TestPrintSomeConfigurations(listConfigsWithCriteria, 50);
+    }
+
+    public void TestPrintSomeConfigurations(List<UnitLoadConfiguration> configs, int numberToPrint)
+    {
+        var sortedConfigs = configs.OrderBy(c => c.ShortestCost).Take(numberToPrint).ToList();
+        int count = 1;
+        foreach (var ulc in sortedConfigs)
+        {
+            Console.WriteLine();
+            Console.Write($"{count}. Configuration boxes: ");
+            Console.Write(
+                string.Join(" | ",
+                    ulc.Layers
+                    .Select(b => "(" + string.Join(",", b.Boxes.OrderBy(x => x)) + ")")
+                    .OrderBy(s => s)
+                )
+            );
+            Console.Write($" | Cost: {ulc.ShortestCost}");
+            count++;
+        }
     }
 }
