@@ -19,9 +19,12 @@ public class GUI_createPickLocationsManyOrders : Form {
     Button confirmButton;
     Button GenerateRandomPickLocationsButton;
     Label sequenceLabel;
+    Label selectOrderLabel;
     TextBox sequenceTextBox;
     List<ComboBox> comboBoxes;
     CheckedListBox orderCheckListBox;
+    CheckedListBox algorithmCheckListBox;
+    HashSet<int> selectedAlgorithms;
     private Pen bluePen = new Pen(Color.Blue, 2);
 
     public GUI_createPickLocationsManyOrders(Graph graph, object sender, EventArgs e) {
@@ -41,12 +44,13 @@ public class GUI_createPickLocationsManyOrders : Form {
         confirmButton.Location = new Point(50, g.shelvesPerAisle * shelfWidth + 100);
         confirmButton.Click += (sender, e) =>
             {
+            ApplyCheckedSearchAlgorithmsToGraph();
             ApplyCheckedOrdersToGraph();
             g.path.Clear();      //lägga till i Combinations
             g.pathNodes.Clear();
             g.nodes.Clear();
             g.CreateGraph();
-            Combinations.RunCombinations(g); 
+            Combinations.RunCombinations(g, selectedAlgorithms); 
             CreateSolution_Click(sender, e);
             
                 if(window.OrderSequenceAnalysis.uniqueOrderStacks.Count > 0) {
@@ -70,13 +74,13 @@ public class GUI_createPickLocationsManyOrders : Form {
             }
         };
 
-        Label selectOrderLabel = new Label();
+        selectOrderLabel = new Label();
         selectOrderLabel.Text = "Select Orders:";
-        selectOrderLabel.Location = new Point(350, g.shelvesPerAisle * shelfWidth + 112);
+        selectOrderLabel.Location = new Point(340, g.shelvesPerAisle * shelfWidth + 96);
         selectOrderLabel.AutoSize = true;
 
         orderCheckListBox = new CheckedListBox();
-        orderCheckListBox.Location = new Point(440, g.shelvesPerAisle * shelfWidth + 106);
+        orderCheckListBox.Location = new Point(340, g.shelvesPerAisle * shelfWidth + 112);
         for (int i = 1; i < g.orders + 1; i++) {
             orderCheckListBox.Items.Add($"Order {i}");
         }
@@ -84,6 +88,22 @@ public class GUI_createPickLocationsManyOrders : Form {
         orderCheckListBox.Height = 80;        
         orderCheckListBox.CheckOnClick = true;
 
+        Label selectSearchAlgorithms = new Label();
+        selectSearchAlgorithms.Text = "Select Search Algorithm:";
+        selectSearchAlgorithms.Location = new Point(550, g.shelvesPerAisle * shelfWidth + 96);
+        selectSearchAlgorithms.AutoSize = true;
+        algorithmCheckListBox = new CheckedListBox();
+        algorithmCheckListBox.Location = new Point(550, g.shelvesPerAisle * shelfWidth + 112); 
+        algorithmCheckListBox.Width = 150;
+        algorithmCheckListBox.Height = 80;
+        algorithmCheckListBox.CheckOnClick = true;
+                algorithmCheckListBox.Items.Add("Brute Force");
+                algorithmCheckListBox.Items.Add("Branch and Bound");
+                algorithmCheckListBox.Items.Add("Random Search");
+                
+                for(int i = 0; i < algorithmCheckListBox.Items.Count; i++) {
+                 algorithmCheckListBox.SetItemChecked(i, true);
+                }
 
         sequenceLabel = new Label();
         sequenceLabel.Text = "Order sequence:";
@@ -100,6 +120,8 @@ public class GUI_createPickLocationsManyOrders : Form {
         this.Controls.Add(sequenceLabel);
         this.Controls.Add(sequenceTextBox);
 
+        this.Controls.Add(selectSearchAlgorithms);
+        this.Controls.Add(algorithmCheckListBox);
 
         this.Controls.Add(confirmButton);
         this.Controls.Add(GenerateRandomPickLocationsButton);
@@ -173,6 +195,12 @@ public class GUI_createPickLocationsManyOrders : Form {
         return result;
     }
 
+    private void ApplyCheckedSearchAlgorithmsToGraph() {
+        selectedAlgorithms = new HashSet<int>(); //0=RS, 1=BB, 2=BF
+        foreach(int indexChecked in algorithmCheckListBox.CheckedIndices) {
+            selectedAlgorithms.Add(indexChecked);
+        }
+    }
 
     private void ApplyCheckedOrdersToGraph() {
     HashSet<int> selectedOrders = new HashSet<int>();

@@ -15,7 +15,7 @@ public class Combinations
     public static BranchAndBound BranchAndBound {get; set;}
     public static OrderSequenceAnalysis analysis {get; set;}
 
-    public static void RunCombinations(Graph g)     
+    public static void RunCombinations(Graph g, HashSet<int> searchAlgorithms)     
     {
         n = g.orders;
         k = g.nbrOrdersPerLayers;
@@ -24,21 +24,26 @@ public class Combinations
             k = n;
         }
        
-        if(n % k == 0) { //works when full layers are possible
-            RunCombinationsEvenNumberOfOrders(n, k, g); //works for uneven orders if n%k == 0       //Brutal-Force approach
-        }  
-        else {
-            RunCombinationsUnevenNumberOfOrders(n, k, g);                                           //Brutal-Force approach
+        //searchAlgorithms(0) = Brutal-Force,
+        //searchAlgorithms(1) = Branch and Bound,
+        //searchAlgorithms(2) = Local Random Search
+
+        if(searchAlgorithms.Contains(0)) {
+            if(n % k == 0) { //works when full layers are possible
+                RunCombinationsEvenNumberOfOrders(n, k, g); //works for uneven orders if n%k == 0       //Brutal-Force approach
+            }  
+            else {
+                RunCombinationsUnevenNumberOfOrders(n, k, g);                                           //Brutal-Force approach
+            }
+        } 
+        if (searchAlgorithms.Contains(1)) {
+            BranchAndBound = new BranchAndBound(g); 
+        } 
+        if (searchAlgorithms.Contains(2)) {
+            LocalRandomSearch = new LocalRandomSearch(g);
         }
-
-        BranchAndBound = new BranchAndBound(g);
-        LocalRandomSearch = new LocalRandomSearch(g);
-
-        /*analysis = new OrderSequenceAnalysis(g); 
-        OrderSequenceVisualization osv =
-            new OrderSequenceVisualization(g, analysis);
-            osv.Show();*/
     }
+    
 
     public static void RunCombinationsEvenNumberOfOrders(int n, int k, Graph g) {
         var numbers = Enumerable.Range(1, n).ToList();
