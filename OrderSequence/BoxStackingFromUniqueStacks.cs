@@ -18,7 +18,11 @@ public class BoxStackingFromUniqueOrderStacks
         }
 
         //To do!
+        int orderStacksToRemove = uniqueOrderStacks.Count - g.nbrOrdersPerLayers; 
         if(uniqueOrderStacks.Count > g.nbrOrdersPerLayers) {
+            for(int i = 0; i < orderStacksToRemove; i++) {
+                uniqueOrderStacks.RemoveAt(0);
+            }
             //Begränsa antal orderStacks? Här implementeras logik för "stackning av order-stacks". Dvs, om fler
             //än 2 lager så kan order-stacks sättas nästa lager dock med hänsyn till extended order stack?..
         }
@@ -62,22 +66,6 @@ public class BoxStackingFromUniqueOrderStacks
             .OrderBy(c => c.ShortestCost)
             .Take(10)
             .ToList();
-
-        int count = 1;
-        foreach (var ulc in finalConfigs)
-        {
-            Console.WriteLine();
-            Console.Write($"{count}. Configuration boxes: ");
-            Console.Write(
-                string.Join(" | ",
-                    ulc.Layers
-                    .Select(b => "(" + string.Join(",", b.Boxes.OrderBy(x => x)) + ")")
-                    .OrderBy(s => s)
-                )
-            );
-            Console.Write($" | Cost: {ulc.ShortestCost}");
-            count++;
-        }
     }
 
     private static string GetCanonicalKey(UnitLoadConfiguration config)
@@ -100,11 +88,8 @@ public class BoxStackingFromUniqueOrderStacks
             
             int[] orderLayer1 = new int[g.nbrOrdersPerLayers];
             int[] orderLayer2 = new int[g.nbrOrdersPerLayers];
-            
             HashSet<int> orderSetLayer1 = new HashSet<int>();
             HashSet<int> orderSetLayer2 = new HashSet<int>();
-
-            //UnitLoadConfiguration bestConfig = finalConfigs[0];
             
             for(int i = 0; i < uniqueOrderStacks.Count; i++) 
             {
@@ -116,10 +101,6 @@ public class BoxStackingFromUniqueOrderStacks
             var requiredLayer1 = orderSetLayer1.Where(x => x != 0).ToHashSet();
             var requiredLayer2 = orderSetLayer2.Where(x => x != 0).ToHashSet();
             List<BoxLayerCombination> layers = [new BoxLayerCombination(orderSetLayer1, 0.0), new BoxLayerCombination(orderSetLayer2, 0.0)];
-            
-            Console.WriteLine();
-            Console.WriteLine("Layer2: " + string.Join(",", orderLayer2));    
-            Console.WriteLine("Layer1: " + string.Join(",", orderLayer1));
 
         //TEST
         bool matchNotFound = true;
@@ -167,32 +148,62 @@ public class BoxStackingFromUniqueOrderStacks
         List<BoxLayerCombination> layers = new List<BoxLayerCombination>();
         layers.Add(boxesLayer1);
         layers.Add(boxesLayer2);
+        int LayersToAdd = g.layers - layers.Count;
 
-        UnitLoadConfiguration formattedConfig = new UnitLoadConfiguration(layers, 0);
+            for (int i = 0; i < LayersToAdd; i++)
+            {
+                layers.Add(new BoxLayerCombination(new HashSet<int>(), 0.0)); //to make sure that g.layers are present in the real config.
+            }
 
         foreach (var orderStack in uniqueOrderStacks)
         {
             boxesLayer1.Boxes.Add(orderStack.bottom.orderNumber);
             boxesLayer2.Boxes.Add(orderStack.top.orderNumber);
         }
+        //L2: 3, 4, a
+        //L1: 2, 1, b 
+        double shortestCost = config.ShortestCost;
+        UnitLoadConfiguration formattedConfig = new UnitLoadConfiguration(layers, shortestCost);
+        int boxesToAdd = g.nbrOrdersPerLayers - boxesLayer1.Boxes.Count;
 
         //Track orders already placed via unique stacks
         HashSet<int> placedOrders = new HashSet<int>();
         foreach (var b in boxesLayer1.Boxes) placedOrders.Add(b);
         foreach (var b in boxesLayer2.Boxes) placedOrders.Add(b);
+        //placedOrders = {1, 2, 3, 4}
+        HashSet<int> ordersToPlace = new HashSet<int>(); //5,6
 
-        Console.WriteLine("Formatted configuration:");
-        for (int i = formattedConfig.Layers.Count; i >= 0; i--)
+        for(int i = 1; i < g.orders+1; i++)
         {
-            Console.WriteLine(
-                $"Layer{i + 1}: " +
-                string.Join(", ", formattedConfig.Layers[i].Boxes)
-            );
+            if(!placedOrders.Contains(i)){
+                ordersToPlace.Add(i);  
+            }
         }
 
+        foreach(var layer in formattedConfig.Layers)
+        {
+            foreach(var order in ordersToPlace)
+            {
+                if(layer.Boxes.Count == g.nbrOrdersPerLayers){
+                    break;
+                }
+                layer.Boxes.Add(order);
+                placedOrders.Add(order);
+                ordersToPlace.Remove(order);
+                if(ordersToPlace.Count == 0){
+                    break;
+                }
+            }
+        }
+        shortestCost = formattedConfig.ShortestCost;
 
-
-        
+        //print (solution) formattedConfig:
+        int layerNbr = formattedConfig.Layers.Count;
+        for (int i = formattedConfig.Layers.Count - 1; i >= 0; i--)
+        {
+            Console.WriteLine($"Layer {layerNbr}: {string.Join(",", formattedConfig.Layers[i].Boxes)}");
+            layerNbr--;
+        }
+        Console.WriteLine($"Shortest cost: {shortestCost}");
     }
-
 }

@@ -11,6 +11,7 @@ public List<OrderStack> orderStacks {get; set;}
 public List<OrderStack> uniqueOrderStacks {get; set;} = new List<OrderStack>();
 public List<ExtendedOrderStack> extendedOrderStacks {get; set;} = new List<ExtendedOrderStack>();
 public List<Order> orders {get; set;}
+
 CreatePickingPath pp;
 
     public OrderSequenceAnalysis(Graph g) {
@@ -140,7 +141,7 @@ CreatePickingPath pp;
                     u.top.orderNumber == stack.top.orderNumber &&
                     u.bottom.orderNumber == stack.bottom.orderNumber))
                 {
-                    uniqueOrderStacks.Add(stack);
+                    uniqueOrderStacks.Add(stack); //TEST!
                     Console.WriteLine($"Unique order-stack: {stack.bottom.orderNumber}-{stack.top.orderNumber}");
                 }
               }
