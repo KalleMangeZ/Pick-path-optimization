@@ -21,6 +21,13 @@ namespace ConsoleApp1
             this.Text = "Order sequence visualized";
             this.Size = new Size(1000, 400);
             this.StartPosition = FormStartPosition.CenterScreen;
+
+            this.AutoScroll = true;
+            // Make the virtual canvas big enough (adjust as needed)
+            this.AutoScrollMinSize = new Size(
+                150 + a.orderSequence.Count * 25,   // width
+                100 + g.orders * 35                  // height
+            );
             this.Invalidate();
         }
 
@@ -28,6 +35,16 @@ namespace ConsoleApp1
         {
             base.OnPaint(e);
             ShowOrderStrings(e.Graphics);
+            PrintOrderSequence();
+        }
+
+        private void PrintOrderSequence()
+        {
+            String orderSequenceString_concat = "";
+            for(int i = 0; i < a.orderSequence.Count; i++) {
+                orderSequenceString_concat += a.orderSequence[i];
+            }
+            Console.WriteLine(orderSequenceString_concat);
         }
 
         private void ShowOrderStrings(Graphics graphics)

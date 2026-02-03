@@ -102,7 +102,9 @@ public class GUI_createPickLocationsManyOrders : Form {
                 algorithmCheckListBox.Items.Add("Random Search");
                 
                 for(int i = 0; i < algorithmCheckListBox.Items.Count; i++) {
+                 if(i == 2) { //standard only random search for now.
                  algorithmCheckListBox.SetItemChecked(i, true);
+                 }
                 }
 
         sequenceLabel = new Label();
@@ -119,10 +121,8 @@ public class GUI_createPickLocationsManyOrders : Form {
 
         this.Controls.Add(sequenceLabel);
         this.Controls.Add(sequenceTextBox);
-
         this.Controls.Add(selectSearchAlgorithms);
         this.Controls.Add(algorithmCheckListBox);
-
         this.Controls.Add(confirmButton);
         this.Controls.Add(GenerateRandomPickLocationsButton);
         this.Controls.Add(selectOrderLabel);

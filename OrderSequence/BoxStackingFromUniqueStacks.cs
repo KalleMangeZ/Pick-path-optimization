@@ -16,6 +16,13 @@ public class BoxStackingFromUniqueOrderStacks
         if(g.layers == 1 || g.layers == g.orders) {
             return;      //no stacking if only one layer or if one order per layer
         }
+
+        //To do!
+        if(uniqueOrderStacks.Count > g.nbrOrdersPerLayers) {
+            //Begränsa antal orderStacks? Här implementeras logik för "stackning av order-stacks". Dvs, om fler
+            //än 2 lager så kan order-stacks sättas nästa lager dock med hänsyn till extended order stack?..
+        }
+
         SearchMatchingConfigurations();
         RepresentConfigurations();
     }
@@ -41,7 +48,6 @@ public class BoxStackingFromUniqueOrderStacks
                 {
                     string key = GetCanonicalKey(config);
 
-                    // keep only one instance per canonical configuration
                     if (!uniqueConfigs.ContainsKey(key))
                     {
                         uniqueConfigs[key] = config;
@@ -84,7 +90,9 @@ public class BoxStackingFromUniqueOrderStacks
         return string.Join(" | ", normalizedLayers);
     }
 
-    private void RepresentConfigurations()
+    //Searches through 2 layers of the config. to check if there are existing configurations that match the order stacks.
+    //regarding higher stacks, another approach needs to be developed.
+    private void RepresentConfigurations() 
         {
             if(g.layers < 2){
                 return;
@@ -98,7 +106,7 @@ public class BoxStackingFromUniqueOrderStacks
 
             //UnitLoadConfiguration bestConfig = finalConfigs[0];
             
-            for(int i = 0; i < uniqueOrderStacks.Count; i++)
+            for(int i = 0; i < uniqueOrderStacks.Count; i++) 
             {
                 orderLayer1[i] = uniqueOrderStacks[i].bottom.orderNumber;
                 orderSetLayer1.Add(orderLayer1[i]);
@@ -115,7 +123,7 @@ public class BoxStackingFromUniqueOrderStacks
 
         //TEST
         bool matchNotFound = true;
-        for (int i = 0; i < 200; i++)
+        for (int i = 0; i < configurations.Count; i++)
         {
             if(!matchNotFound){
                 break;
@@ -128,12 +136,16 @@ public class BoxStackingFromUniqueOrderStacks
                 
                 if (requiredLayer1.All(x => layerSet.Contains(x)))
                 {
-                    Console.WriteLine(
-                        $"MATCH FOUND → Layer: {string.Join(",", layer.Boxes)} " +
-                        $"| Required: {string.Join(",", requiredLayer1)} " +
-                        $"| Cost: {configurations[i].ShortestCost}"
-                    );
-                    matchNotFound = false;
+                    foreach(var layer2 in configurations[i].Layers){
+                        if(requiredLayer2.All(x => layer2.Boxes.Contains(x))){
+                            Console.WriteLine(
+                                $"MATCH FOUND → Layer: {string.Join(",", layer.Boxes)} " +
+                                $"| Required: {string.Join(",", requiredLayer1)} " +
+                                $"| Cost: {configurations[i].ShortestCost}");
+                            FormatConfiguration(configurations[i]);
+                            matchNotFound = false;
+                        }
+                    }
                 }
             }
         }
@@ -142,4 +154,45 @@ public class BoxStackingFromUniqueOrderStacks
             CreateConfigurationsFromUniqueStacks finishBuildingConfig = new CreateConfigurationsFromUniqueStacks(g, uniqueOrderStacks);
         }
     }
+
+    /*e.g
+    Unique order-stack: 2-3
+    Unique order-stack: 1-4
+    */
+    public void FormatConfiguration(UnitLoadConfiguration config)
+    {
+        BoxLayerCombination boxesLayer1 = new BoxLayerCombination(new HashSet<int>(), 0.0);
+        BoxLayerCombination boxesLayer2 = new BoxLayerCombination(new HashSet<int>(), 0.0);
+
+        List<BoxLayerCombination> layers = new List<BoxLayerCombination>();
+        layers.Add(boxesLayer1);
+        layers.Add(boxesLayer2);
+
+        UnitLoadConfiguration formattedConfig = new UnitLoadConfiguration(layers, 0);
+
+        foreach (var orderStack in uniqueOrderStacks)
+        {
+            boxesLayer1.Boxes.Add(orderStack.bottom.orderNumber);
+            boxesLayer2.Boxes.Add(orderStack.top.orderNumber);
+        }
+
+        //Track orders already placed via unique stacks
+        HashSet<int> placedOrders = new HashSet<int>();
+        foreach (var b in boxesLayer1.Boxes) placedOrders.Add(b);
+        foreach (var b in boxesLayer2.Boxes) placedOrders.Add(b);
+
+        Console.WriteLine("Formatted configuration:");
+        for (int i = formattedConfig.Layers.Count; i >= 0; i--)
+        {
+            Console.WriteLine(
+                $"Layer{i + 1}: " +
+                string.Join(", ", formattedConfig.Layers[i].Boxes)
+            );
+        }
+
+
+
+        
+    }
+
 }

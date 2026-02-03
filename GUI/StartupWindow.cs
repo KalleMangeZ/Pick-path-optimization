@@ -78,10 +78,12 @@ public class StartupWindow : Form {
                 nbrOrdersChoice.Items.Add("7");
                 nbrOrdersChoice.Items.Add("8");  
                 nbrOrdersChoice.Items.Add("9");
-                nbrOrdersChoice.Items.Add("10");    //TEST!    
-                nbrOrdersChoice.Items.Add("12");    //EXPERIMENTAL 
-                nbrOrdersChoice.Items.Add("14");    //EXPERIMENTAL       
-                nbrOrdersChoice.Items.Add("48");    //EXPERIMENTAL  
+                nbrOrdersChoice.Items.Add("10");    //B&B and BF algorithms work best up to this!    
+                nbrOrdersChoice.Items.Add("12");    //use RS from now on.
+                nbrOrdersChoice.Items.Add("14");        
+                nbrOrdersChoice.Items.Add("18");
+                nbrOrdersChoice.Items.Add("20");       
+                nbrOrdersChoice.Items.Add("48");      
                    
                 nbrOrdersChoice.DropDownStyle = ComboBoxStyle.DropDownList;
 

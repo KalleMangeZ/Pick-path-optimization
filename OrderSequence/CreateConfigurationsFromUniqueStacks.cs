@@ -87,7 +87,7 @@ public class CreateConfigurationsFromUniqueStacks
             ulc.CalculateShortestCost(g);
        }
     
-        //TestPrintSomeConfigurations(listConfigsWithCriteria, 50);
+        TestPrintSomeConfigurations(listConfigsWithCriteria, 50);
     }
 
     public void TestPrintSomeConfigurations(List<UnitLoadConfiguration> configs, int numberToPrint)

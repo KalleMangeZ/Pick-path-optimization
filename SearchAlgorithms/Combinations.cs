@@ -44,7 +44,6 @@ public class Combinations
         }
     }
     
-
     public static void RunCombinationsEvenNumberOfOrders(int n, int k, Graph g) {
         var numbers = Enumerable.Range(1, n).ToList();
         var partitions = GetPartitions(numbers, k).ToList();

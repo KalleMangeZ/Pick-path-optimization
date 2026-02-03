@@ -24,7 +24,7 @@ public class LocalRandomSearch
     }
 
     public void GenerateRandomConfigurations(int nbrRandomConfigurations)
-    {        
+    {      
         configurations = new List<UnitLoadConfiguration>();
         Random rand = new Random();
 
@@ -36,7 +36,7 @@ public class LocalRandomSearch
             for(int j = 1; j <= g.orders; j++) { allOrders.Add(j); }
 
             List<BoxLayerCombination> listOfLayers = new List<BoxLayerCombination>();
-            for(int layer = 0; layer < g.layers; layer++) 
+            /*for(int layer = 0; layer < g.layers; layer++) 
             {
                 HashSet<int> layerOrders = new HashSet<int>(); //orders in this layer
                 while(layerOrders.Count < g.nbrOrdersPerLayers)
@@ -49,7 +49,25 @@ public class LocalRandomSearch
                 }
                 configuration.Add(layerOrders);
                 usedOrders.Add(layerOrders);
+            }*/
+
+            var remainingOrders = new HashSet<int>(Enumerable.Range(1, g.orders));
+            for (int layer = 0; layer < g.layers && remainingOrders.Count > 0; layer++)
+            {
+                int capacity = Math.Min(g.nbrOrdersPerLayers, remainingOrders.Count);
+                HashSet<int> layerOrders = new HashSet<int>();
+
+                for (int c = 0; c < capacity; c++)
+                {
+                    int idx = rand.Next(remainingOrders.Count);
+                    int order = remainingOrders.ElementAt(idx);
+                    layerOrders.Add(order);
+                    remainingOrders.Remove(order);
+                }
+
+                configuration.Add(layerOrders);
             }
+
 
             //calculate cost of this configuration
             double totalCost = 0.0;
@@ -76,7 +94,10 @@ public class LocalRandomSearch
             configurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost)); //sort by cost
             UnitLoadConfiguration optimal = configurations[0];
             Console.WriteLine("\n#Random configurations generated: " + nbrRandomConfigurations);
-            Console.WriteLine("Only serpentine path traversals (if nbrAisles is even) cost: " + g.layers*((g.aisles*g.shelfWidth*2)+((g.aisles+1)*g.shelvesPerAisle))); 
+                double fullSerpentinePickingRoute = g.layers*((g.aisles*g.shelfWidth*2)+((g.aisles+1)*g.shelvesPerAisle));
+                double efficiency = (fullSerpentinePickingRoute / optimal.ShortestCost - 1) * 100;
+            Console.WriteLine($"Only serpentine path traversals cost: {fullSerpentinePickingRoute}" +
+                              $" | Found solution is: {efficiency:F2}% more distance efficient"); 
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;
 
