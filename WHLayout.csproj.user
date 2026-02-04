@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="GUI\GUI_createPickLocations.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="GUI\GUI_createPickLocationsManyOrders.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="GUI\GUI_solution.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="GUI\StartupWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="OrderSequence\OrderSequenceVisualization.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

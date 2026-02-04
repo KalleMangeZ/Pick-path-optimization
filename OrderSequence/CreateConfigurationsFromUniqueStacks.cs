@@ -10,6 +10,7 @@ public class CreateConfigurationsFromUniqueStacks
         this.g = g;
         this.uniqueOrderStacks = uniqueOrderStacks;
         GenerateConfigurationsFromUniqueStacks();
+    
     }
 
     public void GenerateConfigurationsFromUniqueStacks() {
@@ -22,13 +23,11 @@ public class CreateConfigurationsFromUniqueStacks
         layers.Add(boxesLayer2);
         
         UnitLoadConfiguration configWithCriteria = new UnitLoadConfiguration(layers, 0);
-
         foreach (var orderStack in uniqueOrderStacks)
         {
             boxesLayer1.Boxes.Add(orderStack.bottom.orderNumber);
             boxesLayer2.Boxes.Add(orderStack.top.orderNumber);
         }
-
         if(g.nbrOrdersPerLayers > boxesLayer1.Boxes.Count) {  //om det finns tomma platser kvar i lagren.
             int boxesToAdd = g.nbrOrdersPerLayers - boxesLayer1.Boxes.Count; //per lager
 
@@ -43,7 +42,6 @@ public class CreateConfigurationsFromUniqueStacks
             int iterations = 50; //Select how many new configurations to generate (Random search approach)
             int count = 0; 
             Random rand = new Random();
-
             while(count < iterations && availableOrders.Count >= 2)
             {
                 for(int i = 0; i < boxesToAdd; i++)  //new configuration generation
@@ -86,7 +84,6 @@ public class CreateConfigurationsFromUniqueStacks
             //calculate the cost of the configuration:
             ulc.CalculateShortestCost(g);
        }
-    
         TestPrintSomeConfigurations(listConfigsWithCriteria, 50);
     }
 
@@ -97,7 +94,7 @@ public class CreateConfigurationsFromUniqueStacks
         foreach (var ulc in sortedConfigs)
         {
             Console.WriteLine();
-            Console.Write($"{count}. Configuration boxes: ");
+            Console.Write($"{count}. Generated - Configuration boxes: ");
             Console.Write(
                 string.Join(" | ",
                     ulc.Layers

@@ -23,6 +23,9 @@ CreatePickingPath pp;
             CreateOrderStack();
             PrintOrderStack();
             CaseUniqueStackPossibilites();
+            if(uniqueOrderStacks.Count == 0) {
+               CreateUniqueFromOnlyOrderStacks();
+            }
     }
 
     public void CreateOrderSequence() {
@@ -81,7 +84,6 @@ CreatePickingPath pp;
         if(g.layers > 2) {
             CreateExtendedOrderStack();
         }
-
     }
 
     public void CreateExtendedOrderStack() {
@@ -92,6 +94,37 @@ CreatePickingPath pp;
                 }
             }
         }
+    }
+
+    public void CreateUniqueFromOnlyOrderStacks()
+    {
+            uniqueOrderStacks.Clear();
+
+            HashSet<int> usedOrders = new HashSet<int>();
+
+            // Optional: sort to control priority (shorter spans, lower order numbers, etc.)
+            var sortedStacks = orderStacks
+                .OrderBy(s => s.top.orderNumber - s.bottom.orderNumber)
+                .ToList();
+
+            foreach (var stack in sortedStacks) {
+                int bottom = stack.bottom.orderNumber;
+                int top = stack.top.orderNumber;
+
+                // both orders must be unused
+                if (!usedOrders.Contains(bottom) && !usedOrders.Contains(top)) {
+                    uniqueOrderStacks.Add(stack);
+                    usedOrders.Add(bottom);
+                    usedOrders.Add(top);
+                }
+            }
+
+            // Debug print
+            foreach (var stack in uniqueOrderStacks) {
+                Console.WriteLine(
+                    $"unique order-stack: {stack.bottom.orderNumber}-{stack.top.orderNumber}"
+                );
+            }
     }
 
     public void PrintOrderStack() {
@@ -141,7 +174,8 @@ CreatePickingPath pp;
                     u.bottom.orderNumber == stack.bottom.orderNumber))
                 {
                     uniqueOrderStacks.Add(stack);
-                    Console.WriteLine($"Unique order-stack: {stack.bottom.orderNumber}-{stack.top.orderNumber}");
+                    //does not actually print:
+                    Console.WriteLine($"'CaseUniqueStackPossibilitesUnique' order-stack: {stack.bottom.orderNumber}-{stack.top.orderNumber}");
                 }
               }
         }
