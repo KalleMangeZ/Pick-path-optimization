@@ -10,7 +10,6 @@ public class CreateConfigurationsFromUniqueStacks
         this.g = g;
         this.uniqueOrderStacks = uniqueOrderStacks;
         GenerateConfigurationsFromUniqueStacks();
-    
     }
 
     public void GenerateConfigurationsFromUniqueStacks() {
@@ -30,7 +29,7 @@ public class CreateConfigurationsFromUniqueStacks
         }
         if(g.nbrOrdersPerLayers > boxesLayer1.Boxes.Count) {  //om det finns tomma platser kvar i lagren.
             int boxesToAdd = g.nbrOrdersPerLayers - boxesLayer1.Boxes.Count; //per lager
-
+            Console.WriteLine($"CCFU: Number of boxes to add: {boxesToAdd}");
             List<int> usedOrders = new List<int>();
             List<int> availableOrders = new List<int>();
             HashSet<int> allOrders = new HashSet<int>();
@@ -38,6 +37,7 @@ public class CreateConfigurationsFromUniqueStacks
                 if(!boxesLayer1.Boxes.Contains(i) && !boxesLayer2.Boxes.Contains(i))
                 availableOrders.Add(i); //5,6
             }
+              Console.WriteLine($"CCFU: Available orders: {string.Join(", ", availableOrders)}");
             
             int iterations = 50; //Select how many new configurations to generate (Random search approach)
             int count = 0; 
@@ -46,7 +46,6 @@ public class CreateConfigurationsFromUniqueStacks
             {
                 for(int i = 0; i < boxesToAdd; i++)  //new configuration generation
                 {
-                    //selects a random available box from availableOrders and removes it from the list
                     
                     var tempAvailable = new List<int>(availableOrders);
                     if (tempAvailable.Count < 2){
@@ -65,6 +64,7 @@ public class CreateConfigurationsFromUniqueStacks
                     boxesLayer2.Boxes.Add(box2);
                     count++;
 
+                      Console.WriteLine($"CCFU: " + listConfigsWithCriteria.Count);
                     listConfigsWithCriteria.Add(new UnitLoadConfiguration(
                             new List<BoxLayerCombination> {
                             new BoxLayerCombination(new HashSet<int>(boxesLayer1.Boxes), 0.0),

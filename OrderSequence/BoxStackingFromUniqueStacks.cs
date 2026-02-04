@@ -14,10 +14,9 @@ public class BoxStackingFromUniqueOrderStacks
         this.uniqueOrderStacks = uniqueOrderStacks;
 
         if(g.layers == 1 || g.layers == g.orders) {
-             //Fill first layer with all the orders
             Console.WriteLine("entered FillFirstLayerWithAllOrders");
             FillFirstLayerWithAllOrders();
-            return;      //no stacking if only one layer or if one order per layer
+            return;     
         }
 
         //To do!
@@ -70,7 +69,7 @@ public class BoxStackingFromUniqueOrderStacks
         foreach (var ulc in finalConfigs)
         {
             Console.WriteLine();
-            Console.Write($"{count}. Configuration boxes: ");
+            Console.Write($"{count}. finalConfigs Configuration boxes: ");
             Console.Write(
                 string.Join(" | ",
                     ulc.Layers
@@ -149,8 +148,19 @@ public class BoxStackingFromUniqueOrderStacks
         }
         if(matchNotFound){
             Console.WriteLine("\n No matching configuration found for the unique order stacks. New stack generation needed");
+            if(g.nbrOrdersPerLayers > uniqueOrderStacks.Count){
+                Console.WriteLine("Generating new config from finalConfigs:");
+                CreateConfigurationFromFinalConfig();
+            } else {  //Using else here for TEST PURPOSES
             CreateConfigurationsFromUniqueStacks finishBuildingConfig = new CreateConfigurationsFromUniqueStacks(g, uniqueOrderStacks);
+            }
         }
+    }
+
+    public void CreateConfigurationFromFinalConfig()
+    {
+        UnitLoadConfiguration bestConfig = finalConfigs[0];
+        FixWrongLayerOrientation(bestConfig);
     }
 
     /*e.g
@@ -233,7 +243,7 @@ public class BoxStackingFromUniqueOrderStacks
     }
 
     public void FixWrongLayerOrientation(UnitLoadConfiguration config)
-{
+    {
     // Swap Layer 0 and Layer 1
     BoxLayerCombination temp = config.Layers[0];
     config.Layers[0] = config.Layers[1];
@@ -270,9 +280,8 @@ public class BoxStackingFromUniqueOrderStacks
             string.Join(", ", config.Layers[i].Boxes)
         );
     }
-}
+    }
 
-    
     public void FillFirstLayerWithAllOrders()
     {
         BoxLayerCombination firstLayer = new BoxLayerCombination(new HashSet<int>(), 0.0);
