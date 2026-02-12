@@ -22,7 +22,7 @@ CreatePickingPath pp;
             AnalyzeOrderSequence();
             CreateOrderStack();
             PrintOrderStack();
-            CaseUniqueStackPossibilites();
+            //CaseUniqueStackPossibilites();
             if(uniqueOrderStacks.Count == 0) {
                CreateUniqueFromOnlyOrderStacks();
             }
@@ -53,24 +53,25 @@ CreatePickingPath pp;
             }
 
             for(int orderNum = 1; orderNum < g.orders+1; orderNum++) {
-                for(int orderEnd = orderSequence.Count-1; orderEnd >= 0; orderEnd--) {
+                for(int orderEnd = orderSequence.Count-1; orderEnd >= 0; orderEnd--) {                    
                     if(orderSequence[orderEnd] == orderNum) {
                         orderEndInSequence.Add(orderEnd);
                         break;  
                     }
                 }
-            }    
+            }   
 
             for(int i = 0; i < g.orders; i++) {
-                orders.Add(new Order(i+1, orderStartInSequence[i], orderEndInSequence[i], orderEndInSequence[i]-orderStartInSequence[i]+1));
+                    orders.Add(new Order(i+1, orderStartInSequence[i], orderEndInSequence[i], orderEndInSequence[i]-orderStartInSequence[i]+1));
+                    //Console.WriteLine("orderNumber: " + orders[i].orderNumber + " start: " + orders[i].orderStart + " end: " + orders[i].orderEnd + " span: " + orders[i].orderRouteLength + " orderStartInSequence: " + orderStartInSequence[i] + " orderEndInSequence: " + orderEndInSequence[i]);
             }
     }
 
     //marks out if and so which box that can stack on top of another box
     public void CreateOrderStack() {
         orderStacks = new List<OrderStack>();
-        for(int i = 0; i < orderStartInSequence.Count; i++) {
-            for(int j = 0; j < orderEndInSequence.Count; j++) {
+        for(int i = 0; i < orders.Count; i++) {
+            for(int j = 0; j < orders.Count; j++) {
                 if(orderStartInSequence[i] > orderEndInSequence[j]) {
                     //Console.WriteLine("Order " + (i+1) + " can be stacked on top of Order " + (j+1));
                     orderStacks.Add(new OrderStack(orders[j], orders[i]));

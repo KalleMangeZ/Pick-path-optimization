@@ -265,11 +265,6 @@ public class BoxStackingFromUniqueOrderStacks
         if (!config.Layers[0].Boxes.Contains(lower)) config.Layers[0].Boxes.Add(lower);
         if (!config.Layers[1].Boxes.Contains(higher)) config.Layers[1].Boxes.Add(higher);
     }
-    //TEST
-     while(config.Layers[0].Boxes.Count < g.nbrOrdersPerLayers){
-        config.Layers[0].Boxes.Add(config.Layers[1].Boxes.Last());
-        config.Layers[1].Boxes.Remove(config.Layers[1].Boxes.Last());
-    }
 
     // Test print
     Console.WriteLine("Fixed Formatted configuration:");

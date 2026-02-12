@@ -28,14 +28,19 @@ namespace ConsoleApp1
                 150 + a.orderSequence.Count * 25,   // width
                 100 + g.orders * 35                  // height
             );
+            orderSequenceString = string.Join("   ", a.orderSequence);
             this.Invalidate();
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
+            e.Graphics.TranslateTransform(
+                this.AutoScrollPosition.X,
+                this.AutoScrollPosition.Y
+            );
             base.OnPaint(e);
             ShowOrderStrings(e.Graphics);
-            PrintOrderSequence();
+            //PrintOrderSequence();
         }
 
         private void PrintOrderSequence()
@@ -49,22 +54,44 @@ namespace ConsoleApp1
 
         private void ShowOrderStrings(Graphics graphics)
         {
-            graphics.DrawString("Order sequence:",normalFont,Brushes.Black,new Point(50, 25));
-            for(int i = 0; i < a.orderSequence.Count; i++) {
-                orderSequenceString += a.orderSequence[i] + "   ";
+            graphics.DrawString("Order sequence:", normalFont, Brushes.Black, new Point(50, 25));
+            int startX = 100;
+            int ySequence = 50;
+            int rowLength = 32;
+
+            List<float> sequencePositions = new List<float>();
+
+            float currentX = startX;
+
+            for (int i = 0; i < a.orderSequence.Count; i++)
+            {
+                string text = a.orderSequence[i].ToString();
+
+                sequencePositions.Add(currentX);
+
+                graphics.DrawString(text, normalFont, Brushes.Black, currentX, ySequence);
+
+                SizeF size = graphics.MeasureString(text + "   ", normalFont);
+                currentX += size.Width;
             }
 
-            int rowLength = 32;
-            int spaceBetweenOrders = 22;
+            // Draw order lines
+            for (int order = 1; order <= g.orders; order++)
+            {
+                int y = 50 + rowLength * order;
 
-            for(int order = 1; order < g.orders+1; order++) {
-                graphics.DrawString(order.ToString(),normalFont,Brushes.Black,new Point(50, 50+rowLength*order));
-                graphics.DrawLine(pen, 
-                        109+a.orderStartInSequence[order-1]*spaceBetweenOrders, 50+rowLength*order,
-                        109+a.orderEndInSequence[order-1]*spaceBetweenOrders, 50+rowLength*order);
+                graphics.DrawString(order.ToString(), normalFont, Brushes.Black, 50, y);
 
-            graphics.DrawString(orderSequenceString,normalFont,Brushes.Black,new Point(100, 50));
+                int startIndex = a.orderStartInSequence[order - 1];
+                int endIndex = a.orderEndInSequence[order - 1];
+
+                float x1 = sequencePositions[startIndex]+10;
+                float x2 = sequencePositions[endIndex] +
+                        graphics.MeasureString(a.orderSequence[endIndex].ToString(), normalFont).Width-5;
+
+                graphics.DrawLine(pen, x1, y+10, x2, y+10);
             }
         }
+
     }
 }
