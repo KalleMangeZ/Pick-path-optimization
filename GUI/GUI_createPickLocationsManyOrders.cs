@@ -324,106 +324,12 @@ public class GUI_createPickLocationsManyOrders : Form {
             }
         }
     }
-
-    /*
-    Random random = new Random();
-            foreach (ComboBox comboBox in comboBoxes)
-            {
-                int randomIndex = random.Next(0, comboBox.Items.Count);
-                comboBox.SelectedIndex = randomIndex;
-    */
+    
     public void UseDefinedItemLocations() {
-        
         //preset 1:
         if(g.aisles !=5 && g.shelvesPerAisle != 8 && g.orders != 20)  {
         return;
         }
-        //continue up to [79]
-        /*comboBoxes[0].SelectedIndex = 3;
-        comboBoxes[1].SelectedIndex = 15;
-        comboBoxes[2].SelectedIndex = 8;
-        comboBoxes[3].SelectedIndex = 17;
-        comboBoxes[4].SelectedIndex = 9;
-        comboBoxes[5].SelectedIndex = 9;
-        comboBoxes[6].SelectedIndex = 11;
-        comboBoxes[7].SelectedIndex = 16;
-        comboBoxes[8].SelectedIndex = 20;
-        comboBoxes[9].SelectedIndex = 18;
-        comboBoxes[10].SelectedIndex = 19;
-        comboBoxes[11].SelectedIndex = 2;
-        comboBoxes[12].SelectedIndex = 6;
-        comboBoxes[13].SelectedIndex = 7;
-        comboBoxes[14].SelectedIndex = 1;
-        comboBoxes[15].SelectedIndex = 14;
-
-        comboBoxes[16].SelectedIndex = 17;
-        comboBoxes[17].SelectedIndex = 15;
-        comboBoxes[18].SelectedIndex = 10;
-        comboBoxes[19].SelectedIndex = 11;
-        comboBoxes[20].SelectedIndex = 18;
-        comboBoxes[21].SelectedIndex = 6;
-        comboBoxes[22].SelectedIndex = 7;
-        comboBoxes[23].SelectedIndex = 9;
-        comboBoxes[24].SelectedIndex = 20;
-        comboBoxes[25].SelectedIndex = 8;
-        comboBoxes[26].SelectedIndex = 20;
-        comboBoxes[27].SelectedIndex = 10;
-        comboBoxes[28].SelectedIndex = 3;
-        comboBoxes[29].SelectedIndex = 2;
-        comboBoxes[30].SelectedIndex = 8;
-        comboBoxes[31].SelectedIndex = 16;
-
-        comboBoxes[32].SelectedIndex = 13;
-        comboBoxes[33].SelectedIndex = 5;
-        comboBoxes[34].SelectedIndex = 5;
-        comboBoxes[35].SelectedIndex = 8;
-        comboBoxes[36].SelectedIndex = 9;
-        comboBoxes[37].SelectedIndex = 10;
-        comboBoxes[38].SelectedIndex = 19;
-        comboBoxes[39].SelectedIndex = 3;
-        comboBoxes[40].SelectedIndex = 8;
-        comboBoxes[41].SelectedIndex = 18;
-        comboBoxes[42].SelectedIndex = 7;
-        comboBoxes[43].SelectedIndex = 20;
-        comboBoxes[44].SelectedIndex = 4;
-        comboBoxes[45].SelectedIndex = 17;
-        comboBoxes[46].SelectedIndex = 4;
-        comboBoxes[47].SelectedIndex = 6;
-
-        comboBoxes[48].SelectedIndex = 10;
-        comboBoxes[49].SelectedIndex = 17;
-        comboBoxes[50].SelectedIndex = 4;
-        comboBoxes[51].SelectedIndex = 8;
-        comboBoxes[52].SelectedIndex = 1;
-        comboBoxes[53].SelectedIndex = 7;
-        comboBoxes[54].SelectedIndex = 7;
-        comboBoxes[55].SelectedIndex = 9;
-        comboBoxes[56].SelectedIndex = 2;
-        comboBoxes[57].SelectedIndex = 6;
-        comboBoxes[58].SelectedIndex = 6;
-        comboBoxes[59].SelectedIndex = 12;
-        comboBoxes[60].SelectedIndex = 3;
-        comboBoxes[61].SelectedIndex = 16;
-        comboBoxes[62].SelectedIndex = 6;
-        comboBoxes[63].SelectedIndex = 11;
-
-        comboBoxes[64].SelectedIndex = 4;
-        comboBoxes[65].SelectedIndex = 5;
-        comboBoxes[66].SelectedIndex = 0;
-        comboBoxes[67].SelectedIndex = 16;
-        comboBoxes[68].SelectedIndex = 6;
-        comboBoxes[69].SelectedIndex = 16;
-        comboBoxes[70].SelectedIndex = 0;
-        comboBoxes[71].SelectedIndex = 18;
-        comboBoxes[72].SelectedIndex = 15;
-        comboBoxes[73].SelectedIndex = 3;
-        comboBoxes[74].SelectedIndex = 17;
-        comboBoxes[75].SelectedIndex = 3;
-        comboBoxes[76].SelectedIndex = 4;
-        comboBoxes[77].SelectedIndex = 7;
-        comboBoxes[78].SelectedIndex = 4;
-        comboBoxes[79].SelectedIndex = 3;*/
-
         comboBoxes[0].SelectedIndex  = 3;   comboBoxes[16].SelectedIndex = 17;  comboBoxes[32].SelectedIndex = 13;  comboBoxes[48].SelectedIndex = 10;  comboBoxes[64].SelectedIndex = 4;
         comboBoxes[1].SelectedIndex  = 15;  comboBoxes[17].SelectedIndex = 15;  comboBoxes[33].SelectedIndex = 5;   comboBoxes[49].SelectedIndex = 17;  comboBoxes[65].SelectedIndex = 5;
         comboBoxes[2].SelectedIndex  = 8;   comboBoxes[18].SelectedIndex = 10;  comboBoxes[34].SelectedIndex = 5;   comboBoxes[50].SelectedIndex = 4;   comboBoxes[66].SelectedIndex = 0;
@@ -440,6 +346,5 @@ public class GUI_createPickLocationsManyOrders : Form {
         comboBoxes[13].SelectedIndex = 7;   comboBoxes[29].SelectedIndex = 2;   comboBoxes[45].SelectedIndex = 17;  comboBoxes[61].SelectedIndex = 16;  comboBoxes[77].SelectedIndex = 7;
         comboBoxes[14].SelectedIndex = 1;   comboBoxes[30].SelectedIndex = 8;   comboBoxes[46].SelectedIndex = 4;   comboBoxes[62].SelectedIndex = 6;   comboBoxes[78].SelectedIndex = 4;
         comboBoxes[15].SelectedIndex = 14;  comboBoxes[31].SelectedIndex = 16;  comboBoxes[47].SelectedIndex = 6;   comboBoxes[63].SelectedIndex = 11;  comboBoxes[79].SelectedIndex = 3;
-
     } 
 }
