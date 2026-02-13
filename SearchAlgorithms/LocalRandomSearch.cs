@@ -90,7 +90,7 @@ public class LocalRandomSearch
             UnitLoadConfiguration config = new UnitLoadConfiguration(listOfLayers, totalCost);
             configurations.Add(config);
         }
-            TestPrintSomeConfigurations(configurations, 50);
+            TestPrintSomeConfigurations(configurations, 10);
             configurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost)); //sort by cost
             UnitLoadConfiguration optimal = configurations[0];
             Console.WriteLine("\n#Random configurations generated: " + nbrRandomConfigurations);

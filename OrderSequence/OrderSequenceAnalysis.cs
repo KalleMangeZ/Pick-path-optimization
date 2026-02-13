@@ -3,6 +3,7 @@ namespace ConsoleApp1;
 public class OrderSequenceAnalysis
 {
 Graph g;
+List<UnitLoadConfiguration> configurations;
 public int[,] lm;
 public List<int> orderSequence {get; set;} = new List<int>();
 public List<int> orderStartInSequence {get; set;} = new List<int>();
@@ -13,8 +14,9 @@ public List<ExtendedOrderStack> extendedOrderStacks {get; set;} = new List<Exten
 public List<Order> orders {get; set;}
 CreatePickingPath pp;
 
-    public OrderSequenceAnalysis(Graph g) {
+    public OrderSequenceAnalysis(Graph g, List<UnitLoadConfiguration> configurations) {
             this.g = g;
+            this.configurations = configurations;
             lm = g.LayoutManager.LayoutMatrix;
 
             pp = new CreatePickingPath(g);
@@ -78,9 +80,21 @@ CreatePickingPath pp;
                 }
             }
         }
-            if(orderStacks.Count == 0) {
+            if(orderStacks.Count == 0) {  //choose lowest found cost configuration
                 Console.WriteLine("\n No stacking possibilities found --> Pick Layer-By-Layer");
-            }
+                Console.WriteLine("Pick layer-by-layer configuration:");
+                UnitLoadConfiguration bestConfig = configurations[0];
+
+                for (int i = bestConfig.Layers.Count - 1; i >= 0; i--)
+                    {
+                        Console.WriteLine(
+                            $"Layer{i + 1}: " +
+                            string.Join(", ", bestConfig.Layers[i].Boxes)
+                        );
+                    }
+                bestConfig.CalculateShortestCost(g);
+                Console.WriteLine("Pick layer-by-layer configuration cost: " + bestConfig.ShortestCost);
+                }
 
         if(g.layers > 2) {
             CreateExtendedOrderStack();

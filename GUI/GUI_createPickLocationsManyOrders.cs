@@ -239,7 +239,7 @@ public class GUI_createPickLocationsManyOrders : Form {
 
      private void CreateSolutionWindow() {
         if (IsAnyComboBoxClicked() && g.IsEmptyLayout() == false && graphAnalysis == null) {
-            graphAnalysis = new OrderSequenceAnalysis(g); // Only created once
+            graphAnalysis = new OrderSequenceAnalysis(g, Combinations.LocalRandomSearch.configurations); // Only created once
             OrderSequenceVisualization osv =
             new OrderSequenceVisualization(g, graphAnalysis);
             osv.Show();

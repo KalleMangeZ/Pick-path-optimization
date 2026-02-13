@@ -138,7 +138,7 @@ public class Combinations
     configurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost));
     UnitLoadConfiguration optimal = configurations[0];
 
-    int count = 1;
+    /*int count = 1;
     Console.WriteLine("--- All Configurations --- ");
     foreach(UnitLoadConfiguration ULC in configurations)
     {
@@ -148,7 +148,7 @@ public class Combinations
         ULC.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
         Console.Write(" | Cost: " + ULC.ShortestCost);
         count++;
-    }
+    }*/
     Console.WriteLine();
     
     stopwatch.Stop();
@@ -170,10 +170,6 @@ public class Combinations
         Console.WriteLine($"Hours: {ts.Hours:F2} Minutes: {ts.Minutes:F2}, Seconds: {ts.Seconds + ts.Milliseconds / 1000.0:F2}");        
         Console.WriteLine("Configuration boxes: " + string.Join(" | ", 
         config.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")"))); 
-
-        /*OrderSequenceVisualization osv =
-            new OrderSequenceVisualization(g, analysis);
-            osv.Show();*/
         
         foreach (BoxLayerCombination boxLayer in config.Layers)
         {
@@ -297,7 +293,7 @@ public class Combinations
        unitLoadConfigurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost)); //sort by cost
        UnitLoadConfiguration optimal = unitLoadConfigurations[0];
 
-        int count = 1;
+        /*int count = 1;
         Console.Write("--- All Configurations --- ");
         foreach(UnitLoadConfiguration ULC in unitLoadConfigurations)
         {
@@ -307,7 +303,7 @@ public class Combinations
             ULC.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
             Console.Write(" | Cost: " + ULC.ShortestCost);
             count++;
-        }
+        }*/
         Console.WriteLine();
 
         stopwatch.Stop();
