@@ -68,7 +68,6 @@ public class LocalRandomSearch
                 configuration.Add(layerOrders);
             }
 
-
             //calculate cost of this configuration
             double totalCost = 0.0;
             foreach(var layer in configuration)
@@ -101,8 +100,7 @@ public class LocalRandomSearch
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;
 
-            Combinations.ShowOptimalConfigurationRoutes(g, optimal, "Local Random Search", ts); //ts = TimeSpan.Zero to revert
-            // (Implementation of storing best configuration goes here)*/
+            Combinations.ShowOptimalConfigurationRoutes(g, optimal, "Local Random Search", ts); 
         }
 
     public void TestPrintSomeConfigurations(List<UnitLoadConfiguration> configurations, int n)

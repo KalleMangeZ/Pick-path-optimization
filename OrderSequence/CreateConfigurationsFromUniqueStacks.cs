@@ -49,7 +49,7 @@ public class CreateConfigurationsFromUniqueStacks
                     
                     var tempAvailable = new List<int>(availableOrders);
                     if (tempAvailable.Count < 2){
-                    break;
+                        break;
                     }
 
                     int idx1 = rand.Next(tempAvailable.Count);

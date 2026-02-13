@@ -82,7 +82,8 @@ public class StartupWindow : Form {
                 nbrOrdersChoice.Items.Add("12");    //use RS from now on.
                 nbrOrdersChoice.Items.Add("14");        
                 nbrOrdersChoice.Items.Add("18");
-                nbrOrdersChoice.Items.Add("20");       
+                nbrOrdersChoice.Items.Add("20");
+                nbrOrdersChoice.Items.Add("42");   //most probable upper limit - Erik    
                 nbrOrdersChoice.Items.Add("48");      
                    
                 nbrOrdersChoice.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -101,7 +102,7 @@ public class StartupWindow : Form {
                 nbrOrdersPerLayerChoice.Items.Add("3");
                 nbrOrdersPerLayerChoice.Items.Add("4");    
                 nbrOrdersPerLayerChoice.Items.Add("5"); 
-                nbrOrdersPerLayerChoice.Items.Add("6");
+                nbrOrdersPerLayerChoice.Items.Add("6");     //most probable upper limit - Erik
                 nbrOrdersPerLayerChoice.Items.Add("7");
                 nbrOrdersPerLayerChoice.Items.Add("8");
                 nbrOrdersPerLayerChoice.Items.Add("9");

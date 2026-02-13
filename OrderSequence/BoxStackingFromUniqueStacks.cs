@@ -20,7 +20,7 @@ public class BoxStackingFromUniqueOrderStacks
         }
 
         //To do!
-        if(uniqueOrderStacks.Count > g.nbrOrdersPerLayers) {
+        if(uniqueOrderStacks.Count > g.nbrOrdersPerLayers) {    
             //Begränsa antal orderStacks? Här implementeras logik för "stackning av order-stacks". Dvs, om fler
             //än 2 lager så kan order-stacks sättas nästa lager dock med hänsyn till extended order stack?..
         }
@@ -152,7 +152,8 @@ public class BoxStackingFromUniqueOrderStacks
                 Console.WriteLine("Generating new config from finalConfigs:");
                 CreateConfigurationFromFinalConfig();
             } else {  //Using else here for TEST PURPOSES
-            CreateConfigurationsFromUniqueStacks finishBuildingConfig = new CreateConfigurationsFromUniqueStacks(g, uniqueOrderStacks);
+                Console.WriteLine("g.nbrOrdersPerLayers <= uniqueOrderStacks.Count");
+                CreateConfigurationsFromUniqueStacks finishBuildingConfig = new CreateConfigurationsFromUniqueStacks(g, uniqueOrderStacks);
             }
         }
     }
