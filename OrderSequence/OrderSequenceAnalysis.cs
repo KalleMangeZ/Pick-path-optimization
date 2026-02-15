@@ -10,7 +10,7 @@ public List<int> orderStartInSequence {get; set;} = new List<int>();
 public List<int> orderEndInSequence {get; set;} = new List<int>();
 public List<OrderStack> orderStacks {get; set;}
 public List<OrderStack> uniqueOrderStacks {get; set;} = new List<OrderStack>();
-public List<ExtendedOrderStack> extendedOrderStacks {get; set;} = new List<ExtendedOrderStack>();
+public List<OrderStack_3_Orders> orderStacks_3_Orders {get; set;} = new List<OrderStack_3_Orders>();
 public List<Order> orders {get; set;}
 CreatePickingPath pp;
 
@@ -127,18 +127,23 @@ CreatePickingPath pp;
                 }
 
         if(g.layers > 2) {
-            CreateExtendedOrderStack();
+            CreateOrderStack_3_Orders();
         }
     }
 
-    public void CreateExtendedOrderStack() {
+    public void CreateOrderStack_3_Orders() {
         foreach(OrderStack stack1 in orderStacks) {
             foreach(OrderStack stack2 in orderStacks) {
                 if(stack1.top.orderNumber == stack2.bottom.orderNumber) { 
-                    extendedOrderStacks.Add(new ExtendedOrderStack(stack1.bottom, stack1.top, stack2.top));  //e.g stack1: 1-4, stack2: 4-5
+                    orderStacks_3_Orders.Add(new OrderStack_3_Orders(stack1.bottom, stack1.top, stack2.top));  //e.g stack1: 1-4, stack2: 4-5
                 }
             }
         }
+    }
+
+    public void CreateOrderStack_4_Orders()
+    {
+        
     }
 
     public void CreateUniqueFromOnlyOrderStacks()
@@ -178,9 +183,9 @@ CreatePickingPath pp;
             Console.WriteLine("order-stack: " + orderStacks[i].bottom.orderNumber + "-" + orderStacks[i].top.orderNumber);
         }
 
-        if(extendedOrderStacks.Count != 0) {
-            for(int i = 0; i < extendedOrderStacks.Count; i++) {
-                Console.WriteLine("extended order-stack: " + extendedOrderStacks[i].bottom.orderNumber + "-" + extendedOrderStacks[i].middle.orderNumber + "-" + extendedOrderStacks[i].top.orderNumber);
+        if(orderStacks_3_Orders.Count != 0) {
+            for(int i = 0; i < orderStacks_3_Orders.Count; i++) {
+                Console.WriteLine("3-order-stack: " + orderStacks_3_Orders[i].bottom.orderNumber + "-" + orderStacks_3_Orders[i].middle.orderNumber + "-" + orderStacks_3_Orders[i].top.orderNumber);
             }
         }
     }

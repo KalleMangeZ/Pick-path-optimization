@@ -97,9 +97,6 @@ public class GUI_solution : Form {
                         {
                             graphics.DrawRectangle(new Pen(Color.Red, 3), rack);
                         }
-
-                        // Red border
-                        //graphics.DrawRectangle(new Pen(Color.Red, 3), rack);
                     }
                 }
             }
