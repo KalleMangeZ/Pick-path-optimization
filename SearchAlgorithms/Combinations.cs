@@ -27,6 +27,7 @@ public class Combinations
         //searchAlgorithms(0) = Brutal-Force,
         //searchAlgorithms(1) = Branch and Bound,
         //searchAlgorithms(2) = Local Random Search
+        //searchAlgorithms(3) = Beam Search ... implement?
 
         if(searchAlgorithms.Contains(0)) {
             if(n % k == 0) { //works when full layers are possible

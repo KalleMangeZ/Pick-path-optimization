@@ -68,7 +68,45 @@ public class GUI_solution : Form {
         DrawPath(graphics);
         DrawNodes(graphics);
         DisplayShortestPathString(graphics);
+        HighlightOrders(graphics);
     }
+
+    public void HighlightOrders(Graphics graphics)
+    {
+        int firstAisleCol = 0;
+
+        for (int i = 0; i < g.lanes.Count + 1; i++)
+        {
+            for (int x = 0; x < 2; x++)
+            {
+                for (int y = 0; y < g.shelvesPerAisle; y++)
+                {
+                    int orderNumber = g.LayoutManager.LayoutMatrix[y, x + firstAisleCol];
+
+                    if (g.orderSet != null && g.orderSet.Contains(orderNumber))
+                    {
+                        Rectangle rack = new Rectangle(
+                            x * shelfLength + shelfLength + i * aisleToAisleDist,
+                            y * shelfWidth + shelfWidth,
+                            shelfLength,
+                            shelfWidth
+                        );
+
+                        // Fill background in light red
+                        using (Brush highlightBrush = new SolidBrush(Color.FromArgb(255, 200, 200)))
+                        {
+                            graphics.DrawRectangle(new Pen(Color.Red, 3), rack);
+                        }
+
+                        // Red border
+                        //graphics.DrawRectangle(new Pen(Color.Red, 3), rack);
+                    }
+                }
+            }
+            firstAisleCol += 2;
+        }
+    }
+
 
     public void DrawStartAndEndCircle(Pen redPen, Graphics graphics, int shelfLength, int shelvesPerAisle) {
         int radius = 10;
