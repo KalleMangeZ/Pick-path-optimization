@@ -1,11 +1,11 @@
 namespace ConsoleApp1;
 
-public class CreateConfigurationsFromUniqueStacks
+public class CreateConfigurationsFromUniqueStacks_old
 {
     public Graph g;
     public List<OrderStack> uniqueOrderStacks;
 
-    public CreateConfigurationsFromUniqueStacks(Graph g, List<OrderStack> uniqueOrderStacks)
+    public CreateConfigurationsFromUniqueStacks_old(Graph g, List<OrderStack> uniqueOrderStacks)
     {
         this.g = g;
         this.uniqueOrderStacks = uniqueOrderStacks;

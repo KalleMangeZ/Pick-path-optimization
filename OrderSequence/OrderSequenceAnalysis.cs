@@ -40,7 +40,7 @@ CreatePickingPath pp;
         }
     }
 
-    public void AnalyzeOrderSequence() {
+    /*public void AnalyzeOrderSequence() {
             orderStartInSequence = new List<int>();
             orderEndInSequence = new List<int>();
             orders = new List<Order>();
@@ -67,7 +67,37 @@ CreatePickingPath pp;
                     orders.Add(new Order(i+1, orderStartInSequence[i], orderEndInSequence[i], orderEndInSequence[i]-orderStartInSequence[i]+1));
                     //Console.WriteLine("orderNumber: " + orders[i].orderNumber + " start: " + orders[i].orderStart + " end: " + orders[i].orderEnd + " span: " + orders[i].orderRouteLength + " orderStartInSequence: " + orderStartInSequence[i] + " orderEndInSequence: " + orderEndInSequence[i]);
             }
+    }*/
+
+    public void AnalyzeOrderSequence()
+    {
+        orderStartInSequence = new List<int>();
+        orderEndInSequence = new List<int>();
+        orders = new List<Order>();
+
+        for (int orderNum = 1; orderNum <= g.orders; orderNum++)
+        {
+            int startIndex = orderSequence.IndexOf(orderNum);
+            int endIndex = orderSequence.LastIndexOf(orderNum);
+
+            // 👇 WRITE IT HERE
+            if (startIndex == -1)
+            {
+                Console.WriteLine($"Order {orderNum} not found in sequence.");
+                continue; // skip this order to prevent crash
+            }
+
+            orderStartInSequence.Add(startIndex);
+            orderEndInSequence.Add(endIndex);
+
+            orders.Add(new Order(
+                orderNum,
+                startIndex,
+                endIndex,
+                endIndex - startIndex + 1));
+        }
     }
+
 
     //marks out if and so which box that can stack on top of another box
     public void CreateOrderStack() {

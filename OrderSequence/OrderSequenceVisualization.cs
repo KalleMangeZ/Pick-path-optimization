@@ -76,21 +76,27 @@ namespace ConsoleApp1
             }
 
             // Draw order lines
-            for (int order = 1; order <= g.orders; order++)
+            for (int i = 0; i < a.orders.Count; i++)
             {
-                int y = 50 + rowLength * order;
+                Order orderObj = a.orders[i];
 
-                graphics.DrawString(order.ToString(), normalFont, Brushes.Black, 50, y);
+                int y = 50 + rowLength * orderObj.orderNumber;
 
-                int startIndex = a.orderStartInSequence[order - 1];
-                int endIndex = a.orderEndInSequence[order - 1];
+                graphics.DrawString(orderObj.orderNumber.ToString(),
+                                    normalFont, Brushes.Black, 50, y);
 
-                float x1 = sequencePositions[startIndex]+10;
+                int startIndex = orderObj.orderStart;
+                int endIndex   = orderObj.orderEnd;
+
+                float x1 = sequencePositions[startIndex] + 10;
                 float x2 = sequencePositions[endIndex] +
-                        graphics.MeasureString(a.orderSequence[endIndex].ToString(), normalFont).Width-5;
+                    graphics.MeasureString(
+                        a.orderSequence[endIndex].ToString(),
+                        normalFont).Width - 5;
 
-                graphics.DrawLine(pen, x1, y+10, x2, y+10);
+                graphics.DrawLine(pen, x1, y + 10, x2, y + 10);
             }
+
         }
 
     }

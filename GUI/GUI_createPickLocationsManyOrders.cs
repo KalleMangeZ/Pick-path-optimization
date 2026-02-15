@@ -12,10 +12,8 @@ public class GUI_createPickLocationsManyOrders : Form {
     int aisleToAisleDist = 200;
     int shelfLength = 50;
     int shelfWidth = 50;
-
     int comboBoxNbr = 0;
     int sequenceTextBoxLength;
-
     Button confirmButton;
     Button GenerateRandomPickLocationsButton;
     Button usePreset_1_Button;
@@ -324,7 +322,7 @@ public class GUI_createPickLocationsManyOrders : Form {
             }
         }
     }
-    
+
     public void UseDefinedItemLocations() {
         //preset 1:
         if(g.aisles !=5 && g.shelvesPerAisle != 8 && g.orders != 20)  {
