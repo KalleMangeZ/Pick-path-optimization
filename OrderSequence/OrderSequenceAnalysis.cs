@@ -11,6 +11,7 @@ public List<int> orderEndInSequence {get; set;} = new List<int>();
 public List<OrderStack> orderStacks {get; set;}
 public List<OrderStack> uniqueOrderStacks {get; set;} = new List<OrderStack>();
 public List<OrderStack_3_Orders> orderStacks_3_Orders {get; set;} = new List<OrderStack_3_Orders>();
+public List<OrderStack_4_Orders> orderStacks_4_Orders {get; set;} = new List<OrderStack_4_Orders>();
 public List<Order> orders {get; set;}
 CreatePickingPath pp;
 
@@ -126,6 +127,10 @@ CreatePickingPath pp;
                 Console.WriteLine("Pick layer-by-layer configuration cost: " + bestConfig.ShortestCost);
                 }
 
+        if(g.layers > 3) {
+            CreateOrderStack_4_Orders();
+        }
+
         if(g.layers > 2) {
             CreateOrderStack_3_Orders();
         }
@@ -134,7 +139,7 @@ CreatePickingPath pp;
     public void CreateOrderStack_3_Orders() {
         foreach(OrderStack stack1 in orderStacks) {
             foreach(OrderStack stack2 in orderStacks) {
-                if(stack1.top.orderNumber == stack2.bottom.orderNumber) { 
+                if(stack1.top.orderNumber == stack2.bottom.orderNumber) {  //ändra till orderEnd och Start villkor
                     orderStacks_3_Orders.Add(new OrderStack_3_Orders(stack1.bottom, stack1.top, stack2.top));  //e.g stack1: 1-4, stack2: 4-5
                 }
             }
@@ -143,7 +148,17 @@ CreatePickingPath pp;
 
     public void CreateOrderStack_4_Orders()
     {
-        
+        Console.WriteLine("CreateOrderStack_4_Orders");
+        foreach(OrderStack stack1 in orderStacks) {
+            foreach(OrderStack stack2 in orderStacks) {
+                if(stack2.bottom.orderStart > stack1.top.orderEnd 
+                
+                    //FIX!
+                ) {
+                    orderStacks_4_Orders.Add(new OrderStack_4_Orders(stack1.bottom, stack1.top, stack2.bottom, stack2.top));
+                }
+            }
+        }
     }
 
     public void CreateUniqueFromOnlyOrderStacks()
@@ -180,12 +195,20 @@ CreatePickingPath pp;
     public void PrintOrderStack() {
         Console.WriteLine("------------------");
         for(int i = 0; i < orderStacks.Count; i++) {
-            Console.WriteLine("order-stack: " + orderStacks[i].bottom.orderNumber + "-" + orderStacks[i].top.orderNumber);
+            Console.WriteLine("order-stack: " + orderStacks[i].bottom.orderNumber + "-" + orderStacks[i].top.orderNumber + " orderStart: " + orderStacks[i].bottom.orderStart + " orderEnd: " + orderStacks[i].top.orderEnd);
         }
 
         if(orderStacks_3_Orders.Count != 0) {
             for(int i = 0; i < orderStacks_3_Orders.Count; i++) {
                 Console.WriteLine("3-order-stack: " + orderStacks_3_Orders[i].bottom.orderNumber + "-" + orderStacks_3_Orders[i].middle.orderNumber + "-" + orderStacks_3_Orders[i].top.orderNumber);
+            }
+        }
+
+        if(orderStacks_4_Orders.Count != 0) {
+            for(int i = 0; i < orderStacks_4_Orders.Count; i++) {
+                Console.WriteLine("4-order-stack: " + orderStacks_4_Orders[i].bottom.orderNumber + "-" + orderStacks_4_Orders[i].middleBottom.orderNumber + "-" + orderStacks_4_Orders[i].middleTop.orderNumber + "-" + orderStacks_4_Orders[i].top.orderNumber
+                + " OrderStart os1: " + orderStacks_4_Orders[i].bottom.orderStart + " OrderEnd os1: " + orderStacks_4_Orders[i].bottom.orderEnd
+                + " OrderStart os2: " + orderStacks_4_Orders[i].middleBottom.orderStart + " OrderEnd os2: " + orderStacks_4_Orders[i].middleBottom.orderEnd);
             }
         }
     }

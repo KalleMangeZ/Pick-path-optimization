@@ -56,7 +56,7 @@ public class GUI_createPickLocationsManyOrders : Form {
             g.CreateGraph();
 
             Combinations.RunCombinations(g, selectedAlgorithms); 
-            CreateSolutionWindow_Click(sender, e); //--> graphAnalysis --> CreateUniqueFromOnlyOrderStacks
+            CreateSolutionWindow_Click(sender, e); //--> graphAnalysis 
                 if(window.OrderSequenceAnalysis.uniqueOrderStacks.Count > 0) {
                 BoxStackingFromUniqueOrderStacks boxStacking =      //--> FillFirstLayerWithAllOrders (if...)
                     new BoxStackingFromUniqueOrderStacks(g, Combinations.LocalRandomSearch.configurations, window.OrderSequenceAnalysis.uniqueOrderStacks);

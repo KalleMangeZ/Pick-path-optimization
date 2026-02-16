@@ -41,6 +41,17 @@ public class BoxStackingFromUniqueOrderStacks
         layers.Add(new BoxLayerCombination(new HashSet<int>(), 0.0));
     }
 
+    //Modify the #layers to fit all the #uniqueOrderStacks
+    int requiredLayers = 2*(int) Math.Ceiling(uniqueOrderStacks.Count / (double)g.nbrOrdersPerLayers);
+    Console.WriteLine("Required #layers to fit all uOs: " + requiredLayers + ", current #layers: " + g.layers);
+    if(requiredLayers > g.layers) {
+        int nbrMissingLayers = requiredLayers - g.layers;
+        for(int i = 0; i < nbrMissingLayers; i++) {
+            layers.Add(new BoxLayerCombination(new HashSet<int>(), 0.0));
+        }
+    }
+    //test end
+
     UnitLoadConfiguration config = new UnitLoadConfiguration(layers, 0);
     HashSet<int> placedOrders = new HashSet<int>();
     int layerPos = 0; 
@@ -48,7 +59,7 @@ public class BoxStackingFromUniqueOrderStacks
     //place unique orders in lower layers
     foreach (var orderStack in uniqueOrderStacks) 
     {   
-        if (layerPos < g.nbrOrdersPerLayers) 
+        if (layerPos < g.nbrOrdersPerLayers) //case: 1 layer
         { 
             config.Layers[0].Boxes.Add(orderStack.bottom.orderNumber);
             config.Layers[1].Boxes.Add(orderStack.top.orderNumber);
@@ -56,7 +67,7 @@ public class BoxStackingFromUniqueOrderStacks
             placedOrders.Add(orderStack.top.orderNumber);
             layerPos += 1;
         } 
-        else if (layerPos < g.nbrOrdersPerLayers * 2) 
+        else if (layerPos < g.nbrOrdersPerLayers * 2)  //case: 2 layers
         { 
             config.Layers[2].Boxes.Add(orderStack.bottom.orderNumber);
             config.Layers[3].Boxes.Add(orderStack.top.orderNumber);
@@ -64,7 +75,7 @@ public class BoxStackingFromUniqueOrderStacks
             placedOrders.Add(orderStack.top.orderNumber);
             layerPos += 1;
         } 
-        else if (layerPos < g.nbrOrdersPerLayers * 3) 
+        else if (layerPos < g.nbrOrdersPerLayers * 3)  //case: 3 layers
         { 
             config.Layers[4].Boxes.Add(orderStack.bottom.orderNumber);
             config.Layers[5].Boxes.Add(orderStack.top.orderNumber);
@@ -152,14 +163,6 @@ public class BoxStackingFromUniqueOrderStacks
     }
     Console.WriteLine("| Cost: " + bestConfig.ShortestCost);
 }
-
-
-
-
-
-
-
-
 
     public void FillFirstLayerWithAllOrders()
     {
