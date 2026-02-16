@@ -192,7 +192,6 @@ public class Graph
         }
     }
 
-
     public double FindShortestPath(GraphNode current, GraphNode target, HashSet<GraphNode> visited, double currentDist,
     List<GraphNode> pathSoFar, out List<GraphNode> shortestPath)
     {

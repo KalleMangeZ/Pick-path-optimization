@@ -44,17 +44,29 @@ public class GUI_createPickLocationsManyOrders : Form {
         confirmButton.Click += (sender, e) =>
             {
             ApplyCheckedSearchAlgorithmsToGraph();
-            ApplyCheckedOrdersToGraph();
+            /*ApplyCheckedOrdersToGraph();
             g.path.Clear();      //lägga till i Combinations
             g.pathNodes.Clear();
             g.nodes.Clear();
+            g.CreateGraph();*/
+
+            //g.path.Clear();      
+            //g.pathNodes.Clear();
+            //g.nodes.Clear();
             g.CreateGraph();
+
             Combinations.RunCombinations(g, selectedAlgorithms); 
-            CreateSolution_Click(sender, e); //--> graphAnalysis --> CreateUniqueFromOnlyOrderStacks
+            CreateSolutionWindow_Click(sender, e); //--> graphAnalysis --> CreateUniqueFromOnlyOrderStacks
                 if(window.OrderSequenceAnalysis.uniqueOrderStacks.Count > 0) {
                 BoxStackingFromUniqueOrderStacks boxStacking =      //--> FillFirstLayerWithAllOrders (if...)
                     new BoxStackingFromUniqueOrderStacks(g, Combinations.LocalRandomSearch.configurations, window.OrderSequenceAnalysis.uniqueOrderStacks);
                 }
+
+            /*g.path.Clear();      //uncomment here potentially
+            g.pathNodes.Clear();
+            g.nodes.Clear();
+            g.CreateGraph();*/
+            ApplyCheckedOrdersToGraph();
             };
 
         GenerateRandomPickLocationsButton = new Button();
@@ -138,6 +150,35 @@ public class GUI_createPickLocationsManyOrders : Form {
         this.Controls.Add(orderCheckListBox);
     }
 
+     private void CreateSolutionWindow_Click(object sender, EventArgs e) {
+        if (IsAnyComboBoxClicked() && g.IsEmptyLayout() == false && graphAnalysis == null) {
+            graphAnalysis = new OrderSequenceAnalysis(g, Combinations.LocalRandomSearch.configurations); // Only created once
+            OrderSequenceVisualization osv =
+            new OrderSequenceVisualization(g, graphAnalysis);
+            osv.Show();
+
+        window = new GUI_solution(g, g.pathNodes, graphAnalysis);
+        //window.ShowDialog();
+        }
+    }
+
+    private void ApplyCheckedOrdersToGraph() {
+    HashSet<int> selectedOrders = new HashSet<int>();
+        foreach(int indexChecked in orderCheckListBox.CheckedIndices) {
+            selectedOrders.Add(indexChecked + 1);
+        }
+
+        if (selectedOrders.Count == 0)
+            {
+                MessageBox.Show("Please select at least one order.", "No orders selected",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+        g.orderSet = selectedOrders;
+        window = new GUI_solution(g, g.pathNodes, graphAnalysis);
+        window.ShowDialog();
+    }
+
     private void SequenceTextBox_KeyPress(object sender, KeyPressEventArgs e)
     {
         // Allow control keys (Backspace, Delete, etc.)
@@ -211,40 +252,9 @@ public class GUI_createPickLocationsManyOrders : Form {
         }
     }
 
-    private void ApplyCheckedOrdersToGraph() {
-    HashSet<int> selectedOrders = new HashSet<int>();
-        foreach(int indexChecked in orderCheckListBox.CheckedIndices) {
-            selectedOrders.Add(indexChecked + 1);
-        }
-
-        if (selectedOrders.Count == 0)
-            {
-                MessageBox.Show("Please select at least one order.", "No orders selected",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
-        g.orderSet = selectedOrders;
-    }
-
     private void GUI_createPickLocationsManyOrders_Load(object sender, EventArgs e)
     {
         CreateComboBoxesForOrders();
-    }
-
-    private void CreateSolution_Click(object sender, EventArgs e) {
-        CreateSolutionWindow();
-    }
-
-     private void CreateSolutionWindow() {
-        if (IsAnyComboBoxClicked() && g.IsEmptyLayout() == false && graphAnalysis == null) {
-            graphAnalysis = new OrderSequenceAnalysis(g, Combinations.LocalRandomSearch.configurations); // Only created once
-            OrderSequenceVisualization osv =
-            new OrderSequenceVisualization(g, graphAnalysis);
-            osv.Show();
-
-        window = new GUI_solution(g, g.pathNodes, graphAnalysis);
-        window.ShowDialog();
-        }
     }
 
     private bool IsAnyComboBoxClicked() {
