@@ -12,8 +12,6 @@ public class GUI_createPickLocationsManyOrders : Form {
     int aisleToAisleDist = 200;
     int shelfLength = 50;
     int shelfWidth = 50;
-    int comboBoxNbr = 0;
-    int sequenceTextBoxLength;
     Button confirmButton;
     Button GenerateRandomPickLocationsButton;
     Button usePreset_1_Button;

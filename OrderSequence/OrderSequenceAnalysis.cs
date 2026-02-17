@@ -148,7 +148,6 @@ CreatePickingPath pp;
 
     public void CreateOrderStack_4_Orders()
     {
-        Console.WriteLine("CreateOrderStack_4_Orders");
         foreach(OrderStack stack1 in orderStacks) {
             foreach(OrderStack stack2 in orderStacks) {
                 if(stack2.orderStackStart > stack1.orderStackEnd) {

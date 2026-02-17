@@ -15,7 +15,6 @@ public class StartupWindow : Form {
     public int selectedNbrOrders;
     public int selectedNbrOrdersPerLayer;
     Graph g;
-    public int aisleToAisleDist = 200;
 
     //Org: StartupWindow(Graph g) {
     public StartupWindow() {
