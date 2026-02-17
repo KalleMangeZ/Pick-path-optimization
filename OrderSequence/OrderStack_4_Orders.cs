@@ -7,7 +7,7 @@ public Order middleBottom { get; set; }
 public Order middleTop { get; set; }
 public Order top { get; set; }
 
-    public OrderStack_4_Orders(Order b, Order mT, Order mB, Order t) {
+    public OrderStack_4_Orders(Order b, Order mB, Order mT, Order t) {
         bottom = b;
         middleBottom = mB;
         middleTop = mT;

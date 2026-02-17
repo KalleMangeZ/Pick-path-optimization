@@ -139,7 +139,7 @@ CreatePickingPath pp;
     public void CreateOrderStack_3_Orders() {
         foreach(OrderStack stack1 in orderStacks) {
             foreach(OrderStack stack2 in orderStacks) {
-                if(stack1.top.orderNumber == stack2.bottom.orderNumber) {  //ändra till orderEnd och Start villkor
+                if(stack1.top.orderNumber == stack2.bottom.orderNumber) {  //checking by orderNumber works.
                     orderStacks_3_Orders.Add(new OrderStack_3_Orders(stack1.bottom, stack1.top, stack2.top));  //e.g stack1: 1-4, stack2: 4-5
                 }
             }
@@ -151,10 +151,7 @@ CreatePickingPath pp;
         Console.WriteLine("CreateOrderStack_4_Orders");
         foreach(OrderStack stack1 in orderStacks) {
             foreach(OrderStack stack2 in orderStacks) {
-                if(stack2.bottom.orderStart > stack1.top.orderEnd 
-                
-                    //FIX!
-                ) {
+                if(stack2.orderStackStart > stack1.orderStackEnd) {
                     orderStacks_4_Orders.Add(new OrderStack_4_Orders(stack1.bottom, stack1.top, stack2.bottom, stack2.top));
                 }
             }
@@ -195,7 +192,7 @@ CreatePickingPath pp;
     public void PrintOrderStack() {
         Console.WriteLine("------------------");
         for(int i = 0; i < orderStacks.Count; i++) {
-            Console.WriteLine("order-stack: " + orderStacks[i].bottom.orderNumber + "-" + orderStacks[i].top.orderNumber + " orderStart: " + orderStacks[i].bottom.orderStart + " orderEnd: " + orderStacks[i].top.orderEnd);
+            Console.WriteLine("order-stack: " + orderStacks[i].bottom.orderNumber + "-" + orderStacks[i].top.orderNumber);
         }
 
         if(orderStacks_3_Orders.Count != 0) {
@@ -206,9 +203,7 @@ CreatePickingPath pp;
 
         if(orderStacks_4_Orders.Count != 0) {
             for(int i = 0; i < orderStacks_4_Orders.Count; i++) {
-                Console.WriteLine("4-order-stack: " + orderStacks_4_Orders[i].bottom.orderNumber + "-" + orderStacks_4_Orders[i].middleBottom.orderNumber + "-" + orderStacks_4_Orders[i].middleTop.orderNumber + "-" + orderStacks_4_Orders[i].top.orderNumber
-                + " OrderStart os1: " + orderStacks_4_Orders[i].bottom.orderStart + " OrderEnd os1: " + orderStacks_4_Orders[i].bottom.orderEnd
-                + " OrderStart os2: " + orderStacks_4_Orders[i].middleBottom.orderStart + " OrderEnd os2: " + orderStacks_4_Orders[i].middleBottom.orderEnd);
+                Console.WriteLine("4-order-stack: " + orderStacks_4_Orders[i].bottom.orderNumber + "-" + orderStacks_4_Orders[i].middleBottom.orderNumber + "-" + orderStacks_4_Orders[i].middleTop.orderNumber + "-" + orderStacks_4_Orders[i].top.orderNumber);
             }
         }
     }

@@ -8,24 +8,31 @@
     "net9.0-windows7.0": []
   },
   "packageFolders": {
-    "C:\\Users\\melti\\.nuget\\packages\\": {}
+    "C:\\Users\\chrome4057\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\melti\\OneDrive\\Skrivbord\\Pick-path-optimization\\WHLayout.csproj",
+      "projectUniqueName": "C:\\Users\\chrome4057\\CSharpDev\\WHLayout\\WHLayout.csproj",
       "projectName": "WHLayout",
-      "projectPath": "C:\\Users\\melti\\OneDrive\\Skrivbord\\Pick-path-optimization\\WHLayout.csproj",
-      "packagesPath": "C:\\Users\\melti\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\melti\\OneDrive\\Skrivbord\\Pick-path-optimization\\obj\\",
+      "projectPath": "C:\\Users\\chrome4057\\CSharpDev\\WHLayout\\WHLayout.csproj",
+      "packagesPath": "C:\\Users\\chrome4057\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\chrome4057\\CSharpDev\\WHLayout\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\melti\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\chrome4057\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0-windows"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -68,7 +75,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
