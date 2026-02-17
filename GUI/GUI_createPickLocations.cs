@@ -2,6 +2,7 @@ namespace ConsoleApp1;
 
 public class GUI_createPickLocations : Form {
     Graph g;
+    OrderSequenceAnalysis analysis;
     int aisles;
     int shelvesPerAisle;
     int aisleToAisleDist = 200;
