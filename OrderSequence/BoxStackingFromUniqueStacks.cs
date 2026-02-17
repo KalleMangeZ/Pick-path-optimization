@@ -18,7 +18,11 @@ public class BoxStackingFromUniqueOrderStacks
     and select the lowest cost config.
     */
 
-    public BoxStackingFromUniqueOrderStacks(Graph g, List<UnitLoadConfiguration> configurations, List<OrderStack> uniqueOrderStacks)
+    public BoxStackingFromUniqueOrderStacks(Graph g, 
+        List<UnitLoadConfiguration> configurations,
+        List<OrderStack> uniqueOrderStacks, 
+        List<OrderStack_3_Orders> uniqueOrderStacks_3_Orders, 
+        List<OrderStack_4_Orders> uniqueOrderStacks_4_Orders)
     {
         this.g = g;
         this.configurations = configurations;
@@ -134,7 +138,6 @@ public class BoxStackingFromUniqueOrderStacks
 
         // Calculate cost
         tempConfig.CalculateShortestCost(g);
-
         // Store configuration
         candidateConfigs.Add(tempConfig);
     }
@@ -162,7 +165,7 @@ public class BoxStackingFromUniqueOrderStacks
         );
     }
     Console.WriteLine("| Cost: " + bestConfig.ShortestCost);
-}
+    }
 
     public void FillFirstLayerWithAllOrders()
     {

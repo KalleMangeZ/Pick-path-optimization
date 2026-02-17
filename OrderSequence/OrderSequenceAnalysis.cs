@@ -11,7 +11,9 @@ public List<int> orderEndInSequence {get; set;} = new List<int>();
 public List<OrderStack> orderStacks {get; set;}
 public List<OrderStack> uniqueOrderStacks {get; set;} = new List<OrderStack>();
 public List<OrderStack_3_Orders> orderStacks_3_Orders {get; set;} = new List<OrderStack_3_Orders>();
+public List<OrderStack_3_Orders> uniqueOrderStacks_3_Orders {get; set;} = new List<OrderStack_3_Orders>();
 public List<OrderStack_4_Orders> orderStacks_4_Orders {get; set;} = new List<OrderStack_4_Orders>();
+public List<OrderStack_4_Orders> uniqueOrderStacks_4_Orders {get; set;} = new List<OrderStack_4_Orders>();
 public List<Order> orders {get; set;}
 CreatePickingPath pp;
 
@@ -25,11 +27,26 @@ CreatePickingPath pp;
             AnalyzeOrderSequence();
             CreateOrderStack();
             PrintOrderStack();
-            //CaseUniqueStackPossibilites();
-            if(uniqueOrderStacks.Count == 0) {
-               CreateUniqueFromOnlyOrderStacks();
+            if(g.layers > 1) {
+                CreateUniqueOrderStacks();
             }
+            
+            if (g.layers > 2) {
+                CreateUniqueOrderStack_3_Orders();
+            }
+            
+             if (g.layers > 3) {
+                CreateUniqueOrderStack_4_Orders();
+            }
+
+    /*
+    if g.layers > 3 --> allocate (if pos.) 4-uos && (if pos.) 3-uos && (if pos.) uos 
+    if g.layers > 2 --> allocate (if pos.) 3-uos && (if pos.) uos 
+    if g.layers > 1 --> allocate (if pos.) uos 
+    */
+
     }
+    
 
     public void CreateOrderSequence() {
         for(int i = 0; i < pp.racks.Count; i++) {
@@ -40,35 +57,6 @@ CreatePickingPath pp;
             }
         }
     }
-
-    /*public void AnalyzeOrderSequence() {
-            orderStartInSequence = new List<int>();
-            orderEndInSequence = new List<int>();
-            orders = new List<Order>();
-
-            for(int orderNum = 1; orderNum < g.orders+1; orderNum++) {
-                for(int orderStart = 0; orderStart < orderSequence.Count; orderStart++) {
-                    if(orderSequence[orderStart] == orderNum) {
-                        orderStartInSequence.Add(orderStart);
-                        break;
-                    }
-                }    
-            }
-
-            for(int orderNum = 1; orderNum < g.orders+1; orderNum++) {
-                for(int orderEnd = orderSequence.Count-1; orderEnd >= 0; orderEnd--) {                    
-                    if(orderSequence[orderEnd] == orderNum) {
-                        orderEndInSequence.Add(orderEnd);
-                        break;  
-                    }
-                }
-            }   
-
-            for(int i = 0; i < g.orders; i++) {
-                    orders.Add(new Order(i+1, orderStartInSequence[i], orderEndInSequence[i], orderEndInSequence[i]-orderStartInSequence[i]+1));
-                    //Console.WriteLine("orderNumber: " + orders[i].orderNumber + " start: " + orders[i].orderStart + " end: " + orders[i].orderEnd + " span: " + orders[i].orderRouteLength + " orderStartInSequence: " + orderStartInSequence[i] + " orderEndInSequence: " + orderEndInSequence[i]);
-            }
-    }*/
 
     public void AnalyzeOrderSequence()
     {
@@ -98,7 +86,6 @@ CreatePickingPath pp;
                 endIndex - startIndex + 1));
         }
     }
-
 
     //marks out if and so which box that can stack on top of another box
     public void CreateOrderStack() {
@@ -157,7 +144,7 @@ CreatePickingPath pp;
         }
     }
 
-    public void CreateUniqueFromOnlyOrderStacks()
+    public void CreateUniqueOrderStacks()
     {
             uniqueOrderStacks.Clear();
 
@@ -188,6 +175,64 @@ CreatePickingPath pp;
             }
     }
 
+    public void CreateUniqueOrderStack_3_Orders() {
+        uniqueOrderStacks_3_Orders.Clear();
+
+        HashSet<int> usedOrders = new HashSet<int>();
+
+        foreach (var stack in orderStacks_3_Orders) {
+                int bottom = stack.bottom.orderNumber;
+                int middle = stack.middle.orderNumber;
+                int top = stack.top.orderNumber;
+
+                //both orders must be unused
+                if (!usedOrders.Contains(bottom) && !usedOrders.Contains(middle) && !usedOrders.Contains(top)) {
+                    uniqueOrderStacks_3_Orders.Add(stack);
+                    usedOrders.Add(bottom);
+                    usedOrders.Add(middle);
+                    usedOrders.Add(top);
+                }
+            }
+
+            // Debug print
+        foreach (var stack in uniqueOrderStacks_3_Orders) {
+            Console.WriteLine(
+            $"unique 3-order-stack: {stack.bottom.orderNumber}-{stack.middle.orderNumber}-{stack.top.orderNumber}"
+            );
+        }
+    }
+
+    public void CreateUniqueOrderStack_4_Orders()
+    {
+         uniqueOrderStacks_4_Orders.Clear();
+
+        HashSet<int> usedOrders = new HashSet<int>();
+
+        foreach (var stack in orderStacks_4_Orders) {
+                int bottom = stack.bottom.orderNumber;
+                int middleBottom = stack.middleBottom.orderNumber;
+                int middleTop = stack.middleTop.orderNumber;
+                int top = stack.top.orderNumber;
+
+                //both orders must be unused
+                if (!usedOrders.Contains(bottom) && !usedOrders.Contains(middleBottom) && !usedOrders.Contains(middleTop) && !usedOrders.Contains(top)) {
+                    uniqueOrderStacks_4_Orders.Add(stack);
+                    usedOrders.Add(bottom);
+                    usedOrders.Add(middleBottom);
+                    usedOrders.Add(middleTop);
+                    usedOrders.Add(top);
+                }
+            }
+
+            // Debug print
+        foreach (var stack in uniqueOrderStacks_4_Orders) {
+            Console.WriteLine(
+            $"unique 4-order-stack: {stack.bottom.orderNumber}-{stack.middleBottom.orderNumber}-{stack.middleTop.orderNumber}-{stack.top.orderNumber}"
+            );
+        }
+    }
+
+
     public void PrintOrderStack() {
         Console.WriteLine("------------------");
         for(int i = 0; i < orderStacks.Count; i++) {
@@ -204,47 +249,6 @@ CreatePickingPath pp;
             for(int i = 0; i < orderStacks_4_Orders.Count; i++) {
                 Console.WriteLine("4-order-stack: " + orderStacks_4_Orders[i].bottom.orderNumber + "-" + orderStacks_4_Orders[i].middleBottom.orderNumber + "-" + orderStacks_4_Orders[i].middleTop.orderNumber + "-" + orderStacks_4_Orders[i].top.orderNumber);
             }
-        }
-    }
-
-   public void CaseUniqueStackPossibilites()
-    {
-    Dictionary<int, int> stackPossibilities = new Dictionary<int, int>();
-
-    for (int i = 0; i < orderStacks.Count; i++)
-    {
-        Order orderTop = orderStacks[i].top;
-        Order orderBottom = orderStacks[i].bottom;
-
-        // Top
-        if (stackPossibilities.ContainsKey(orderTop.orderNumber))
-            stackPossibilities[orderTop.orderNumber]++;
-        else
-            stackPossibilities[orderTop.orderNumber] = 1;
-        // Bottom
-        if (stackPossibilities.ContainsKey(orderBottom.orderNumber))
-            stackPossibilities[orderBottom.orderNumber]++;
-        else
-            stackPossibilities[orderBottom.orderNumber] = 1;
-    }
-    //prints
-        foreach(KeyValuePair<int, int> kvp in stackPossibilities) {
-            //Console.WriteLine("Order: " + kvp.Key + "  Value: " + kvp.Value);
-              if (kvp.Value == 1)
-              {
-                var stack = orderStacks.Find(os =>
-                    os.top.orderNumber == kvp.Key ||
-                    os.bottom.orderNumber == kvp.Key);
-
-                if (stack != null && !uniqueOrderStacks.Any(u =>
-                    u.top.orderNumber == stack.top.orderNumber &&
-                    u.bottom.orderNumber == stack.bottom.orderNumber))
-                {
-                    uniqueOrderStacks.Add(stack);
-                    //does not actually print:
-                    Console.WriteLine($"'CaseUniqueStackPossibilitesUnique' order-stack: {stack.bottom.orderNumber}-{stack.top.orderNumber}");
-                }
-              }
         }
     }
 }

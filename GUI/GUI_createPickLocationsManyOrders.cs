@@ -57,7 +57,11 @@ public class GUI_createPickLocationsManyOrders : Form {
             CreateSolutionWindow_Click(sender, e); //--> graphAnalysis 
                 if(window.OrderSequenceAnalysis.uniqueOrderStacks.Count > 0) {
                 BoxStackingFromUniqueOrderStacks boxStacking =      //--> FillFirstLayerWithAllOrders (if...)
-                    new BoxStackingFromUniqueOrderStacks(g, Combinations.LocalRandomSearch.configurations, window.OrderSequenceAnalysis.uniqueOrderStacks);
+                    new BoxStackingFromUniqueOrderStacks(g, 
+                        Combinations.LocalRandomSearch.configurations,  //window. borde funka...
+                        window.OrderSequenceAnalysis.uniqueOrderStacks,
+                        window.OrderSequenceAnalysis.uniqueOrderStacks_3_Orders,
+                        window.OrderSequenceAnalysis.uniqueOrderStacks_4_Orders);
                 }
 
             /*g.path.Clear();      //uncomment here potentially
