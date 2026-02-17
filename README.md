@@ -1,4 +1,6 @@
-Pick path optimization algorithm using WinForms that generates a near-optimal picking path given user defined pick locations. Major constraint is that backtracking is not allowed.
+Pick path optimization algorithm using WinForms that generates a near-optimal picking path given user defined pick locations. Orders are representing picking totes that are put on a unit-load (e.g pallet). The goal is to optimize the allocation and internal order of the totes on the unit-load so not to block for item picks into totes during the picking round (a tote has to be closed to allow for placement of anoter tote on top of it).
+
+Major constraint is that backtracking is not allowed.
 
 An order-picker can either
 • Travel all the way through the current aisle, picking as necessary, or

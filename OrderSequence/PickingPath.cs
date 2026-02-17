@@ -14,6 +14,5 @@ public class PickingPath
         {
             layout[i] = new int[racksPerAisle * 2];
         }
-        //Console.WriteLine("Rows: " + layout.Length + " Columns: " + layout[0].Length);
     }
 }
