@@ -5,7 +5,7 @@ public class BoxStackingFromUniqueOrderStacks_old
     Graph g;
     List<UnitLoadConfiguration> configurations;
     List<OrderStack> uniqueOrderStacks;
-    List<UnitLoadConfiguration> finalConfigs;
+    List<UnitLoadConfiguration>? finalConfigs;
 
     public BoxStackingFromUniqueOrderStacks_old(Graph g, List<UnitLoadConfiguration> configurations, List<OrderStack> uniqueOrderStacks)
     {

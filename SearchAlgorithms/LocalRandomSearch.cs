@@ -11,7 +11,7 @@ Heuristic search algorithm that generates random unit load configurations. Avoid
 public class LocalRandomSearch
 {
     Graph g;
-    public List<UnitLoadConfiguration> configurations {get; set;}
+    public List<UnitLoadConfiguration>? configurations {get; set;}
     Stopwatch stopwatch;
 
     public LocalRandomSearch(Graph g)

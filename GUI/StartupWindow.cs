@@ -14,7 +14,7 @@ public class StartupWindow : Form {
     public int selectedNbrShelves;
     public int selectedNbrOrders;
     public int selectedNbrOrdersPerLayer;
-    Graph g;
+    Graph? g;
 
     //Org: StartupWindow(Graph g) {
     public StartupWindow() {

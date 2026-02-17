@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace ConsoleApp1;
 
 public class BoxStackingFromUniqueOrderStacks
@@ -5,6 +7,8 @@ public class BoxStackingFromUniqueOrderStacks
     Graph g;
     List<UnitLoadConfiguration> configurations;
     List<OrderStack> uniqueOrderStacks;
+    List<OrderStack_3_Orders> uniqueOrderStacks_3_Orders;
+    List<OrderStack_4_Orders> uniqueOrderStacks_4_Orders;
     int nbrConfigs = 1000;
 
     /*
@@ -27,6 +31,8 @@ public class BoxStackingFromUniqueOrderStacks
         this.g = g;
         this.configurations = configurations;
         this.uniqueOrderStacks = uniqueOrderStacks;
+        this.uniqueOrderStacks_3_Orders = uniqueOrderStacks_3_Orders;
+        this.uniqueOrderStacks_4_Orders = uniqueOrderStacks_4_Orders;
 
         if(g.layers == 1 || g.layers == g.orders) {
             Console.WriteLine("entered FillFirstLayerWithAllOrders");
@@ -34,7 +40,18 @@ public class BoxStackingFromUniqueOrderStacks
             return;     
         }
 
-        AllocateUniqueOrderStacksToConfiguration();
+        /*if(g.layers > 3) //Allocate 4-order-stacks. if g.layers > 3
+        {
+            AllocateUniqueOrderStacksToConfiguration_4_Orders();
+        }
+        if(g.layers > 2) //Allocate 3-order-stacks. if g.layers > 2
+        {
+            AllocateUniqueOrderStacksToConfiguration_3_Orders();
+        }
+        AllocateUniqueOrderStacksToConfiguration();*/
+
+        BuildConfigurationWithAllStacks();
+
     }
 
     public void AllocateUniqueOrderStacksToConfiguration()
@@ -54,7 +71,6 @@ public class BoxStackingFromUniqueOrderStacks
             layers.Add(new BoxLayerCombination(new HashSet<int>(), 0.0));
         }
     }
-    //test end
 
     UnitLoadConfiguration config = new UnitLoadConfiguration(layers, 0);
     HashSet<int> placedOrders = new HashSet<int>();
@@ -67,37 +83,28 @@ public class BoxStackingFromUniqueOrderStacks
         { 
             config.Layers[0].Boxes.Add(orderStack.bottom.orderNumber);
             config.Layers[1].Boxes.Add(orderStack.top.orderNumber);
-            placedOrders.Add(orderStack.bottom.orderNumber);
-            placedOrders.Add(orderStack.top.orderNumber);
-            layerPos += 1;
         } 
         else if (layerPos < g.nbrOrdersPerLayers * 2)  //case: 2 layers
         { 
             config.Layers[2].Boxes.Add(orderStack.bottom.orderNumber);
             config.Layers[3].Boxes.Add(orderStack.top.orderNumber);
-            placedOrders.Add(orderStack.bottom.orderNumber);
-            placedOrders.Add(orderStack.top.orderNumber);
-            layerPos += 1;
         } 
         else if (layerPos < g.nbrOrdersPerLayers * 3)  //case: 3 layers
         { 
             config.Layers[4].Boxes.Add(orderStack.bottom.orderNumber);
             config.Layers[5].Boxes.Add(orderStack.top.orderNumber);
-            placedOrders.Add(orderStack.bottom.orderNumber);
-            placedOrders.Add(orderStack.top.orderNumber);
-            layerPos += 1;
         } 
         else if (layerPos < g.nbrOrdersPerLayers * 4)  //Will probably not reach here because probable upper limit of 7 layers
         { 
             config.Layers[6].Boxes.Add(orderStack.bottom.orderNumber);
             config.Layers[7].Boxes.Add(orderStack.top.orderNumber);
-            placedOrders.Add(orderStack.bottom.orderNumber);
-            placedOrders.Add(orderStack.top.orderNumber);
-            layerPos += 1;
         }
+        placedOrders.Add(orderStack.bottom.orderNumber);
+        placedOrders.Add(orderStack.top.orderNumber);
+        layerPos += 1;
     }
 
-    //Collect remaining orders
+    //Collect remaining orders. CHANGE DO THIS AFTER ALL ALLOCATION-VERSIONS?
     List<int> remainingOrders = Enumerable.Range(1, g.orders)
         .Where(o => !placedOrders.Contains(o))
         .ToList();
@@ -110,9 +117,9 @@ public class BoxStackingFromUniqueOrderStacks
     {
         // Copy base configuration with unique stacks
         List<BoxLayerCombination> layersCopy = new List<BoxLayerCombination>();
-        foreach (var layer in config.Layers)
+        foreach (var layer in config.Layers) {
             layersCopy.Add(new BoxLayerCombination(new HashSet<int>(layer.Boxes), 0));
-
+        }
         UnitLoadConfiguration tempConfig = new UnitLoadConfiguration(layersCopy, 0);
 
         // Shuffle remaining orders
@@ -121,16 +128,18 @@ public class BoxStackingFromUniqueOrderStacks
         // Place remaining orders bottom-up
         int layerIndex = 0;
         HashSet<int> placedTemp = new HashSet<int>();
-        foreach (var layer in tempConfig.Layers)
-            foreach (var order in layer.Boxes)
+        foreach (var layer in tempConfig.Layers) {
+            foreach (var order in layer.Boxes) {
                 placedTemp.Add(order);
+            }
+        }
 
         foreach (int order in shuffledOrders)
         {
-            while (layerIndex < tempConfig.Layers.Count && tempConfig.Layers[layerIndex].Boxes.Count >= g.nbrOrdersPerLayers)
+            while (layerIndex < tempConfig.Layers.Count && tempConfig.Layers[layerIndex].Boxes.Count >= g.nbrOrdersPerLayers) {
                 layerIndex++;
-
-            if (layerIndex >= tempConfig.Layers.Count) break;
+            }
+            if (layerIndex >= tempConfig.Layers.Count) {break;}
 
             tempConfig.Layers[layerIndex].Boxes.Add(order);
             placedTemp.Add(order);
@@ -156,15 +165,124 @@ public class BoxStackingFromUniqueOrderStacks
         rank++;
     }*/
 
-    //Output the best configuration
-    Console.WriteLine("Lowest cost randomized configuration:");
-    for (int i = bestConfig.Layers.Count - 1; i >= 0; i--)
-    {
-        Console.WriteLine(
-            $"Layer{i + 1}: " + string.Join(", ", bestConfig.Layers[i].Boxes)
-        );
+        //Output the best configuration
+        Console.WriteLine("uos: Lowest cost randomized configuration:");
+        for (int i = bestConfig.Layers.Count - 1; i >= 0; i--)
+        {
+            Console.WriteLine(
+                $"Layer{i + 1}: " + string.Join(", ", bestConfig.Layers[i].Boxes)
+            );
+        }
+        Console.WriteLine("| Cost: " + bestConfig.ShortestCost);
     }
-    Console.WriteLine("| Cost: " + bestConfig.ShortestCost);
+
+    public void AllocateUniqueOrderStacksToConfiguration_3_Orders()
+    {
+        List<BoxLayerCombination> layers = new List<BoxLayerCombination>();
+        for (int i = 0; i < g.layers; i++)
+        {
+            layers.Add(new BoxLayerCombination(new HashSet<int>(), 0.0));
+        }
+
+        //Modify the #layers to fit all the #uniqueOrderStacks
+        int requiredLayers = 3*(int) Math.Ceiling(uniqueOrderStacks_3_Orders.Count / (double)g.nbrOrdersPerLayers);
+        Console.WriteLine("Required #layers to fit all uOs_3-orders: " + requiredLayers + ", current #layers: " + g.layers);
+        if(requiredLayers > g.layers) {
+            int nbrMissingLayers = requiredLayers - g.layers; //hmm,är kan det bildas mycket uppstickande ordrar. införa villkor på g.layers > 5?
+            for(int i = 0; i < nbrMissingLayers; i++) {
+                layers.Add(new BoxLayerCombination(new HashSet<int>(), 0.0));
+            }
+        }
+
+        UnitLoadConfiguration config = new UnitLoadConfiguration(layers, 0);
+        HashSet<int> placedOrders = new HashSet<int>();
+        int layerPos = 0; 
+
+        foreach (var orderStack in uniqueOrderStacks_3_Orders) 
+        {   
+            if (layerPos < g.nbrOrdersPerLayers) //case: 1 layer
+            { 
+                config.Layers[0].Boxes.Add(orderStack.bottom.orderNumber);
+                config.Layers[1].Boxes.Add(orderStack.middle.orderNumber);
+                config.Layers[2].Boxes.Add(orderStack.top.orderNumber);
+            } 
+            else if (layerPos < g.nbrOrdersPerLayers * 2)  //case: 2 layers (would generate 6 layers)
+            { 
+                config.Layers[3].Boxes.Add(orderStack.bottom.orderNumber);
+                config.Layers[4].Boxes.Add(orderStack.middle.orderNumber);
+                config.Layers[5].Boxes.Add(orderStack.top.orderNumber);
+            } 
+            placedOrders.Add(orderStack.bottom.orderNumber);
+            placedOrders.Add(orderStack.middle.orderNumber);
+            placedOrders.Add(orderStack.top.orderNumber);
+            layerPos += 1;   
+        }
+
+        Console.WriteLine("3-uos: Lowest cost randomized configuration:");
+        for (int i = config.Layers.Count - 1; i >= 0; i--)
+        {
+            Console.WriteLine(
+                $"Layer{i + 1}: " + string.Join(", ", config.Layers[i].Boxes)
+            );
+        }
+        config.CalculateShortestCost(g);
+        Console.WriteLine("| Cost: " + config.ShortestCost);
+    }
+
+    public void AllocateUniqueOrderStacksToConfiguration_4_Orders()
+    {
+        List<BoxLayerCombination> layers = new List<BoxLayerCombination>();
+        for (int i = 0; i < g.layers; i++)
+        {
+            layers.Add(new BoxLayerCombination(new HashSet<int>(), 0.0));
+        }
+
+        //Modify the #layers to fit all the #uniqueOrderStacks
+        int requiredLayers = 4*(int) Math.Ceiling(uniqueOrderStacks_4_Orders.Count / (double)g.nbrOrdersPerLayers);
+        Console.WriteLine("Required #layers to fit all uOs_4-orders: " + requiredLayers + ", current #layers: " + g.layers);
+        if(requiredLayers > g.layers) {
+            int nbrMissingLayers = requiredLayers - g.layers; //hmm, här kan det bildas mycket uppstickande ordrar. införa villkor på g.layers > 7?
+            for(int i = 0; i < nbrMissingLayers; i++) {
+                layers.Add(new BoxLayerCombination(new HashSet<int>(), 0.0));
+            }
+    }
+
+    UnitLoadConfiguration config = new UnitLoadConfiguration(layers, 0);
+    HashSet<int> placedOrders = new HashSet<int>();
+    int layerPos = 0; 
+
+    foreach (var orderStack in uniqueOrderStacks_4_Orders) 
+    {   
+        if (layerPos < g.nbrOrdersPerLayers) //case: 1 layer
+        { 
+            config.Layers[0].Boxes.Add(orderStack.bottom.orderNumber);
+            config.Layers[1].Boxes.Add(orderStack.middleBottom.orderNumber);
+            config.Layers[2].Boxes.Add(orderStack.middleTop.orderNumber);
+            config.Layers[3].Boxes.Add(orderStack.top.orderNumber);
+        } 
+        else if (layerPos < g.nbrOrdersPerLayers * 2)  //case: 2 layers (would generate 8 layers)
+        { 
+            config.Layers[4].Boxes.Add(orderStack.bottom.orderNumber);       //will probably not be used
+            config.Layers[5].Boxes.Add(orderStack.middleBottom.orderNumber); //will probably not be used
+            config.Layers[6].Boxes.Add(orderStack.middleTop.orderNumber);    //will probably not be used
+            config.Layers[7].Boxes.Add(orderStack.top.orderNumber);          //will probably not be used
+        } 
+        placedOrders.Add(orderStack.bottom.orderNumber);
+        placedOrders.Add(orderStack.middleBottom.orderNumber);
+        placedOrders.Add(orderStack.middleTop.orderNumber);
+        placedOrders.Add(orderStack.top.orderNumber);
+        layerPos += 1;   
+    }
+
+        Console.WriteLine("4-uos: Lowest cost randomized configuration:");
+        for (int i = config.Layers.Count - 1; i >= 0; i--)
+        {
+            Console.WriteLine(
+                $"Layer{i + 1}: " + string.Join(", ", config.Layers[i].Boxes)
+            );
+        }
+        config.CalculateShortestCost(g);
+        Console.WriteLine("| Cost: " + config.ShortestCost);
     }
 
     public void FillFirstLayerWithAllOrders()
@@ -189,6 +307,188 @@ public class BoxStackingFromUniqueOrderStacks
         }
     }
 
+    public void BuildConfigurationWithAllStacks()
+    {
+    List<BoxLayerCombination> layers = new List<BoxLayerCombination>();
+
+    for (int i = 0; i < g.layers; i++)
+        layers.Add(new BoxLayerCombination(new HashSet<int>(), 0.0));
+
+    UnitLoadConfiguration baseConfig = new UnitLoadConfiguration(layers, 0);
+
+    HashSet<int> placedOrders = new HashSet<int>();
+    int layerPos = 0;
+
+    layerPos = Allocate4Stacks(baseConfig, placedOrders, layerPos);
+
+    layerPos = Allocate3Stacks(baseConfig, placedOrders, layerPos);
+
+    layerPos = Allocate2Stacks(baseConfig, placedOrders, layerPos);
+
+    DistributeRemainingOrders(baseConfig, placedOrders);
+    }
+
+    private int Allocate4Stacks(UnitLoadConfiguration config, HashSet<int> placed, int layerPos)
+    {
+        foreach (var stack in uniqueOrderStacks_4_Orders)
+        {
+            if (placed.Contains(stack.bottom.orderNumber) ||
+                placed.Contains(stack.middleBottom.orderNumber) ||
+                placed.Contains(stack.middleTop.orderNumber) ||
+                placed.Contains(stack.top.orderNumber))
+                continue;
+
+            int column = layerPos % g.nbrOrdersPerLayers;
+
+            if (config.Layers.Count < 4) break;
+
+            // Check capacity in this column
+            if (config.Layers[0].Boxes.Count > column ||
+                config.Layers[1].Boxes.Count > column ||
+                config.Layers[2].Boxes.Count > column ||
+                config.Layers[3].Boxes.Count > column)
+            {
+                layerPos++;
+                continue;
+            }
+
+            config.Layers[0].Boxes.Add(stack.bottom.orderNumber);
+            config.Layers[1].Boxes.Add(stack.middleBottom.orderNumber);
+            config.Layers[2].Boxes.Add(stack.middleTop.orderNumber);
+            config.Layers[3].Boxes.Add(stack.top.orderNumber);
+
+            placed.Add(stack.bottom.orderNumber);
+            placed.Add(stack.middleBottom.orderNumber);
+            placed.Add(stack.middleTop.orderNumber);
+            placed.Add(stack.top.orderNumber);
+
+            layerPos++;
+        }
+
+        return layerPos;
+    }
+
+
+   private int Allocate3Stacks(UnitLoadConfiguration config, HashSet<int> placed, int layerPos)
+    {
+        foreach (var stack in uniqueOrderStacks_3_Orders)
+        {
+            // 1️⃣ Skip if ANY order already placed
+            if (placed.Contains(stack.bottom.orderNumber) ||
+                placed.Contains(stack.middle.orderNumber) ||
+                placed.Contains(stack.top.orderNumber))
+                continue;
+
+            if (config.Layers.Count < 3)
+                break;
+
+            int column = layerPos % g.nbrOrdersPerLayers;
+
+            // 2️⃣ Check layer capacity for this column
+            if (config.Layers[0].Boxes.Count > column ||
+                config.Layers[1].Boxes.Count > column ||
+                config.Layers[2].Boxes.Count > column)
+            {
+                layerPos++;
+                continue;
+            }
+
+            // 3️⃣ Place vertically in same column
+            config.Layers[0].Boxes.Add(stack.bottom.orderNumber);
+            config.Layers[1].Boxes.Add(stack.middle.orderNumber);
+            config.Layers[2].Boxes.Add(stack.top.orderNumber);
+
+            placed.Add(stack.bottom.orderNumber);
+            placed.Add(stack.middle.orderNumber);
+            placed.Add(stack.top.orderNumber);
+
+            layerPos++;
+        }
+
+        return layerPos;
+    }
+
+
+
+    private int Allocate2Stacks(UnitLoadConfiguration config, HashSet<int> placed, int layerPos)
+    {
+        foreach (var stack in uniqueOrderStacks)
+        {
+            // 1️⃣ Skip if ANY order already placed
+            if (placed.Contains(stack.bottom.orderNumber) ||
+                placed.Contains(stack.top.orderNumber))
+                continue;
+
+            if (config.Layers.Count < 2)
+                break;
+
+            int column = layerPos % g.nbrOrdersPerLayers;
+
+            // 2️⃣ Check layer capacity
+            if (config.Layers[0].Boxes.Count > column ||
+                config.Layers[1].Boxes.Count > column)
+            {
+                layerPos++;
+                continue;
+            }
+
+            // 3️⃣ Place vertically
+            config.Layers[0].Boxes.Add(stack.bottom.orderNumber);
+            config.Layers[1].Boxes.Add(stack.top.orderNumber);
+
+            placed.Add(stack.bottom.orderNumber);
+            placed.Add(stack.top.orderNumber);
+
+            layerPos++;
+        }
+
+        return layerPos;
+    }
+
+    private void DistributeRemainingOrders(UnitLoadConfiguration baseConfig, HashSet<int> placed)
+    {
+        List<int> remaining = Enumerable.Range(1, g.orders)
+            .Where(o => !placed.Contains(o))
+            .ToList();
+
+        Random rnd = new Random();
+        List<UnitLoadConfiguration> candidates = new List<UnitLoadConfiguration>();
+
+        for (int i = 0; i < nbrConfigs; i++)
+        {
+            var layersCopy = baseConfig.Layers
+                .Select(l => new BoxLayerCombination(new HashSet<int>(l.Boxes), 0))
+                .ToList();
+
+            UnitLoadConfiguration temp = new UnitLoadConfiguration(layersCopy, 0);
+
+            var shuffled = remaining.OrderBy(x => rnd.Next()).ToList();
+
+            int layerIndex = 0;
+
+            foreach (int order in shuffled)
+            {
+                while (layerIndex < temp.Layers.Count &&
+                    temp.Layers[layerIndex].Boxes.Count >= g.nbrOrdersPerLayers)
+                    layerIndex++;
+
+                if (layerIndex >= temp.Layers.Count) break;
+
+                temp.Layers[layerIndex].Boxes.Add(order);
+            }
+
+            temp.CalculateShortestCost(g);
+            candidates.Add(temp);
+        }
+
+        var best = candidates.OrderBy(c => c.ShortestCost).First();
+
+        Console.WriteLine("FINAL CONFIG:");
+        for (int i = best.Layers.Count - 1; i >= 0; i--)
+            Console.WriteLine($"Layer{i + 1}: {string.Join(", ", best.Layers[i].Boxes)}");
+
+        Console.WriteLine("| Cost: " + best.ShortestCost);
+    }
 
 
 }

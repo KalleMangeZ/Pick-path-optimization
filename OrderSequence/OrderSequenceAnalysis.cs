@@ -8,13 +8,13 @@ public int[,] lm;
 public List<int> orderSequence {get; set;} = new List<int>();
 public List<int> orderStartInSequence {get; set;} = new List<int>();
 public List<int> orderEndInSequence {get; set;} = new List<int>();
-public List<OrderStack> orderStacks {get; set;}
+public List<OrderStack>? orderStacks {get; set;}
 public List<OrderStack> uniqueOrderStacks {get; set;} = new List<OrderStack>();
 public List<OrderStack_3_Orders> orderStacks_3_Orders {get; set;} = new List<OrderStack_3_Orders>();
 public List<OrderStack_3_Orders> uniqueOrderStacks_3_Orders {get; set;} = new List<OrderStack_3_Orders>();
 public List<OrderStack_4_Orders> orderStacks_4_Orders {get; set;} = new List<OrderStack_4_Orders>();
 public List<OrderStack_4_Orders> uniqueOrderStacks_4_Orders {get; set;} = new List<OrderStack_4_Orders>();
-public List<Order> orders {get; set;}
+public List<Order>? orders {get; set;}
 CreatePickingPath pp;
 
     public OrderSequenceAnalysis(Graph g, List<UnitLoadConfiguration> configurations) {
@@ -26,7 +26,7 @@ CreatePickingPath pp;
             CreateOrderSequence();
             AnalyzeOrderSequence();
             CreateOrderStack();
-            PrintOrderStack();
+            //PrintOrderStack();
             if(g.layers > 1) {
                 CreateUniqueOrderStacks();
             }

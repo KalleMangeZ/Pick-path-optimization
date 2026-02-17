@@ -6,7 +6,7 @@ public class BranchAndBound
 {
 
 private double bestCost;
-private List<HashSet<int>> bestConfiguration;
+private List<HashSet<int>>? bestConfiguration;
 Graph g;
 Stopwatch stopwatch;
 private double minLayerCost;

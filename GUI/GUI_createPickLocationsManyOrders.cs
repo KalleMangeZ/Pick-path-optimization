@@ -7,8 +7,8 @@ using System.Windows.Forms;
 
 public class GUI_createPickLocationsManyOrders : Form {
     Graph g;
-    GUI_solution window { get; set; }
-    private OrderSequenceAnalysis graphAnalysis;
+    GUI_solution? window { get; set; }
+    private OrderSequenceAnalysis? graphAnalysis;
     int aisleToAisleDist = 200;
     int shelfLength = 50;
     int shelfWidth = 50;
@@ -21,7 +21,7 @@ public class GUI_createPickLocationsManyOrders : Form {
     List<ComboBox> comboBoxes;
     CheckedListBox orderCheckListBox;
     CheckedListBox algorithmCheckListBox;
-    HashSet<int> selectedAlgorithms;
+    HashSet<int>? selectedAlgorithms;
     private Pen bluePen = new Pen(Color.Blue, 2);
 
     public GUI_createPickLocationsManyOrders(Graph graph, object sender, EventArgs e) {

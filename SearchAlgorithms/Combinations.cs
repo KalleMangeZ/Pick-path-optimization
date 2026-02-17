@@ -9,7 +9,7 @@ public class Combinations
 {
     static int k;
     static int n;
-    static Stopwatch stopwatch;
+    static Stopwatch? stopwatch;
     public static LocalRandomSearch? LocalRandomSearch {get; set;}
     public static BranchAndBound? BranchAndBound {get; set;}
     public static OrderSequenceAnalysis? analysis {get; set;}
