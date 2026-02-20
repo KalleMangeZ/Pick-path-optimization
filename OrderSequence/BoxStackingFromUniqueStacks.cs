@@ -56,10 +56,14 @@ public class BoxStackingFromUniqueOrderStacks
         AllocateUniqueOrderStacksToConfiguration();*/
 
         BuildConfigurationWithAllStacks();
-        //BuildConfigurationWithAllStacks_Horizontal(); //priority filling layers with order-stack
+        
+        placedUniqueOrderStacks.Clear();
+        placedUniqueOrderStacks_3_Orders.Clear();
+        placedUniqueOrderStacks_4_Orders.Clear();
+
+        BuildConfigurationWithAllStacks_Horizontal(); //priority filling layers with order-stack
                                                         //rather than priority of stacking with 
-                                                        //high-number stacks.
-        printPlacedOrderStacks();
+                                                        //high-number stacks. (Only fills with unique 2-order stacks.)
     }
 
     public void AllocateUniqueOrderStacksToConfiguration()
@@ -317,6 +321,7 @@ public class BoxStackingFromUniqueOrderStacks
 
     public void BuildConfigurationWithAllStacks()
     {
+    Console.WriteLine("\n BuildConfigurationWithAllStacks");
     List<BoxLayerCombination> layers = new List<BoxLayerCombination>();
 
     for (int i = 0; i < g.layers; i++)
@@ -334,10 +339,13 @@ public class BoxStackingFromUniqueOrderStacks
     layerPos = Allocate2Stacks(baseConfig, placedOrders, layerPos);
 
     DistributeRemainingOrders(baseConfig, placedOrders);
+    PrintPlacedOrderStacks();
+
     }
 
-    public void BuildConfigurationWithAllStacks_Horizontal() //ADJUST THIS METHOD
+    public void BuildConfigurationWithAllStacks_Horizontal() 
     {
+    Console.WriteLine("\n BuildConfigurationWithAllStacks_Horizontal");
         List<BoxLayerCombination> layers = new List<BoxLayerCombination>();
 
     for (int i = 0; i < g.layers; i++)
@@ -348,15 +356,10 @@ public class BoxStackingFromUniqueOrderStacks
     HashSet<int> placedOrders = new HashSet<int>();
     int layerPos = 0;
 
-    if(uniqueOrderStacks.Count < g.nbrOrdersPerLayers) {
-        layerPos = Allocate2Stacks(baseConfig, placedOrders, layerPos);
-    } else {
-        layerPos = Allocate4Stacks(baseConfig, placedOrders, layerPos);
-        layerPos = Allocate3Stacks(baseConfig, placedOrders, layerPos);
-        layerPos = Allocate2Stacks(baseConfig, placedOrders, layerPos);
-    }
+    layerPos = Allocate2Stacks(baseConfig, placedOrders, layerPos);   
 
     DistributeRemainingOrders(baseConfig, placedOrders);
+    PrintPlacedOrderStacks();
     }
 
     private int Allocate4Stacks(UnitLoadConfiguration config, HashSet<int> placed, int layerPos)
@@ -527,7 +530,7 @@ public class BoxStackingFromUniqueOrderStacks
         Console.WriteLine("| Cost: " + best.ShortestCost);
     }
 
-    public void printPlacedOrderStacks()
+    public void PrintPlacedOrderStacks()
     {
         foreach(var stack in placedUniqueOrderStacks_4_Orders)
         {
@@ -541,7 +544,7 @@ public class BoxStackingFromUniqueOrderStacks
 
         foreach (var stack in placedUniqueOrderStacks)
         {
-            Console.WriteLine("placed uniqueOrderStacks:" +stack.bottom.orderNumber + "-" + stack.top.orderNumber);
+            Console.WriteLine("placed uniqueOrderStacks: " +stack.bottom.orderNumber + "-" + stack.top.orderNumber);
         }
     }
 

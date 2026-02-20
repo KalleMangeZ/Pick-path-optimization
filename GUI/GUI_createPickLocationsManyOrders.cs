@@ -64,11 +64,12 @@ public class GUI_createPickLocationsManyOrders : Form {
                         window.OrderSequenceAnalysis.uniqueOrderStacks_4_Orders);
                 }
 
-            /*g.path.Clear();      //uncomment here potentially
+            ApplyCheckedOrdersToGraph();
+            g.path.Clear();      //uncomment here potentially
             g.pathNodes.Clear();
             g.nodes.Clear();
-            g.CreateGraph();*/
-            ApplyCheckedOrdersToGraph();
+            g.CreateGraph();
+
             };
 
         GenerateRandomPickLocationsButton = new Button();

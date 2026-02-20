@@ -64,12 +64,12 @@ CreatePickingPath pp;
         orderEndInSequence = new List<int>();
         orders = new List<Order>();
 
+        Console.WriteLine();
         for (int orderNum = 1; orderNum <= g.orders; orderNum++)
         {
             int startIndex = orderSequence.IndexOf(orderNum);
             int endIndex = orderSequence.LastIndexOf(orderNum);
 
-            // 👇 WRITE IT HERE
             if (startIndex == -1)
             {
                 Console.WriteLine($"Order {orderNum} not found in sequence.");
