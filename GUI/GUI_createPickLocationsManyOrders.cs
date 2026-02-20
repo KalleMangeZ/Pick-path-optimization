@@ -58,17 +58,17 @@ public class GUI_createPickLocationsManyOrders : Form {
                 if(window.OrderSequenceAnalysis.uniqueOrderStacks.Count > 0) {
                 BoxStackingFromUniqueOrderStacks boxStacking =      //--> FillFirstLayerWithAllOrders (if...)
                     new BoxStackingFromUniqueOrderStacks(g, 
-                        Combinations.LocalRandomSearch.configurations,  //window. borde funka...
+                        Combinations.RandomSearch.configurations,  
                         window.OrderSequenceAnalysis.uniqueOrderStacks,
                         window.OrderSequenceAnalysis.uniqueOrderStacks_3_Orders,
                         window.OrderSequenceAnalysis.uniqueOrderStacks_4_Orders);
                 }
 
-            ApplyCheckedOrdersToGraph();
-            g.path.Clear();      //uncomment here potentially
+            /*g.path.Clear();      
             g.pathNodes.Clear();
             g.nodes.Clear();
-            g.CreateGraph();
+            g.CreateGraph();*/
+            ApplyCheckedOrdersToGraph();
 
             };
 
@@ -155,7 +155,7 @@ public class GUI_createPickLocationsManyOrders : Form {
 
      private void CreateSolutionWindow_Click(object sender, EventArgs e) {
         if (IsAnyComboBoxClicked() && g.IsEmptyLayout() == false && graphAnalysis == null) {
-            graphAnalysis = new OrderSequenceAnalysis(g, Combinations.LocalRandomSearch.configurations); // Only created once
+            graphAnalysis = new OrderSequenceAnalysis(g, Combinations.RandomSearch.configurations); // Only created once
             OrderSequenceVisualization osv =
             new OrderSequenceVisualization(g, graphAnalysis);
             osv.Show();
@@ -178,6 +178,10 @@ public class GUI_createPickLocationsManyOrders : Form {
             }
 
         g.orderSet = selectedOrders;
+        g.path.Clear();      
+        g.pathNodes.Clear();
+        g.nodes.Clear();
+        g.CreateGraph();
         window = new GUI_solution(g, g.pathNodes, graphAnalysis);
         window.ShowDialog();
     }

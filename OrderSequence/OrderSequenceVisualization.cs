@@ -53,7 +53,9 @@ namespace ConsoleApp1
 
         private void ShowOrderStrings(Graphics graphics)
         {
-            graphics.DrawString("Order sequence:", normalFont, Brushes.Black, new Point(50, 25));
+            HashSet<int> stackedOrders = GetOrdersInUniqueStacks();
+            Pen redPen = new Pen(Color.Red, 3);
+            graphics.DrawString("Order sequence (marked red = part of a unique order-stack): ", normalFont, Brushes.Black, new Point(50, 25));
             int startX = 100;
             int ySequence = 50;
             int rowLength = 32;
@@ -93,10 +95,58 @@ namespace ConsoleApp1
                         a.orderSequence[endIndex].ToString(),
                         normalFont).Width - 5;
 
-                graphics.DrawLine(pen, x1, y + 10, x2, y + 10);
+                //graphics.DrawLine(pen, x1, y + 10, x2, y + 10); 
+
+                if (stackedOrders.Contains(orderObj.orderNumber))
+                {
+                    graphics.DrawLine(redPen, x1, y + 10, x2, y + 10);
+                } else {
+                    graphics.DrawLine(pen, x1, y + 10, x2, y + 10);
+                }
             }
 
         }
+
+        private HashSet<int> GetOrdersInUniqueStacks()
+        {
+            HashSet<int> stackedOrders = new HashSet<int>();
+
+            // 2-order stacks
+            if (a.uniqueOrderStacks != null)
+            {
+                foreach (var stack in a.uniqueOrderStacks)
+                {
+                    stackedOrders.Add(stack.bottom.orderNumber);
+                    stackedOrders.Add(stack.top.orderNumber);
+                }
+            }
+
+            // 3-order stacks
+            if (a.uniqueOrderStacks_3_Orders != null)
+            {
+                foreach (var stack in a.uniqueOrderStacks_3_Orders)
+                {
+                    stackedOrders.Add(stack.bottom.orderNumber);
+                    stackedOrders.Add(stack.middle.orderNumber);
+                    stackedOrders.Add(stack.top.orderNumber);
+                }
+            }
+
+            // 4-order stacks
+            if (a.uniqueOrderStacks_4_Orders != null)
+            {
+                foreach (var stack in a.uniqueOrderStacks_4_Orders)
+                {
+                    stackedOrders.Add(stack.bottom.orderNumber);
+                    stackedOrders.Add(stack.middleBottom.orderNumber);
+                    stackedOrders.Add(stack.middleTop.orderNumber);
+                    stackedOrders.Add(stack.top.orderNumber);
+                }
+            }
+
+            return stackedOrders;
+        }
+
 
     }
 }

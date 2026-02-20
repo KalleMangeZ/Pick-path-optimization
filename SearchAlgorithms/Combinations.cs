@@ -10,7 +10,7 @@ public class Combinations
     static int k;
     static int n;
     static Stopwatch? stopwatch;
-    public static LocalRandomSearch? LocalRandomSearch {get; set;}
+    public static RandomSearch? RandomSearch {get; set;}
     public static BranchAndBound? BranchAndBound {get; set;}
     public static OrderSequenceAnalysis? analysis {get; set;}
 
@@ -40,7 +40,7 @@ public class Combinations
             BranchAndBound = new BranchAndBound(g); 
         } 
         if (searchAlgorithms.Contains(2)) {
-            LocalRandomSearch = new LocalRandomSearch(g);
+            RandomSearch = new RandomSearch(g);
         }
     }
     

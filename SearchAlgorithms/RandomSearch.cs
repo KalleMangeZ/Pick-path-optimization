@@ -8,19 +8,18 @@ using System.Diagnostics;
 Heuristic search algorithm that generates random unit load configurations. Avoids exhaustive search.
 */
 
-public class LocalRandomSearch
+public class RandomSearch
 {
     Graph g;
     public List<UnitLoadConfiguration>? configurations {get; set;}
     Stopwatch stopwatch;
 
-    public LocalRandomSearch(Graph g)
+    public RandomSearch(Graph g)
     {
         this.g = g;
         stopwatch = new Stopwatch();
         stopwatch.Start();
         GenerateRandomConfigurations(5000);
-        //TestPrintSomeConfigurations(configurations, 500);
     }
 
     public void GenerateRandomConfigurations(int nbrRandomConfigurations)
@@ -36,20 +35,6 @@ public class LocalRandomSearch
             for(int j = 1; j <= g.orders; j++) { allOrders.Add(j); }
 
             List<BoxLayerCombination> listOfLayers = new List<BoxLayerCombination>();
-            /*for(int layer = 0; layer < g.layers; layer++) 
-            {
-                HashSet<int> layerOrders = new HashSet<int>(); //orders in this layer
-                while(layerOrders.Count < g.nbrOrdersPerLayers)
-                {
-                    int order = rand.Next(1, g.orders + 1);
-                    if(!layerOrders.Contains(order) && !usedOrders.Any(u => u.Contains(order)))
-                    {
-                        layerOrders.Add(order);
-                    }
-                }
-                configuration.Add(layerOrders);
-                usedOrders.Add(layerOrders);
-            }*/
 
             var remainingOrders = new HashSet<int>(Enumerable.Range(1, g.orders));
             for (int layer = 0; layer < g.layers && remainingOrders.Count > 0; layer++)
@@ -89,7 +74,9 @@ public class LocalRandomSearch
             UnitLoadConfiguration config = new UnitLoadConfiguration(listOfLayers, totalCost);
             configurations.Add(config);
         }
-            //TestPrintSomeConfigurations(configurations, 10);
+            //TestPrintTop_n_Configurations(configurations, 500);
+            TestPrint_n_RandomConfigurations(configurations, 500);
+
             configurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost)); //sort by cost
             UnitLoadConfiguration optimal = configurations[0];
             Console.WriteLine("\n#Random configurations generated: " + nbrRandomConfigurations);
@@ -100,12 +87,12 @@ public class LocalRandomSearch
             stopwatch.Stop();
             TimeSpan ts = stopwatch.Elapsed;
 
-            Combinations.ShowOptimalConfigurationRoutes(g, optimal, "Local Random Search", ts); 
+            Combinations.ShowOptimalConfigurationRoutes(g, optimal, "Random Search", ts); 
         }
 
-    public void TestPrintSomeConfigurations(List<UnitLoadConfiguration> configurations, int n)
+    public void TestPrintTop_n_Configurations(List<UnitLoadConfiguration> configurations, int n)
     {
-        Console.WriteLine("\n --- LOCAL RANDOM SEARCH --- ");
+        Console.WriteLine("\n --- RANDOM SEARCH --- ");
         int count = 1;
         
         configurations.Sort((a, b) => a.ShortestCost.CompareTo(b.ShortestCost)); //sort by cost
@@ -119,8 +106,24 @@ public class LocalRandomSearch
             } 
             Console.WriteLine();
             Console.Write(count + ". ");
-            Console.Write("Configuration boxes: " + string.Join(" | ",          
-            ULC.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
+            Console.Write("Configuration boxes: " + string.Join(" | ", ULC.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
+            Console.Write(" | Cost: " + ULC.ShortestCost);
+            count++;
+        }
+    }
+
+    public void TestPrint_n_RandomConfigurations(List<UnitLoadConfiguration> configurations, int n)
+    {
+        Console.WriteLine("\n --- RANDOM SEARCH --- ");
+        int count = 1;
+        foreach(UnitLoadConfiguration ULC in configurations)
+        {
+            if(count > n) { 
+                break; 
+            } 
+            Console.WriteLine();
+            Console.Write(count + ". ");
+            Console.Write("Configuration boxes: " + string.Join(" | ", ULC.Layers.Select(b => "(" + string.Join(",", b.Boxes) + ")")));
             Console.Write(" | Cost: " + ULC.ShortestCost);
             count++;
         }
