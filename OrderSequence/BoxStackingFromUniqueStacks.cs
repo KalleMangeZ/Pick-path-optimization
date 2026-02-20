@@ -9,6 +9,11 @@ public class BoxStackingFromUniqueOrderStacks
     List<OrderStack> uniqueOrderStacks;
     List<OrderStack_3_Orders> uniqueOrderStacks_3_Orders;
     List<OrderStack_4_Orders> uniqueOrderStacks_4_Orders;
+    
+    List<OrderStack> placedUniqueOrderStacks = new List<OrderStack>();
+    List<OrderStack_3_Orders> placedUniqueOrderStacks_3_Orders = new List<OrderStack_3_Orders>();
+    List<OrderStack_4_Orders> placedUniqueOrderStacks_4_Orders = new List<OrderStack_4_Orders>();
+    
     int nbrConfigs = 1000;
 
     /*
@@ -51,7 +56,10 @@ public class BoxStackingFromUniqueOrderStacks
         AllocateUniqueOrderStacksToConfiguration();*/
 
         BuildConfigurationWithAllStacks();
-
+        //BuildConfigurationWithAllStacks_Horizontal(); //priority filling layers with order-stack
+                                                        //rather than priority of stacking with 
+                                                        //high-number stacks.
+        printPlacedOrderStacks();
     }
 
     public void AllocateUniqueOrderStacksToConfiguration()
@@ -328,6 +336,29 @@ public class BoxStackingFromUniqueOrderStacks
     DistributeRemainingOrders(baseConfig, placedOrders);
     }
 
+    public void BuildConfigurationWithAllStacks_Horizontal() //ADJUST THIS METHOD
+    {
+        List<BoxLayerCombination> layers = new List<BoxLayerCombination>();
+
+    for (int i = 0; i < g.layers; i++)
+        layers.Add(new BoxLayerCombination(new HashSet<int>(), 0.0));
+
+    UnitLoadConfiguration baseConfig = new UnitLoadConfiguration(layers, 0);
+
+    HashSet<int> placedOrders = new HashSet<int>();
+    int layerPos = 0;
+
+    if(uniqueOrderStacks.Count < g.nbrOrdersPerLayers) {
+        layerPos = Allocate2Stacks(baseConfig, placedOrders, layerPos);
+    } else {
+        layerPos = Allocate4Stacks(baseConfig, placedOrders, layerPos);
+        layerPos = Allocate3Stacks(baseConfig, placedOrders, layerPos);
+        layerPos = Allocate2Stacks(baseConfig, placedOrders, layerPos);
+    }
+
+    DistributeRemainingOrders(baseConfig, placedOrders);
+    }
+
     private int Allocate4Stacks(UnitLoadConfiguration config, HashSet<int> placed, int layerPos)
     {
         foreach (var stack in uniqueOrderStacks_4_Orders)
@@ -362,6 +393,8 @@ public class BoxStackingFromUniqueOrderStacks
             placed.Add(stack.middleTop.orderNumber);
             placed.Add(stack.top.orderNumber);
 
+            placedUniqueOrderStacks_4_Orders.Add(stack);
+
             layerPos++;
         }
 
@@ -373,7 +406,7 @@ public class BoxStackingFromUniqueOrderStacks
     {
         foreach (var stack in uniqueOrderStacks_3_Orders)
         {
-            // 1️⃣ Skip if ANY order already placed
+            //  Skip if ANY order already placed
             if (placed.Contains(stack.bottom.orderNumber) ||
                 placed.Contains(stack.middle.orderNumber) ||
                 placed.Contains(stack.top.orderNumber))
@@ -384,7 +417,7 @@ public class BoxStackingFromUniqueOrderStacks
 
             int column = layerPos % g.nbrOrdersPerLayers;
 
-            // 2️⃣ Check layer capacity for this column
+            // Check layer capacity for this column
             if (config.Layers[0].Boxes.Count > column ||
                 config.Layers[1].Boxes.Count > column ||
                 config.Layers[2].Boxes.Count > column)
@@ -393,7 +426,7 @@ public class BoxStackingFromUniqueOrderStacks
                 continue;
             }
 
-            // 3️⃣ Place vertically in same column
+            //  Place vertically in same column
             config.Layers[0].Boxes.Add(stack.bottom.orderNumber);
             config.Layers[1].Boxes.Add(stack.middle.orderNumber);
             config.Layers[2].Boxes.Add(stack.top.orderNumber);
@@ -401,6 +434,8 @@ public class BoxStackingFromUniqueOrderStacks
             placed.Add(stack.bottom.orderNumber);
             placed.Add(stack.middle.orderNumber);
             placed.Add(stack.top.orderNumber);
+
+            placedUniqueOrderStacks_3_Orders.Add(stack);
 
             layerPos++;
         }
@@ -414,7 +449,7 @@ public class BoxStackingFromUniqueOrderStacks
     {
         foreach (var stack in uniqueOrderStacks)
         {
-            // 1️⃣ Skip if ANY order already placed
+            // Skip if ANY order already placed
             if (placed.Contains(stack.bottom.orderNumber) ||
                 placed.Contains(stack.top.orderNumber))
                 continue;
@@ -424,7 +459,7 @@ public class BoxStackingFromUniqueOrderStacks
 
             int column = layerPos % g.nbrOrdersPerLayers;
 
-            // 2️⃣ Check layer capacity
+            // Check layer capacity
             if (config.Layers[0].Boxes.Count > column ||
                 config.Layers[1].Boxes.Count > column)
             {
@@ -432,12 +467,14 @@ public class BoxStackingFromUniqueOrderStacks
                 continue;
             }
 
-            // 3️⃣ Place vertically
+            // Place vertically
             config.Layers[0].Boxes.Add(stack.bottom.orderNumber);
             config.Layers[1].Boxes.Add(stack.top.orderNumber);
 
             placed.Add(stack.bottom.orderNumber);
             placed.Add(stack.top.orderNumber);
+
+            placedUniqueOrderStacks.Add(stack);
 
             layerPos++;
         }
@@ -488,6 +525,24 @@ public class BoxStackingFromUniqueOrderStacks
             Console.WriteLine($"Layer{i + 1}: {string.Join(", ", best.Layers[i].Boxes)}");
 
         Console.WriteLine("| Cost: " + best.ShortestCost);
+    }
+
+    public void printPlacedOrderStacks()
+    {
+        foreach(var stack in placedUniqueOrderStacks_4_Orders)
+        {
+            Console.WriteLine("placed uniqueOrderStacks_4_Orders: " + stack.bottom.orderNumber + "-" + stack.middleBottom.orderNumber + "-" + stack.middleTop.orderNumber + "-" + stack.top.orderNumber);
+        }
+
+         foreach(var stack in placedUniqueOrderStacks_3_Orders)
+        {
+            Console.WriteLine("placed uniqueOrderStacks_3_Orders: " + stack.bottom.orderNumber + "-" + stack.middle.orderNumber + "-" + stack.top.orderNumber);
+        }
+
+        foreach (var stack in placedUniqueOrderStacks)
+        {
+            Console.WriteLine("placed uniqueOrderStacks:" +stack.bottom.orderNumber + "-" + stack.top.orderNumber);
+        }
     }
 
 
